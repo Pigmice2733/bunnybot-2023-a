@@ -48,6 +48,9 @@ def includeDesktopSupport = true
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
+    implementation project(':robolib')
+    wpi.vendor.loadFrom(project(':robolib'))
+    
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
 
@@ -65,7 +68,7 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
 }
 
 // Simulation configuration (e.g. environment variables).
