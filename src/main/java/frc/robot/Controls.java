@@ -1,6 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.TurretConfig;
 
 public class Controls {
 
@@ -13,5 +15,12 @@ public class Controls {
     public Controls(XboxController driver, XboxController operator) {
         this.driver = driver;
         this.operator = operator;
+    }
+
+    public double getTurretRotationSpeed() {
+        double joystickValue = operator.getRightTriggerAxis() - operator.getLeftTriggerAxis();
+        joystickValue = MathUtil.applyDeadband(joystickValue, threshold);
+
+        return Math.signum(joystickValue) * TurretConfig.MANUAL_ROTATION_SPEED;
     }
 }
