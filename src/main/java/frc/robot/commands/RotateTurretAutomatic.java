@@ -9,24 +9,23 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.TurretConfig;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 
 import static edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 
-import java.util.function.Supplier;
-
 public class RotateTurretAutomatic extends ProfiledPIDCommand {
     private final Turret turret;
-    private final Supplier<Double> manualControl;
+    private final Vision vision;
 
-    public RotateTurretAutomatic(Turret turret, Supplier<Double> manualControl) {
+    public RotateTurretAutomatic(Turret turret, Vision vision) {
         super(new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
-                new Constraints(TurretConfig.MAX_VELOSITY, TurretConfig.MAX_ACCELERATION)),
-                () -> turret.getTurretRotation(), () -> new State(turret.getTargetRotation(), 0),
+                new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION)),
+                () -> turret.getCurrentRotation(), () -> new State(turret.getTargetRotation(), 0),
                 (output, state) -> turret.outputToMotor(output));
 
         this.turret = turret;
-        this.manualControl = manualControl;
+        this.vision = vision;
         addRequirements(turret);
     }
 
@@ -34,7 +33,8 @@ public class RotateTurretAutomatic extends ProfiledPIDCommand {
     public void execute() {
         super.execute();
 
-        turret.changeTargetRotation(manualControl.get());
+        var yaw = vision.getCurrentTarget().getYaw();
+        turret.setTargetRotation(yaw + turret.getCurrentRotation());
     }
 
     @Override

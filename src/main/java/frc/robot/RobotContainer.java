@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.RotateTurretAutomatic;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -21,6 +22,7 @@ import frc.robot.subsystems.Turret;
  */
 public class RobotContainer {
     private final Turret turret = new Turret();
+    private final Vision vision = new Vision();
 
     private final XboxController driver = new XboxController(0);
     private final XboxController operator = new XboxController(1);
@@ -30,7 +32,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        turret.setDefaultCommand(new RotateTurretAutomatic(turret, controls::getTurretRotationSpeed));
+        turret.setDefaultCommand(new RotateTurretAutomatic(turret, vision));
         configureButtonBindings();
     }
 
