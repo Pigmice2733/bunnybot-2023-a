@@ -20,25 +20,8 @@ public class Shooter extends SubsystemBase {
         rotationMotor.getEncoder().setPositionConversionFactor(ShooterConfig.ROTATION_MOTOR_CONVERSION);
     }
 
-    /** Sets the percent output of the shooter rotation motor */
-    public void outputToMotor(double percentOutput) {
+    /** Sets the percent output of the shooter motor */
+    public void outputToShooter(double percentOutput) {
         rotationMotor.set(percentOutput);
-    }
-
-    private double targetRotation;
-
-    /** Sets the turrets actual rotation */
-    public void setTargetRotation(double targetDegrees) {
-        targetRotation = targetDegrees;
-    }
-
-    /** Changes the turrets target rotaiton */
-    public void changeTargetRotation(double delta) {
-        targetRotation += delta;
-    }
-
-    /** Getst the turrets target rotation */
-    public double getTargetRotation() {
-        return targetRotation;
     }
 }
