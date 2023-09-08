@@ -8,6 +8,7 @@ import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
@@ -19,6 +20,8 @@ public class Turret extends SubsystemBase {
     private double targetRotation;
     private double currentRotation;
 
+    private final GenericEntry motorOutputEntry;
+
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
         rotationMotor.restoreFactoryDefaults();
@@ -28,6 +31,8 @@ public class Turret extends SubsystemBase {
                 .asDial(0, 360);
         ShuffleboardHelper.addOutput("Target Rotation", Constants.TURRET_TAB, () -> targetRotation)
                 .asDial(0, 360);
+
+        motorOutputEntry = Constants.TURRET_TAB.add("Motor Output (%)", 0).getEntry();
     }
 
     @Override
@@ -38,6 +43,7 @@ public class Turret extends SubsystemBase {
     /** Sets the percent output of the turret rotation motor */
     public void outputToMotor(double percentOutput) {
         rotationMotor.set(percentOutput);
+        motorOutputEntry.setDouble(percentOutput);
     }
 
     /** @return the turrets current rotation in degrees */

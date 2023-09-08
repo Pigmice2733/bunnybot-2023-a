@@ -40,7 +40,6 @@ public class RotateTurretAutomatic extends ProfiledPIDCommand {
         SmartDashboard.putNumber("Vision target yaw", yaw);
         SmartDashboard.putNumber("Current Turret Rotation", turret.getCurrentRotation());
         SmartDashboard.putNumber("Turret Target Rotation", turret.getTargetRotation());
-
     }
 
     @Override
