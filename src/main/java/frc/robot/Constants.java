@@ -22,6 +22,7 @@ public final class Constants {
     public static final class CANConfig {
         public static final int ROTATE_TURRET = 20;
         public static final int ROTATE_SHOOTER = 20;
+        public static final int ROTATE_HOOD = 20;
     }
 
     public static final class TurretConfig {
@@ -44,6 +45,20 @@ public final class Constants {
 
         public static final double MAX_VELOSITY = 50; // deg/sec
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
+    }
+
+    public static final class HoodConfig {
+        public static final double MANUAL_ROTATION_SPEED = 3;
+
+        private static final double ROTATION_GEAR_RATIO = 1;
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
+
+        public static final double ROTATION_P = 0.001;
+        public static final double ROTATION_I = 0.0;
+        public static final double ROTATION_D = 0.0;
+
+        public static final double MAX_VELOSITY = 30; // deg/sec
+        public static final double MAX_ACCELERATION = 30; // deg/sec/sec
     }
 
     public static final class IntakeConfig {
