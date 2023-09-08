@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.TurretConfig;
 import frc.robot.subsystems.Turret;
@@ -35,6 +36,11 @@ public class RotateTurretAutomatic extends ProfiledPIDCommand {
 
         var yaw = vision.getCurrentTarget().getYaw();
         turret.setTargetRotation(yaw + turret.getCurrentRotation());
+
+        SmartDashboard.putNumber("Vision target yaw", yaw);
+        SmartDashboard.putNumber("Current Turret Rotation", turret.getCurrentRotation());
+        SmartDashboard.putNumber("Turret Target Rotation", turret.getTargetRotation());
+
     }
 
     @Override
