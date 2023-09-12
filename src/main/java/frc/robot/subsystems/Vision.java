@@ -7,10 +7,11 @@ package frc.robot.subsystems;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
-    private final PhotonCamera camera = new PhotonCamera("photonvision");
+    private final PhotonCamera camera = new PhotonCamera("HD_Pro_Webcam_C920");
     private PhotonTrackedTarget currentTarget;
 
     public Vision() {
@@ -23,9 +24,14 @@ public class Vision extends SubsystemBase {
         if (!results.hasTargets()) {
             currentTarget = null;
             return;
+            // camera.getLatestResult().getTargets().
         }
 
         currentTarget = results.getBestTarget();
+        SmartDashboard.putNumber("yaw", currentTarget.getYaw());
+        SmartDashboard.putNumber("pitch", currentTarget.getPitch());
+        SmartDashboard.putNumber("skew", currentTarget.getSkew());
+        SmartDashboard.putNumber("area", currentTarget.getArea());
     }
 
     public PhotonTrackedTarget getCurrentTarget() {

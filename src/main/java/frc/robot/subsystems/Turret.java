@@ -8,7 +8,9 @@ import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
@@ -19,17 +21,20 @@ public class Turret extends SubsystemBase {
 
     private double targetRotation;
     private double currentRotation;
+    public double setpoint;
 
     private final GenericEntry motorOutputEntry;
 
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
         rotationMotor.restoreFactoryDefaults();
-        rotationMotor.getEncoder().setPositionConversionFactor(TurretConfig.ROTATION_MOTOR_CONVERSION);
+        // rotationMotor.getEncoder().setPositionConversionFactor(TurretConfig.ROTATION_MOTOR_CONVERSION);
 
         ShuffleboardHelper.addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
                 .asDial(0, 360);
         ShuffleboardHelper.addOutput("Target Rotation", Constants.TURRET_TAB, () -> targetRotation)
+                .asDial(0, 360);
+        ShuffleboardHelper.addOutput("Setpoint", Constants.TURRET_TAB, () -> setpoint)
                 .asDial(0, 360);
 
         motorOutputEntry = Constants.TURRET_TAB.add("Motor Output (%)", 0).getEntry();
@@ -38,10 +43,12 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         currentRotation = rotationMotor.getEncoder().getPosition();
+        SmartDashboard.putNumber("Current Rotation", currentRotation);
     }
 
     /** Sets the percent output of the turret rotation motor */
     public void outputToMotor(double percentOutput) {
+        percentOutput = MathUtil.clamp(percentOutput, -0.1, 0.1);
         rotationMotor.set(percentOutput);
         motorOutputEntry.setDouble(percentOutput);
     }
