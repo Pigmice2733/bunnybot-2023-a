@@ -24,7 +24,6 @@ public class Vision extends SubsystemBase {
         if (!results.hasTargets()) {
             currentTarget = null;
             return;
-            // camera.getLatestResult().getTargets().
         }
 
         currentTarget = results.getBestTarget();
