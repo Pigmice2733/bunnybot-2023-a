@@ -9,6 +9,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.TurretConfig;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -27,7 +28,7 @@ public class RotateTurretAutomatic extends ProfiledPIDCommand {
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
                 new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION)),
                 () -> turret.getCurrentRotation(), () -> new State(turret.getTargetRotation(), 0),
-                (output, state) -> turret.outputToMotor(output));
+                (output, state) -> turret.outputToMotor(-output));
 
         this.turret = turret;
         this.vision = vision;
@@ -46,7 +47,7 @@ public class RotateTurretAutomatic extends ProfiledPIDCommand {
         }
 
         double yaw = target.getYaw();
-        turret.setTargetRotation(turret.getCurrentRotation() - yaw);
+        turret.setTargetRotation(turret.getCurrentRotation() + yaw);
         turret.setpoint = getController().getSetpoint().position;
     }
 

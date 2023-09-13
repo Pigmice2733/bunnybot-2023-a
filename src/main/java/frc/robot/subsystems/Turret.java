@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,7 +20,7 @@ import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
-    private final CANSparkMax rotationMotor;
+    private final TalonSRX rotationMotor;
 
     private double targetRotation;
     private double currentRotation;
@@ -26,30 +29,29 @@ public class Turret extends SubsystemBase {
     private final GenericEntry motorOutputEntry;
 
     public Turret() {
-        rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
-        rotationMotor.restoreFactoryDefaults();
-        // rotationMotor.getEncoder().setPositionConversionFactor(TurretConfig.ROTATION_MOTOR_CONVERSION);
+        rotationMotor = new TalonSRX(CANConfig.ROTATE_TURRET);
+        rotationMotor.setSelectedSensorPosition(0, 0, 0);
 
         ShuffleboardHelper.addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
-                .asDial(0, 360);
+                .asDial(-360, 360);
         ShuffleboardHelper.addOutput("Target Rotation", Constants.TURRET_TAB, () -> targetRotation)
-                .asDial(0, 360);
+                .asDial(-360, 360);
         ShuffleboardHelper.addOutput("Setpoint", Constants.TURRET_TAB, () -> setpoint)
-                .asDial(0, 360);
+                .asDial(-360, 360);
 
         motorOutputEntry = Constants.TURRET_TAB.add("Motor Output (%)", 0).getEntry();
     }
 
     @Override
     public void periodic() {
-        currentRotation = rotationMotor.getEncoder().getPosition();
+        currentRotation = rotationMotor.getSelectedSensorPosition() / 4096 * 360;
         SmartDashboard.putNumber("Current Rotation", currentRotation);
     }
 
     /** Sets the percent output of the turret rotation motor */
     public void outputToMotor(double percentOutput) {
-        percentOutput = MathUtil.clamp(percentOutput, -0.1, 0.1);
-        rotationMotor.set(percentOutput);
+        // percentOutput = MathUtil.clamp(percentOutput, -0.1, 0.1);
+        rotationMotor.set(TalonSRXControlMode.PercentOutput, percentOutput);
         motorOutputEntry.setDouble(percentOutput);
     }
 
