@@ -24,8 +24,6 @@ public class RotateTurretAutomatic extends ProfiledPIDCommand {
 
     private boolean turningRight = true;
 
-
-
     public RotateTurretAutomatic(Turret turret, Vision vision) {
 
         super(new ProfiledPIDController(
@@ -45,23 +43,20 @@ public class RotateTurretAutomatic extends ProfiledPIDCommand {
 
         PhotonTrackedTarget target = vision.getCurrentTarget();
 
-
         if (target == null) {
-            //wander behavior
+            // wander behavior
             if (turningRight && (turret.getCurrentRotation() < TurretConfig.WANDER_LIMIT)) {
-                turret.setTargetRotation(turret.getCurrentRotation() + TurretConfig.WANDER_SPEED);
-            }
-            else if (turningRight && (turret.getCurrentRotation() >= TurretConfig.WANDER_LIMIT)) {
+                turret.setTargetRotation(TurretConfig.WANDER_LIMIT);
+            } else if (turningRight && (turret.getCurrentRotation() >= TurretConfig.WANDER_LIMIT)) {
                 turningRight = false;
-                turret.setTargetRotation(turret.getCurrentRotation() - TurretConfig.WANDER_SPEED);
+                turret.setTargetRotation(-TurretConfig.WANDER_LIMIT);
             }
-            
+
             if (!turningRight && (turret.getCurrentRotation() > -TurretConfig.WANDER_LIMIT)) {
-                turret.setTargetRotation(turret.getCurrentRotation() - TurretConfig.WANDER_SPEED);
-            }
-            else if (!turningRight && (turret.getCurrentRotation() <= -TurretConfig.WANDER_LIMIT)) {
+                turret.setTargetRotation(-TurretConfig.WANDER_LIMIT);
+            } else if (!turningRight && (turret.getCurrentRotation() <= -TurretConfig.WANDER_LIMIT)) {
                 turningRight = true;
-                turret.setTargetRotation(turret.getCurrentRotation() + TurretConfig.WANDER_SPEED);
+                turret.setTargetRotation(TurretConfig.WANDER_LIMIT);
             }
         }
 

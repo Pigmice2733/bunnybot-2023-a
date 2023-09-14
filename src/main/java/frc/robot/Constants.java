@@ -41,7 +41,6 @@ public final class Constants {
         public static final double MAX_VELOCITY = 500; // deg/sec
         public static final double MAX_ACCELERATION = 1200; // deg/sec/sec
 
-        public static final double WANDER_SPEED = 1;
         public static final double WANDER_LIMIT = 90;
     }
 
