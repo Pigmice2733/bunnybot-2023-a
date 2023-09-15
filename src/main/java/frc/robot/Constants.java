@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -19,9 +22,11 @@ package frc.robot;
 public final class Constants {
     public static final double AXIS_THRESHOLD = 0.1;
 
+    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
+
     public static final class CANConfig {
         public static final int ROTATE_TURRET = 20;
-        public static final int ROTATE_SHOOTER = 20;
+        public static final int ROTATE_SHOOTER = 1;
     }
 
     public static final class TurretConfig {
@@ -44,6 +49,8 @@ public final class Constants {
 
         public static final double MAX_VELOSITY = 50; // deg/sec
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
+
+        public static final double DEFAULT_OUTPUT = 0.5;
     }
 
     public static final class IntakeConfig {
