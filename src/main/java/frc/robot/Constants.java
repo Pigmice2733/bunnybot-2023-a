@@ -34,14 +34,14 @@ public final class Constants {
         private static final double ROTATION_GEAR_RATIO = 1;
         public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
 
-        public static final double ROTATION_P = 0.017;
+        public static final double ROTATION_P = 0.016;
         public static final double ROTATION_I = 0.0001;
         public static final double ROTATION_D = 0.0001;
 
-        public static final double MAX_VELOCITY = 500; // deg/sec
-        public static final double MAX_ACCELERATION = 1200; // deg/sec/sec
+        public static final double MAX_VELOCITY = 1200; // deg/sec
+        public static final double MAX_ACCELERATION = 2000; // deg/sec/sec
 
-        public static final double WANDER_LIMIT = 90;
+        public static final double WANDER_LIMIT = 180;
     }
 
     public static final class ShooterConfig {

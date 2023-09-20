@@ -7,13 +7,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
@@ -24,20 +21,30 @@ public class Turret extends SubsystemBase {
 
     private double targetRotation;
     private double currentRotation;
-    public double setpoint;
 
     private final GenericEntry motorOutputEntry;
+
+    private final ProfiledPIDController rotationController;
+    private Constraints constraints;
 
     public Turret() {
         rotationMotor = new TalonSRX(CANConfig.ROTATE_TURRET);
         rotationMotor.setSelectedSensorPosition(0, 0, 0);
 
+        constraints = new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION);
+
+        rotationController = new ProfiledPIDController(
+                TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
+                constraints);
+
+        rotationController.enableContinuousInput(-180, 180);
+
         ShuffleboardHelper.addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
-                .asDial(-360, 360);
+                .asDial(-180, 180);
         ShuffleboardHelper.addOutput("Target Rotation", Constants.TURRET_TAB, () -> targetRotation)
-                .asDial(-360, 360);
-        ShuffleboardHelper.addOutput("Setpoint", Constants.TURRET_TAB, () -> setpoint)
-                .asDial(-360, 360);
+                .asDial(-180, 180);
+        ShuffleboardHelper.addOutput("Setpoint", Constants.TURRET_TAB, () -> rotationController.getSetpoint().position)
+                .asDial(-180, 180);
 
         motorOutputEntry = Constants.TURRET_TAB.add("Motor Output (%)", 0).getEntry();
     }
@@ -45,7 +52,9 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         currentRotation = rotationMotor.getSelectedSensorPosition() / 4096 * 360;
-        SmartDashboard.putNumber("Current Rotation", currentRotation);
+        double calculatedOutput = rotationController.calculate(currentRotation, targetRotation);
+
+        outputToMotor(calculatedOutput);
     }
 
     /** Sets the percent output of the turret rotation motor */
@@ -73,5 +82,9 @@ public class Turret extends SubsystemBase {
     /** Getst the turrets target rotation */
     public double getTargetRotation() {
         return targetRotation;
+    }
+
+    public void setPIDConstraints(Constraints constraints) {
+        this.constraints = constraints;
     }
 }
