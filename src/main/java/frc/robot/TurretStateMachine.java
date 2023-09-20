@@ -103,6 +103,8 @@ public class TurretStateMachine {
 
     public class Wander implements TurretState {
         boolean turningRight = true;
+        double directionMultiplier;
+        int wanderLimit = TurretConfig.WANDER_LIMIT;
 
         @Override
         public void onStateEntry() {
@@ -113,26 +115,21 @@ public class TurretStateMachine {
         @Override
         public void execute() {
             PhotonTrackedTarget target = vision.getCurrentTarget();
+            double currentRotation = turret.getCurrentRotation();
 
             if (target != null) {
                 setState(TrackTarget.class);
                 return;
             }
 
-            // TODO: make this code good
-            if (turningRight && (turret.getCurrentRotation() < TurretConfig.WANDER_LIMIT)) {
-                turret.setTargetRotation(TurretConfig.WANDER_LIMIT + 5);
-            } else if (turningRight && (turret.getCurrentRotation() >= TurretConfig.WANDER_LIMIT)) {
-                turningRight = false;
-                turret.setTargetRotation(-TurretConfig.WANDER_LIMIT - 5);
+            if (-wanderLimit < currentRotation && currentRotation < wanderLimit)
+                directionMultiplier = turningRight ? 1 : -1;
+            else {
+                directionMultiplier = currentRotation > wanderLimit ? -1 : 1;
             }
 
-            if (!turningRight && (turret.getCurrentRotation() > -TurretConfig.WANDER_LIMIT)) {
-                turret.setTargetRotation(-TurretConfig.WANDER_LIMIT - 5);
-            } else if (!turningRight && (turret.getCurrentRotation() <= -TurretConfig.WANDER_LIMIT)) {
-                turningRight = true;
-                turret.setTargetRotation(TurretConfig.WANDER_LIMIT + 5);
-            }
+            turret.setTargetRotation((wanderLimit + 5) * directionMultiplier);
+            turningRight = directionMultiplier > 0 ? true : false;
         }
 
         @Override
