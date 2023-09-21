@@ -79,6 +79,10 @@ public class Turret extends SubsystemBase {
         targetRotation += delta;
     }
 
+    public double getTurretVelocity() {
+        return rotationMotor.getSelectedSensorVelocity();
+    }
+
     /** Getst the turrets target rotation */
     public double getTargetRotation() {
         return targetRotation;
