@@ -41,8 +41,10 @@ public class Turret extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
                 .asDial(-180, 180);
+
         ShuffleboardHelper.addOutput("Target Rotation", Constants.TURRET_TAB, () -> targetRotation)
                 .asDial(-180, 180);
+
         ShuffleboardHelper.addOutput("Setpoint", Constants.TURRET_TAB, () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
 
@@ -51,7 +53,12 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void periodic() {
-        currentRotation = rotationMotor.getSelectedSensorPosition() / 4096 * 360;
+        updateClosedLoopControl();
+    }
+
+    /** Calculates and applys the next output from the PID controller */
+    private void updateClosedLoopControl() {
+        currentRotation = getCurrentRotation();
         double calculatedOutput = rotationController.calculate(currentRotation, targetRotation);
 
         outputToMotor(calculatedOutput);
@@ -59,7 +66,6 @@ public class Turret extends SubsystemBase {
 
     /** Sets the percent output of the turret rotation motor */
     public void outputToMotor(double percentOutput) {
-        // percentOutput = MathUtil.clamp(percentOutput, -0.1, 0.1);
         rotationMotor.set(TalonSRXControlMode.PercentOutput, percentOutput);
         motorOutputEntry.setDouble(percentOutput);
     }

@@ -23,6 +23,7 @@ public final class Constants {
     public static final double AXIS_THRESHOLD = 0.1;
 
     public static final ShuffleboardTab TURRET_TAB = Shuffleboard.getTab("Turret");
+    public static final ShuffleboardTab VISION_TAB = Shuffleboard.getTab("Vision");
 
     public static final class CANConfig {
         public static final int ROTATE_TURRET = 11;
