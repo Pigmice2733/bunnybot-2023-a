@@ -41,7 +41,8 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1200; // deg/sec
         public static final double MAX_ACCELERATION = 2000; // deg/sec/sec
 
-        public static final int WANDER_LIMIT = 90;
+        public static final double WANDER_LIMIT = 90;
+        public static final double MAX_ALLOWED_ROTATION = 100; // TODO: implement this
     }
 
     public static final class ShooterConfig {

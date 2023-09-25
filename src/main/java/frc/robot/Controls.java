@@ -17,7 +17,7 @@ public class Controls {
         this.operator = operator;
     }
 
-    public double getTurretRotationSpeed() {
+    public double getManualTurretRotationSpeed() {
         double joystickValue = operator.getRightTriggerAxis() - operator.getLeftTriggerAxis();
         joystickValue = MathUtil.applyDeadband(joystickValue, threshold);
 

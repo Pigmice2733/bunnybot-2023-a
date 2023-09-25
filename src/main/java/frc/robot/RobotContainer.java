@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.RotateTurretAutomatic;
+import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
@@ -32,7 +32,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        turret.setDefaultCommand(new RotateTurretAutomatic(turret, vision));
+        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision, controls::getManualTurretRotationSpeed));
         configureButtonBindings();
     }
 
