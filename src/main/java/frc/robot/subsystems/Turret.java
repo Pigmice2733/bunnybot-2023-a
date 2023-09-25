@@ -17,7 +17,7 @@ import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
-    private final TalonSRX rotationMotor;
+    private final TalonSRX rotationMotor; // TODO: when ready to test on the actual robot, switch to a CANSparkMax
 
     private double targetRotation;
     private double currentRotation;
@@ -66,6 +66,12 @@ public class Turret extends SubsystemBase {
 
     /** Sets the percent output of the turret rotation motor */
     public void outputToMotor(double percentOutput) {
+        // TODO: assumes (+ output) => (+ rotation). Verify this.
+        if (currentRotation > TurretConfig.MAX_ALLOWED_ROTATION)
+            percentOutput = Math.min(0, percentOutput);
+        if (currentRotation < -TurretConfig.MAX_ALLOWED_ROTATION)
+            percentOutput = Math.max(0, percentOutput);
+
         rotationMotor.set(TalonSRXControlMode.PercentOutput, percentOutput);
         motorOutputEntry.setDouble(percentOutput);
     }
@@ -85,15 +91,17 @@ public class Turret extends SubsystemBase {
         targetRotation += delta;
     }
 
+    /** @return the current velocity of the turret in degrees / sec */
     public double getTurretVelocity() {
         return rotationMotor.getSelectedSensorVelocity();
     }
 
-    /** Getst the turrets target rotation */
+    /** @return the current rotation of the turret in degrees */
     public double getTargetRotation() {
         return targetRotation;
     }
 
+    /** Sets the velocity and acceleration of the turret */
     public void setPIDConstraints(Constraints constraints) {
         this.constraints = constraints;
     }
