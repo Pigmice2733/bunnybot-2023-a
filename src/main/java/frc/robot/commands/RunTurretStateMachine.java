@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.TurretStateMachine;
-import frc.robot.TurretStateMachine.WanderLeft;
+import frc.robot.TurretStateMachine.WanderRight;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
@@ -22,7 +22,7 @@ public class RunTurretStateMachine extends CommandBase {
 
     @Override
     public void initialize() {
-        stateMachine.setState(WanderLeft.class);
+        stateMachine.setState(WanderRight.class);
     }
 
     @Override

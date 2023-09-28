@@ -11,6 +11,7 @@ import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
@@ -25,19 +26,17 @@ public class Turret extends SubsystemBase {
     private final GenericEntry motorOutputEntry;
 
     private final ProfiledPIDController rotationController;
-    private Constraints constraints;
 
     public Turret() {
         rotationMotor = new TalonSRX(CANConfig.ROTATE_TURRET);
         rotationMotor.setSelectedSensorPosition(0, 0, 0);
-
-        constraints = new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION);
+        rotationMotor.setInverted(false);
 
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
-                constraints);
+                new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION));
 
-        rotationController.enableContinuousInput(-180, 180);
+        // rotationController.enableContinuousInput(-180, 180);
 
         ShuffleboardHelper.addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
                 .asDial(-180, 180);
@@ -49,18 +48,25 @@ public class Turret extends SubsystemBase {
                 .asDial(-180, 180);
 
         motorOutputEntry = Constants.TURRET_TAB.add("Motor Output (%)", 0).getEntry();
+
+        Constants.TURRET_TAB.add("Reset Encoder", new InstantCommand(() -> rotationMotor.setSelectedSensorPosition(0)));
+    }
+
+    public void resetRotationController() {
+        currentRotation = (rotationMotor.getSelectedSensorPosition() / 4096) * 360;
+        targetRotation = currentRotation;
+        rotationController.reset(currentRotation);
     }
 
     @Override
     public void periodic() {
+        currentRotation = (rotationMotor.getSelectedSensorPosition() / 4096) * 360;
         updateClosedLoopControl();
     }
 
     /** Calculates and applys the next output from the PID controller */
     private void updateClosedLoopControl() {
-        currentRotation = getCurrentRotation();
         double calculatedOutput = rotationController.calculate(currentRotation, targetRotation);
-
         outputToMotor(calculatedOutput);
     }
 
@@ -72,8 +78,8 @@ public class Turret extends SubsystemBase {
         if (currentRotation < -TurretConfig.MAX_ALLOWED_ROTATION)
             percentOutput = Math.max(0, percentOutput);
 
-        rotationMotor.set(TalonSRXControlMode.PercentOutput, percentOutput);
-        motorOutputEntry.setDouble(percentOutput);
+        rotationMotor.set(TalonSRXControlMode.PercentOutput, -percentOutput);
+        motorOutputEntry.setDouble(percentOutput / 10);
     }
 
     /** @return the turrets current rotation in degrees */
@@ -103,6 +109,6 @@ public class Turret extends SubsystemBase {
 
     /** Sets the velocity and acceleration of the turret */
     public void setPIDConstraints(Constraints constraints) {
-        this.constraints = constraints;
+        rotationController.setConstraints(constraints);
     }
 }

@@ -26,7 +26,7 @@ public final class Constants {
     public static final ShuffleboardTab VISION_TAB = Shuffleboard.getTab("Vision");
 
     public static final class CANConfig {
-        public static final int ROTATE_TURRET = 11;
+        public static final int ROTATE_TURRET = 30;
     }
 
     public static final class TurretConfig {
@@ -35,15 +35,18 @@ public final class Constants {
         private static final double ROTATION_GEAR_RATIO = 1;
         public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
 
-        public static final double ROTATION_P = 0.016;
+        public static final double ROTATION_P = 0.009;
         public static final double ROTATION_I = 0.0001;
         public static final double ROTATION_D = 0.0001;
 
-        public static final double MAX_VELOCITY = 1200; // deg/sec
-        public static final double MAX_ACCELERATION = 2000; // deg/sec/sec
+        public static final double MAX_VELOCITY = 2400 * 2;// 1200; // deg/sec
+        public static final double MAX_ACCELERATION = 2400 * 2; // 1200; // deg/sec/sec
 
-        public static final double WANDER_LIMIT = 90;
-        public static final double MAX_ALLOWED_ROTATION = 100; // TODO: implement this
+        public static final double WANDER_VELOCITY = MAX_VELOCITY / 20; // deg/sec
+        public static final double WANDER_ACCELERATION = MAX_ACCELERATION / 10; // deg/sec/sec
+
+        public static final double WANDER_LIMIT = 180; // degrees
+        public static final double MAX_ALLOWED_ROTATION = WANDER_LIMIT + 10; // degrees
     }
 
     public static final class ShooterConfig {

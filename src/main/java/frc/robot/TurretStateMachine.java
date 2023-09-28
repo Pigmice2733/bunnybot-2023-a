@@ -5,9 +5,8 @@ import java.util.function.Supplier;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TurretConfig;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -35,11 +34,14 @@ public class TurretStateMachine {
         this.vision = vision;
         this.manualRotationSpeed = manualRotationSpeed;
 
-        ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () -> currentState.getClass().getName());
+        // ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () ->
+        // currentState.getClass().getName());
     }
 
     /** Switches the current state, and calls appropriate entry and exit methods */
     public void setState(Class<?> stateType) {
+        turret.resetRotationController();
+        SmartDashboard.putString("State", stateType.getName());
         TurretState newState = states.get(stateType);
 
         if (newState == null)
@@ -98,7 +100,7 @@ public class TurretStateMachine {
                 if (Math.signum(turret.getTurretVelocity()) >= 0)
                     setState(WanderRight.class);
                 else
-                    setState(WanderLeft.class);
+                    setState(WanderRight.class);
                 return;
             }
 
@@ -109,14 +111,14 @@ public class TurretStateMachine {
     }
 
     /** Rotates left until a target is found, or the wander boundary is reached */
-    public class WanderLeft implements TurretState {
+    public class WanderRight implements TurretState {
         double directionMultiplier;
         double wanderLimit = TurretConfig.WANDER_LIMIT;
 
         @Override
         public void onStateEntry() {
             turret.setPIDConstraints(
-                    new Constraints(TurretConfig.MAX_VELOCITY / 4, TurretConfig.MAX_ACCELERATION / 2));
+                    new Constraints(TurretConfig.WANDER_VELOCITY, TurretConfig.WANDER_ACCELERATION));
 
             turret.setTargetRotation(wanderLimit + 5);
         }
@@ -132,7 +134,7 @@ public class TurretStateMachine {
             }
 
             if (currentRotation > wanderLimit) {
-                setState(WanderRight.class);
+                setState(WanderLeft.class);
             }
         }
 
@@ -144,14 +146,14 @@ public class TurretStateMachine {
     }
 
     /** Rotates right until a target is found, or the wander boundary is reached */
-    public class WanderRight implements TurretState {
+    public class WanderLeft implements TurretState {
         double directionMultiplier;
         double wanderLimit = TurretConfig.WANDER_LIMIT;
 
         @Override
         public void onStateEntry() {
             turret.setPIDConstraints(
-                    new Constraints(TurretConfig.MAX_VELOCITY / 4, TurretConfig.MAX_ACCELERATION / 2));
+                    new Constraints(TurretConfig.WANDER_VELOCITY, TurretConfig.WANDER_ACCELERATION));
 
             turret.setTargetRotation(-wanderLimit - 5);
         }
@@ -166,8 +168,8 @@ public class TurretStateMachine {
                 return;
             }
 
-            if (currentRotation < wanderLimit) {
-                setState(WanderLeft.class);
+            if (currentRotation < -wanderLimit) {
+                setState(WanderRight.class);
             }
         }
 
@@ -184,7 +186,7 @@ public class TurretStateMachine {
         public void execute() {
             double speed = manualRotationSpeed.get();
             if (Math.abs(speed) < Constants.AXIS_THRESHOLD) {
-                setState(WanderLeft.class);
+                setState(WanderRight.class);
                 return;
             }
 

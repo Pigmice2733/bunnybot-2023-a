@@ -21,7 +21,7 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private final Turret turret = new Turret();
+    public final Turret turret = new Turret();
     private final Vision vision = new Vision();
 
     private final XboxController driver = new XboxController(0);
@@ -32,7 +32,8 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision, controls::getManualTurretRotationSpeed));
+        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
+                controls::getManualTurretRotationSpeed));
         configureButtonBindings();
     }
 
