@@ -35,7 +35,8 @@ public class TurretStateMachine {
         this.manualRotationSpeed = manualRotationSpeed;
 
         // ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () ->
-        // currentState.getClass().getName());
+        // currentState.getClass().getName()); // TODO: uncomment after fixing
+        // shuffleboard helper
     }
 
     /** Switches the current state, and calls appropriate entry and exit methods */
@@ -95,7 +96,7 @@ public class TurretStateMachine {
             PhotonTrackedTarget target = vision.getCurrentTarget();
 
             if (target == null) {
-                // wander in the direction the turret is currently rotating
+                // Wander in the direction the turret is currently rotating
                 // TODO: test if it goes the right direction when it switches to wander
                 if (Math.signum(turret.getTurretVelocity()) >= 0)
                     setState(WanderRight.class);
