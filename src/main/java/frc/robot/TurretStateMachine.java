@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TurretConfig;
@@ -34,9 +36,7 @@ public class TurretStateMachine {
         this.vision = vision;
         this.manualRotationSpeed = manualRotationSpeed;
 
-        // ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () ->
-        // currentState.getClass().getName()); // TODO: uncomment after fixing
-        // shuffleboard helper
+        ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () -> currentState.getClass().getName());
     }
 
     /** Switches the current state, and calls appropriate entry and exit methods */
@@ -45,11 +45,13 @@ public class TurretStateMachine {
         SmartDashboard.putString("State", stateType.getName());
         TurretState newState = states.get(stateType);
 
+        currentState.onStateExit();
+
         if (newState == null)
             setState(Idle.class);
+        else
+            currentState = newState;
 
-        currentState.onStateExit();
-        currentState = newState;
         currentState.onStateEntry();
     }
 
@@ -63,6 +65,7 @@ public class TurretStateMachine {
         if (currentState == null)
             return;
 
+        // If the manual control trigger is pressed, switch to the manual control state
         if (Math.abs(manualRotationSpeed.get()) > Constants.AXIS_THRESHOLD) {
             setState(ManualControl.class);
         }
@@ -129,11 +132,13 @@ public class TurretStateMachine {
             PhotonTrackedTarget target = vision.getCurrentTarget();
             double currentRotation = turret.getCurrentRotation();
 
+            // If a target is found, track it
             if (target != null) {
                 setState(TrackTarget.class);
                 return;
             }
 
+            // If the wander limit is reached, switch directions
             if (currentRotation > wanderLimit) {
                 setState(WanderLeft.class);
             }
@@ -164,11 +169,13 @@ public class TurretStateMachine {
             PhotonTrackedTarget target = vision.getCurrentTarget();
             double currentRotation = turret.getCurrentRotation();
 
+            // If a target is found, track it
             if (target != null) {
                 setState(TrackTarget.class);
                 return;
             }
 
+            // If the wander limit is reached, switch directions
             if (currentRotation < -wanderLimit) {
                 setState(WanderRight.class);
             }
@@ -185,13 +192,15 @@ public class TurretStateMachine {
     public class ManualControl implements TurretState {
         @Override
         public void execute() {
-            double speed = manualRotationSpeed.get();
-            if (Math.abs(speed) < Constants.AXIS_THRESHOLD) {
+            double manualSpeed = manualRotationSpeed.get();
+
+            // Switch back to wander state if the trigger is no longer pressed
+            if (Math.abs(manualSpeed) < Constants.AXIS_THRESHOLD) {
                 setState(WanderRight.class);
                 return;
             }
 
-            turret.changeTargetRotation(speed);
+            turret.changeTargetRotation(manualSpeed);
         }
     }
 }

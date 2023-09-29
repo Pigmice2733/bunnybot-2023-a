@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
@@ -40,7 +41,7 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        var results = camera.getLatestResult();
+        PhotonPipelineResult results = camera.getLatestResult();
         if (!results.hasTargets()) {
             currentTarget = null;
             return;

@@ -19,13 +19,10 @@ import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
     private final TalonSRX rotationMotor; // TODO: when ready to test on the actual robot, switch to a CANSparkMax
-
-    private double targetRotation;
-    private double currentRotation;
-
+    private final ProfiledPIDController rotationController;
     private final GenericEntry motorOutputEntry;
 
-    private final ProfiledPIDController rotationController;
+    private double targetRotation;
 
     public Turret() {
         rotationMotor = new TalonSRX(CANConfig.ROTATE_TURRET);
@@ -35,8 +32,6 @@ public class Turret extends SubsystemBase {
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
                 new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION));
-
-        // rotationController.enableContinuousInput(-180, 180);
 
         ShuffleboardHelper.addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
                 .asDial(-180, 180);
@@ -53,26 +48,27 @@ public class Turret extends SubsystemBase {
     }
 
     public void resetRotationController() {
-        currentRotation = (rotationMotor.getSelectedSensorPosition() / 4096) * 360;
+        double currentRotation = getCurrentRotation();
         targetRotation = currentRotation;
         rotationController.reset(currentRotation);
     }
 
     @Override
     public void periodic() {
-        currentRotation = (rotationMotor.getSelectedSensorPosition() / 4096) * 360;
         updateClosedLoopControl();
     }
 
     /** Calculates and applys the next output from the PID controller */
     private void updateClosedLoopControl() {
-        double calculatedOutput = rotationController.calculate(currentRotation, targetRotation);
+        double calculatedOutput = rotationController.calculate(getCurrentRotation(), targetRotation);
         outputToMotor(calculatedOutput);
     }
 
     /** Sets the percent output of the turret rotation motor */
     public void outputToMotor(double percentOutput) {
-        // TODO: assumes (+ output) => (+ rotation). Verify this.
+        double currentRotation = getCurrentRotation();
+
+        // TODO: assumes (+ output) => (+ rotation). Verify this in later testing
         if (currentRotation > TurretConfig.MAX_ALLOWED_ROTATION)
             percentOutput = Math.min(0, percentOutput);
         if (currentRotation < -TurretConfig.MAX_ALLOWED_ROTATION)
@@ -84,7 +80,10 @@ public class Turret extends SubsystemBase {
 
     /** @return the turrets current rotation in degrees */
     public double getCurrentRotation() {
-        return currentRotation;
+        // 4090 is sensor ticks per rotation, and 360 converts rotations to degrees
+        // TODO: once design is finalized, figure out the gear ratio and actual sensor
+        // conversion and put in constants
+        return (rotationMotor.getSelectedSensorPosition() / 4096) * 360;
     }
 
     /** Sets the turrets actual rotation */
