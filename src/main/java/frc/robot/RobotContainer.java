@@ -4,9 +4,17 @@
 
 package frc.robot;
 
+import com.pigmice.frc.lib.swerve.SwerveDrivetrain;
+import com.pigmice.frc.lib.swerve.commands.DriveWithJoysticks;
+import com.pigmice.frc.lib.swerve.commands.path_following.RetracePath;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -24,6 +32,8 @@ public class RobotContainer {
     public final Turret turret = new Turret();
     private final Vision vision = new Vision();
 
+    private SwerveDrivetrain drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
+
     private final XboxController driver = new XboxController(0);
     private final XboxController operator = new XboxController(1);
     private final Controls controls = new Controls(driver, operator);
@@ -32,6 +42,10 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        drivetrain.setDefaultCommand(new DriveWithJoysticks(drivetrain,
+                controls::getDriveSpeedX,
+                controls::getDriveSpeedY, controls::getTurnSpeed, () -> true));
+
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
                 controls::getManualTurretRotationSpeed));
         configureButtonBindings();
@@ -46,7 +60,8 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
+        new JoystickButton(driver, Button.kY.value).whileTrue(new RetracePath(drivetrain));
+        new JoystickButton(driver, Button.kX.value).onTrue(Commands.run(() -> drivetrain.resetOdometry()));
     }
 
     /**
