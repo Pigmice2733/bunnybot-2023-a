@@ -1,7 +1,7 @@
 package frc.robot;
 
 import java.util.Hashtable;
-import java.util.function.Supplier;
+import java.util.function.DoubleSupplier;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -14,23 +14,23 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
 public class TurretStateMachine {
-    private Hashtable<Class<?>, TurretState> states = new Hashtable<Class<?>, TurretState>();
+    private Hashtable<TurretStates, TurretState> states = new Hashtable<TurretStates, TurretState>();
     private TurretState currentState;
 
     private final Vision vision;
     private final Turret turret;
 
-    private final Supplier<Double> manualRotationSpeed;
+    private final DoubleSupplier manualRotationSpeed;
 
-    /** A state machine to control the turret's behaviour */
-    public TurretStateMachine(Turret turret, Vision vision, Supplier<Double> manualRotationSpeed) {
-        states.put(Idle.class, new Idle());
-        states.put(TrackTarget.class, new TrackTarget());
-        states.put(WanderLeft.class, new WanderLeft());
-        states.put(WanderRight.class, new WanderRight());
-        states.put(ManualControl.class, new ManualControl());
+    /** Creates a state machine to control the turret's behavior. */
+    public TurretStateMachine(Turret turret, Vision vision, DoubleSupplier manualRotationSpeed) {
+        states.put(TurretStates.idle, new Idle());
+        states.put(TurretStates.trackTarget, new TrackTarget());
+        states.put(TurretStates.wanderLeft, new WanderLeft());
+        states.put(TurretStates.wanderRight, new WanderRight());
+        states.put(TurretStates.manual, new ManualControl());
 
-        currentState = states.get(Idle.class);
+        currentState = states.get(TurretStates.idle);
 
         this.turret = turret;
         this.vision = vision;
@@ -39,16 +39,20 @@ public class TurretStateMachine {
         ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () -> currentState.getClass().getName());
     }
 
-    /** Switches the current state, and calls appropriate entry and exit methods */
-    public void setState(Class<?> stateType) {
+    public static enum TurretStates {
+        idle, trackTarget, wanderLeft, wanderRight, manual
+    }
+
+    /** Switches the current state, and calls appropriate entry and exit methods. */
+    public void setState(TurretStates stateType) {
         turret.resetRotationController();
-        SmartDashboard.putString("State", stateType.getName());
+        SmartDashboard.putString("State", stateType.name());
         TurretState newState = states.get(stateType);
 
         currentState.onStateExit();
 
         if (newState == null)
-            setState(Idle.class);
+            setState(TurretStates.idle);
         else
             currentState = newState;
 
@@ -60,63 +64,68 @@ public class TurretStateMachine {
         return currentState;
     }
 
-    /** Periodically updates the state macine, including the curret state */
+    /**
+     * Periodically updates the state machine, including the {@code execute} method
+     * of the current state.
+     */
     public void updateStateMachine() {
         if (currentState == null)
             return;
 
         // If the manual control trigger is pressed, switch to the manual control state
-        if (Math.abs(manualRotationSpeed.get()) > Constants.AXIS_THRESHOLD) {
-            setState(ManualControl.class);
+        if (Math.abs(manualRotationSpeed.getAsDouble()) > Constants.AXIS_THRESHOLD) {
+            setState(TurretStates.manual);
         }
 
         currentState.execute();
     }
 
-    /** Implement this for any behaviour of the turret */
+    // Implement this for any behavior of the turret
     public interface TurretState {
-        /** Called once when the turret enters this state */
+        /** Called once when the turret enters this state. */
         public default void onStateEntry() {
         };
 
-        /** Called repeatedly while the turret is in this state */
+        /** Called repeatedly while the turret is in this state. */
         public default void execute() {
         };
 
-        /** Called once when the turret exits this state */
+        /** Called once when the turret exits this state. */
         public default void onStateExit() {
         };
     }
 
-    /** When the turret is idle, it will not move at all */
+    /** When the turret is idle, it will not move at all. */
     public class Idle implements TurretState {
     }
 
-    /** Tracks a target until it is not seen, then switches to wander */
+    /** Tracks a target until it is not seen, then switches to wander. */
     public class TrackTarget implements TurretState {
+        PhotonTrackedTarget target = null;
+
         @Override
         public void execute() {
-            PhotonTrackedTarget target = vision.getCurrentTarget();
+            target = vision.getCurrentTarget();
 
             if (target == null) {
                 // Wander in the direction the turret is currently rotating
                 // TODO: test if it goes the right direction when it switches to wander
                 if (Math.signum(turret.getTurretVelocity()) >= 0)
-                    setState(WanderRight.class);
+                    setState(TurretStates.wanderRight);
                 else
-                    setState(WanderRight.class);
+                    setState(TurretStates.wanderLeft);
                 return;
             }
 
             // Sets the target rotation to the current rotation plus the target's yaw
-            double yaw = target.getYaw();
-            turret.setTargetRotation(turret.getCurrentRotation() + yaw);
+            turret.setTargetRotation(turret.getCurrentRotation() + target.getYaw());
         }
     }
 
-    /** Rotates left until a target is found, or the wander boundary is reached */
+    /** Rotates right until a target is found, or the wander boundary is reached. */
     public class WanderRight implements TurretState {
-        double directionMultiplier;
+        double directionMultiplier, currentRotation;
+        PhotonTrackedTarget target;
         double wanderLimit = TurretConfig.WANDER_LIMIT;
 
         @Override
@@ -129,18 +138,18 @@ public class TurretStateMachine {
 
         @Override
         public void execute() {
-            PhotonTrackedTarget target = vision.getCurrentTarget();
-            double currentRotation = turret.getCurrentRotation();
+            target = vision.getCurrentTarget();
+            currentRotation = turret.getCurrentRotation();
 
             // If a target is found, track it
             if (target != null) {
-                setState(TrackTarget.class);
+                setState(TurretStates.trackTarget);
                 return;
             }
 
             // If the wander limit is reached, switch directions
             if (currentRotation > wanderLimit) {
-                setState(WanderLeft.class);
+                setState(TurretStates.wanderLeft);
             }
         }
 
@@ -151,9 +160,10 @@ public class TurretStateMachine {
         }
     }
 
-    /** Rotates right until a target is found, or the wander boundary is reached */
+    /** Rotates left until a target is found, or the wander boundary is reached. */
     public class WanderLeft implements TurretState {
-        double directionMultiplier;
+        double directionMultiplier, currentRotation;
+        PhotonTrackedTarget target;
         double wanderLimit = TurretConfig.WANDER_LIMIT;
 
         @Override
@@ -166,18 +176,18 @@ public class TurretStateMachine {
 
         @Override
         public void execute() {
-            PhotonTrackedTarget target = vision.getCurrentTarget();
-            double currentRotation = turret.getCurrentRotation();
+            target = vision.getCurrentTarget();
+            currentRotation = turret.getCurrentRotation();
 
             // If a target is found, track it
             if (target != null) {
-                setState(TrackTarget.class);
+                setState(TurretStates.trackTarget);
                 return;
             }
 
             // If the wander limit is reached, switch directions
             if (currentRotation < -wanderLimit) {
-                setState(WanderRight.class);
+                setState(TurretStates.wanderRight);
             }
         }
 
@@ -188,15 +198,17 @@ public class TurretStateMachine {
         }
     }
 
-    /** Manually controls the turret until the input is zero, then wander */
+    /** Manually controls the turret until the input is zero, then wander. */
     public class ManualControl implements TurretState {
+        double manualSpeed;
+
         @Override
         public void execute() {
-            double manualSpeed = manualRotationSpeed.get();
+            manualSpeed = manualRotationSpeed.getAsDouble();
 
             // Switch back to wander state if the trigger is no longer pressed
             if (Math.abs(manualSpeed) < Constants.AXIS_THRESHOLD) {
-                setState(WanderRight.class);
+                setState(TurretStates.wanderRight);
                 return;
             }
 

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.PathConstraints;
 import com.pigmice.frc.lib.swerve.SwerveConfig;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
@@ -84,7 +85,7 @@ public final class Constants {
         }
 
         public static final class VisionConfig {
-                public static final double TARGET_HEIGHT_METERS = 1; // TODO
+                public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42); // TODO
 
                 public static final double CAMERA_HEIGHT_METERS = 1; // TODO
                 public static final double CAMERA_PITCH_RADIANS = 0; // TODO
