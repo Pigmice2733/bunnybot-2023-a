@@ -4,30 +4,29 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.TurretStateMachine;
-import frc.robot.TurretStateMachine.WanderRight;
+import frc.robot.TurretStateMachine.TurretStates;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
 public class RunTurretStateMachine extends CommandBase {
     private final TurretStateMachine stateMachine;
 
-    public RunTurretStateMachine(Turret turret, Vision vision, Supplier<Double> manualRotationSpeed) {
+    public RunTurretStateMachine(Turret turret, Vision vision, DoubleSupplier manualRotationSpeed) {
         this.stateMachine = new TurretStateMachine(turret, vision, manualRotationSpeed);
         addRequirements(turret, vision);
     }
 
     @Override
     public void initialize() {
-        stateMachine.setState(WanderRight.class);
+        stateMachine.setState(TurretStates.wanderRight);
     }
 
     @Override
     public void execute() {
-        super.execute();
         stateMachine.updateStateMachine();
     }
 }
