@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.commands.RunTurretStateMachine;
@@ -61,7 +61,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         new JoystickButton(driver, Button.kY.value).whileTrue(new RetracePath(drivetrain));
-        new JoystickButton(driver, Button.kX.value).onTrue(Commands.run(() -> drivetrain.resetOdometry()));
+        new JoystickButton(driver, Button.kX.value).onTrue(new InstantCommand(drivetrain::resetOdometry));
     }
 
     /**
