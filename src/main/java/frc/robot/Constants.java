@@ -43,7 +43,7 @@ public final class Constants {
 
                 public static final int FRONT_LEFT_DRIVE = 10;
                 public static final int FRONT_LEFT_STEER = 11;
-                public static final int FRONT_RIGHT_DRIVE = 13;
+                public static final int FRONT_RIGHT_DRIVE = 3;
                 public static final int FRONT_RIGHT_STEER = 12;
                 public static final int BACK_LEFT_DRIVE = 17;
                 public static final int BACK_LEFT_STEER = 16;
@@ -74,6 +74,8 @@ public final class Constants {
 
                 public static final double MAX_ALLOWED_ROTATION = 180; // degrees
                 public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
+
+                public static final double TARGET_YAW_TOLERENCE = 3.5;
         }
 
         public static final class ShooterConfig {

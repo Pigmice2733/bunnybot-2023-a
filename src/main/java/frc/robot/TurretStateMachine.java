@@ -1,11 +1,13 @@
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.function.DoubleSupplier;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
+import com.pigmice.frc.lib.utils.Event;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +16,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
 public class TurretStateMachine {
+
     private Hashtable<TurretStates, TurretState> states = new Hashtable<TurretStates, TurretState>();
     private TurretState currentState;
 
@@ -37,10 +40,9 @@ public class TurretStateMachine {
         this.manualRotationSpeed = manualRotationSpeed;
 
         ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () -> currentState.getClass().getName());
-    }
 
-    public static enum TurretStates {
-        idle, trackTarget, wanderLeft, wanderRight, manual
+        ShuffleboardHelper.addOutput("Has Target", Constants.TURRET_TAB,
+                () -> ((TrackTarget) getState(TurretStates.trackTarget)).targetInRange);
     }
 
     /** Switches the current state, and calls appropriate entry and exit methods. */
@@ -62,6 +64,11 @@ public class TurretStateMachine {
     /** @return the state the turret is currently in */
     public TurretState getCurrentState() {
         return currentState;
+    }
+
+    /** @return the instance of a state */
+    public TurretState getState(TurretStates state) {
+        return states.get(state);
     }
 
     /**
@@ -101,7 +108,10 @@ public class TurretStateMachine {
 
     /** Tracks a target until it is not seen, then switches to wander. */
     public class TrackTarget implements TurretState {
-        PhotonTrackedTarget target = null;
+        private PhotonTrackedTarget target = null;
+        public boolean targetInRange;
+
+        public Event targetEnteredRange = new Event();
 
         @Override
         public void execute() {
@@ -119,6 +129,12 @@ public class TurretStateMachine {
 
             // Sets the target rotation to the current rotation plus the target's yaw
             turret.setTargetRotation(turret.getCurrentRotation() + target.getYaw());
+            targetInRange = Math.abs(target.getYaw()) < TurretConfig.TARGET_YAW_TOLERENCE;
+        }
+
+        @Override
+        public void onStateExit() {
+            targetInRange = false;
         }
     }
 
@@ -214,5 +230,9 @@ public class TurretStateMachine {
 
             turret.changeTargetRotation(manualSpeed);
         }
+    }
+
+    public static enum TurretStates {
+        idle, trackTarget, wanderLeft, wanderRight, manual
     }
 }

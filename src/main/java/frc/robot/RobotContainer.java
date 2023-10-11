@@ -60,8 +60,9 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(driver, Button.kY.value).whileTrue(new RetracePath(drivetrain));
-        new JoystickButton(driver, Button.kX.value).onTrue(Commands.run(() -> drivetrain.resetOdometry()));
+        // new JoystickButton(driver, Button.kY.value).whileTrue(new
+        // RetracePath(drivetrain));
+        new JoystickButton(driver, Button.kX.value).onTrue(Commands.runOnce(() -> drivetrain.resetOdometry()));
     }
 
     /**
