@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.pigmice.frc.lib.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.swerve.commands.DriveWithJoysticks;
-import com.pigmice.frc.lib.swerve.commands.path_following.RetracePath;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
