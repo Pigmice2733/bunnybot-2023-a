@@ -61,7 +61,7 @@ public final class Constants {
         }
 
         public static final class TurretConfig {
-                public static final double MANUAL_ROTATION_SPEED = 3;
+                public static final double MANUAL_ROTATION_MULTIPLIER = 3;
 
                 private static final double ROTATION_GEAR_RATIO = 1;
                 public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
