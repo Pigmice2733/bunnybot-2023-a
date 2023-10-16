@@ -60,57 +60,67 @@ public class Grabber extends SubsystemBase {
         outputToRotationMotor(calculatedOutput);
     }
 
+    /** Sets the rotation motor percent output */
     public void outputToRotationMotor(double output) {
         rotationMotor.set(output);
         rotationOutputEntry.setDouble(output);
     }
 
+    /** Sets the flywheels motor percent output */
     public void outputToFlywheelsMotor(double output) {
         flywheelsMotor.set(output);
         flywheelsOutputEntry.setDouble(output);
     }
 
+    /** Sets the angle that the arm will go to */
     public void setTargetRotation(double targetRotation) {
         this.targetRotation = targetRotation;
     }
 
+    /** @return the arms target rotation */
     public double getTargetRotation() {
         return targetRotation;
     }
 
+    /** @return the arms current rotation */
     public double getCurrentRotation() {
         return currentRotation;
     }
 
+    /** Sets the flywheels to intake bunnies */
     public Command runFlywheelsIntakeCommand(double percent) {
         return Commands.runOnce(() -> outputToFlywheelsMotor(GrabberConfig.FLYWHEEL_INTAKE_SPEED));
     }
 
-    public Command runFlywheelsOuttakeCommand(double percent) {
-        return Commands.runOnce(() -> outputToFlywheelsMotor(GrabberConfig.FLYWHEEL_OUTTAKE_SPEED));
+    /** Sets the flywheels to eject bunnies */
+    public Command runFlywheelsEjectCommand(double percent) {
+        return Commands.runOnce(() -> outputToFlywheelsMotor(GrabberConfig.FLYWHEEL_EJECT_SPEED));
     }
 
+    /** Sets the flywheels to zero output */
     public Command stopFlywheelsCommand() {
         return Commands.runOnce(() -> outputToFlywheelsMotor(0));
     }
 
-    public Command setTargetArmAngleCommand() {
-        return Commands.runOnce(() -> setTargetRotation(targetRotation));
+    /** Sends the arm to the specified position */
+    public Command setTargetArmAngleCommand(ArmPosition position) {
+        return Commands.runOnce(() -> setTargetRotation(rotationFromPosition(position)));
     }
 
     public enum ArmPosition {
-        Up,
-        Middle,
-        Down
+        up,
+        middle,
+        down
     }
 
-    public static double rotationFromState(ArmPosition state) {
+    /** Converts an ArmPosition to a specific rotation in degrees */
+    public static double rotationFromPosition(ArmPosition state) {
         switch (state) {
-            case Up:
+            case up:
                 return GrabberConfig.ARM_UP_ANGLE;
-            case Middle:
+            case middle:
                 return GrabberConfig.ARM_MID_ANGLE;
-            case Down:
+            case down:
                 return GrabberConfig.ARM_DOWN_ANGLE;
             default:
                 return 0;
