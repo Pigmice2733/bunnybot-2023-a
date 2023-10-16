@@ -104,6 +104,9 @@ public final class Constants {
         public static final double ARM_UP_ANGLE = 0;
         public static final double ARM_MID_ANGLE = 90;
         public static final double ARM_DOWN_ANGLE = 180;
+
+        public static final double FLYWHEEL_INTAKE_SPEED = 0.2;
+        public static final double FLYWHEEL_OUTTAKE_SPEED = -0.2;
     }
 
     public static final class VisionConfig {
@@ -117,8 +120,7 @@ public final class Constants {
         public static final double MAX_DRIVE_SPEED = 3; // max meters / second
         public static final double MAX_TURN_SPEED = 6; // max radians / second
 
-        private static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one wheel to
-                                                                 // another
+        private static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one wheel to another
 
         private final static SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(TRACK_WIDTH_METERS / 2, TRACK_WIDTH_METERS / 2), // Front left

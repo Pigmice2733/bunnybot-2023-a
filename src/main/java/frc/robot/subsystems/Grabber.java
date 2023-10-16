@@ -82,8 +82,12 @@ public class Grabber extends SubsystemBase {
         return currentRotation;
     }
 
-    public Command runFlywheelsCommand(double percent) {
-        return Commands.runOnce(() -> outputToFlywheelsMotor(percent));
+    public Command runFlywheelsIntakeCommand(double percent) {
+        return Commands.runOnce(() -> outputToFlywheelsMotor(GrabberConfig.FLYWHEEL_INTAKE_SPEED));
+    }
+
+    public Command runFlywheelsOuttakeCommand(double percent) {
+        return Commands.runOnce(() -> outputToFlywheelsMotor(GrabberConfig.FLYWHEEL_OUTTAKE_SPEED));
     }
 
     public Command stopFlywheelsCommand() {
