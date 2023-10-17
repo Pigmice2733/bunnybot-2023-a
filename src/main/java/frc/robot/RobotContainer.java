@@ -4,11 +4,19 @@
 
 package frc.robot;
 
+import com.pigmice.frc.lib.swerve.SwerveDrivetrain;
+import com.pigmice.frc.lib.swerve.commands.DriveWithJoysticks;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.RotateTurretAutomatic;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.DrivetrainConfig;
+import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -20,7 +28,10 @@ import frc.robot.subsystems.Turret;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private final Turret turret = new Turret();
+    public final Turret turret = new Turret();
+    private final Vision vision = new Vision();
+
+    private SwerveDrivetrain drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
 
     private final XboxController driver = new XboxController(0);
     private final XboxController operator = new XboxController(1);
@@ -30,7 +41,12 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        turret.setDefaultCommand(new RotateTurretAutomatic(turret, controls::getTurretRotationSpeed));
+        drivetrain.setDefaultCommand(new DriveWithJoysticks(drivetrain,
+                controls::getDriveSpeedX,
+                controls::getDriveSpeedY, controls::getTurnSpeed, () -> true));
+
+        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
+                controls::getManualTurretRotationSpeed));
         configureButtonBindings();
     }
 
@@ -43,7 +59,9 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
+        // new JoystickButton(driver, Button.kY.value).whileTrue(new
+        // RetracePath(drivetrain));
+        new JoystickButton(driver, Button.kX.value).onTrue(Commands.runOnce(() -> drivetrain.resetOdometry()));
     }
 
     /**
