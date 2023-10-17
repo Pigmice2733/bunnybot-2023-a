@@ -39,8 +39,11 @@ public final class Constants {
     public static final ShuffleboardTab VISION_TAB = Shuffleboard.getTab("Vision");
     public static final ShuffleboardTab GRABBER_TAB = Shuffleboard.getTab("Grabber");
 
+    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
+
     public static final class CANConfig {
-        public static final int ROTATE_TURRET = 30;
+        public static final int ROTATE_TURRET = 20;
+        public static final int ROTATE_SHOOTER = 1;
 
         public static final int FRONT_LEFT_DRIVE = 10;
         public static final int FRONT_LEFT_STEER = 11;
@@ -83,7 +86,28 @@ public final class Constants {
     }
 
     public static final class ShooterConfig {
+        private static final double ROTATION_GEAR_RATIO = 1;
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
 
+        public static final double MAX_VELOSITY = 50; // deg/sec
+        public static final double MAX_ACCELERATION = 50; // deg/sec/sec
+
+        public static final double DEFAULT_OUTPUT = 0.5;
+
+        public static final ShooterSetPoint[] ShooterValues = { new ShooterSetPoint(0, 0, 0) };
+
+    }
+
+    public static class ShooterSetPoint {
+        public final double distance;
+        public final double flywheelSpeed;
+        public final double height;
+
+        public ShooterSetPoint(int d, int f, int h) {
+            distance = d;
+            flywheelSpeed = f;
+            height = h;
+        }
     }
 
     public static final class IntakeConfig {
