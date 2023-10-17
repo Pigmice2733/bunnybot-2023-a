@@ -24,7 +24,7 @@ public class Hood extends SubsystemBase {
     private GenericEntry motorOutputEntry;
 
     public Hood() {
-        rotationMotor = new CANSparkMax(CANConfig.ROTATE_HOOD, MotorType.kBrushless);
+        rotationMotor = new CANSparkMax(CANConfig.HOOD_ROTATION, MotorType.kBrushless);
         rotationMotor.restoreFactoryDefaults();
         rotationMotor.getEncoder().setPositionConversionFactor(HoodConfig.ROTATION_MOTOR_CONVERSION);
 
