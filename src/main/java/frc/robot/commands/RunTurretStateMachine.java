@@ -22,7 +22,7 @@ public class RunTurretStateMachine extends CommandBase {
 
     @Override
     public void initialize() {
-        stateMachine.setState(TurretStates.wanderRight);
+        stateMachine.setState(TurretStates.WANDER_RIGHT);
     }
 
     @Override
