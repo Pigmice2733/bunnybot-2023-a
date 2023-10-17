@@ -32,17 +32,17 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double AXIS_THRESHOLD = 0.18;
-
+    public static final ShuffleboardTab HOOD_TAB = Shuffleboard.getTab("Hood");
     public static final ShuffleboardTab TURRET_TAB = Shuffleboard.getTab("Turret");
     public static final ShuffleboardTab SWERVE_TAB = Shuffleboard.getTab("Drivetrain");
     public static final ShuffleboardTab VISION_TAB = Shuffleboard.getTab("Vision");
-    public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
     public static final ShuffleboardTab GRABBER_TAB = Shuffleboard.getTab("Grabber");
+    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
+    public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
+
+    public static final double AXIS_THRESHOLD = 0.1;
 
     public static final class CANConfig {
-        public static final int ROTATE_TURRET = 30;
-
         public static final int FRONT_LEFT_DRIVE = 10;
         public static final int FRONT_LEFT_STEER = 11;
         public static final int FRONT_RIGHT_DRIVE = 3;
@@ -52,15 +52,20 @@ public final class Constants {
         public static final int BACK_RIGHT_DRIVE = 14;
         public static final int BACK_RIGHT_STEER = 15;
 
-        public static final int GRABBER_ROTATION = 40;
-        public static final int GRABBER_FLYWHEELS = 41;
-
         public static final int FRONT_LEFT_ABS_ENCODER = 20;
         public static final int FRONT_RIGHT_ABS_ENCODER = 22;
         public static final int BACK_LEFT_ABS_ENCODER = 26;
         public static final int BACK_RIGHT_ABS_ENCODER = 24;
 
-        public static final int INDEXER_BELT = 51;
+        public static final int ROTATE_TURRET = 30;
+        public static final int ROTATE_SHOOTER = 31;
+
+        public static final int GRABBER_ROTATION = 40;
+        public static final int GRABBER_FLYWHEELS = 41;
+
+        public static final int INDEXER_BELT = 50;
+
+        public static final int HOOD_ROTATION = 60;
     }
 
     public static final class TurretConfig {
@@ -86,7 +91,44 @@ public final class Constants {
     }
 
     public static final class ShooterConfig {
+        private static final double ROTATION_GEAR_RATIO = 1;
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
 
+        public static final double MAX_VELOSITY = 50; // deg/sec
+        public static final double MAX_ACCELERATION = 50; // deg/sec/sec
+
+        public static final double DEFAULT_OUTPUT = 0.5;
+
+        public static final ShooterSetPoint[] ShooterValues = { new ShooterSetPoint(0, 0, 0) };
+
+    }
+
+    public static class ShooterSetPoint {
+        public final double distance;
+        public final double flywheelSpeed;
+        public final double height;
+
+        public ShooterSetPoint(int d, int f, int h) {
+            distance = d;
+            flywheelSpeed = f;
+            height = h;
+        }
+    }
+
+    public static final class HoodConfig {
+        public static final double MANUAL_ROTATION_SPEED = 3;
+
+        private static final double ROTATION_GEAR_RATIO = 1;
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
+
+        public static final double HOOD_P = 0.0;
+        public static final double HOOD_I = 0.0;
+        public static final double HOOD_D = 0.0;
+
+        public static final double MAX_VELOCITY = 30; // deg/sec
+        public static final double MAX_ACCELERATION = 30; // deg/sec/sec
+
+        public static final double ROTATION_CONVERSION = 1; // encoder rotaiton to arm rotations (TODO)
     }
 
     public static final class IntakeConfig {
@@ -94,7 +136,7 @@ public final class Constants {
     }
 
     public static final class IndexerConfig {
-        public static final double BELT_SPEED = 0.2;
+        public static final double BELT_SPEED = 0.15;
     }
 
     public static final class GrabberConfig {
