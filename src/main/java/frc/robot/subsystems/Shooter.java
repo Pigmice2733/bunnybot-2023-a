@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.ShooterConfig;
-import frc.robot.Constants.ShooterSetPoint;
 
 public class Shooter extends SubsystemBase {
     private final CANSparkMax rotationMotor;
