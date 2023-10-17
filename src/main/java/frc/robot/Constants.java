@@ -37,6 +37,7 @@ public final class Constants {
     public static final ShuffleboardTab TURRET_TAB = Shuffleboard.getTab("Turret");
     public static final ShuffleboardTab SWERVE_TAB = Shuffleboard.getTab("Drivetrain");
     public static final ShuffleboardTab VISION_TAB = Shuffleboard.getTab("Vision");
+    public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
 
     public static final class CANConfig {
         public static final int ROTATE_TURRET = 30;
@@ -54,6 +55,8 @@ public final class Constants {
         public static final int FRONT_RIGHT_ABS_ENCODER = 22;
         public static final int BACK_LEFT_ABS_ENCODER = 26;
         public static final int BACK_RIGHT_ABS_ENCODER = 24;
+
+        public static final int INDEXER_BELT = 51;
     }
 
     public static final class TurretConfig {
@@ -82,6 +85,10 @@ public final class Constants {
 
     public static final class IntakeConfig {
 
+    }
+
+    public static final class IndexerConfig {
+        public static final double BELT_SPEED = 0.2;
     }
 
     public static final class VisionConfig {
