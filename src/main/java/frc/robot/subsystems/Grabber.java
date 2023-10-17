@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.GrabberConfig;
+import frc.robot.Constants.GrabberConfig.ArmPosition;
 
 public class Grabber extends SubsystemBase {
     private final CANSparkMax rotationMotor, flywheelsMotor;
@@ -104,26 +105,6 @@ public class Grabber extends SubsystemBase {
 
     /** Sends the arm to the specified position */
     public Command setTargetArmAngleCommand(ArmPosition position) {
-        return Commands.runOnce(() -> setTargetRotation(rotationFromPosition(position)));
-    }
-
-    public enum ArmPosition {
-        up,
-        middle,
-        down
-    }
-
-    /** Converts an ArmPosition to a specific rotation in degrees */
-    public static double rotationFromPosition(ArmPosition state) {
-        switch (state) {
-            case up:
-                return GrabberConfig.ARM_UP_ANGLE;
-            case middle:
-                return GrabberConfig.ARM_MID_ANGLE;
-            case down:
-                return GrabberConfig.ARM_DOWN_ANGLE;
-            default:
-                return 0;
-        }
+        return Commands.runOnce(() -> setTargetRotation(position.getAngle()));
     }
 }
