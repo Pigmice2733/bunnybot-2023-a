@@ -51,6 +51,21 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
         public static final double DEFAULT_OUTPUT = 0.5;
+
+        public static final ShooterSetPoint[] ShooterValues = { new ShooterSetPoint(0, 0, 0) };
+
+    }
+
+    public static class ShooterSetPoint {
+        public final double distance;
+        public final double flywheelSpeed;
+        public final double height;
+
+        public ShooterSetPoint(int d, int f, int h) {
+            distance = d;
+            flywheelSpeed = f;
+            height = h;
+        }
     }
 
     public static final class IntakeConfig {
