@@ -6,6 +6,7 @@ import java.util.function.DoubleSupplier;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
+import com.pigmice.frc.lib.utils.Event;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +15,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
 public class TurretStateMachine {
+
     private Hashtable<TurretStates, TurretState> states = new Hashtable<TurretStates, TurretState>();
     private TurretState currentState;
 
@@ -24,23 +26,22 @@ public class TurretStateMachine {
 
     /** Creates a state machine to control the turret's behavior. */
     public TurretStateMachine(Turret turret, Vision vision, DoubleSupplier manualRotationSpeed) {
-        states.put(TurretStates.idle, new Idle());
-        states.put(TurretStates.trackTarget, new TrackTarget());
-        states.put(TurretStates.wanderLeft, new WanderLeft());
-        states.put(TurretStates.wanderRight, new WanderRight());
-        states.put(TurretStates.manual, new ManualControl());
+        states.put(TurretStates.IDLE, new Idle());
+        states.put(TurretStates.TRACK_TARGET, new TrackTarget());
+        states.put(TurretStates.WANDER_LEFT, new WanderLeft());
+        states.put(TurretStates.WANDER_RIGHT, new WanderRight());
+        states.put(TurretStates.MANUAL, new ManualControl());
 
-        currentState = states.get(TurretStates.idle);
+        currentState = states.get(TurretStates.IDLE);
 
         this.turret = turret;
         this.vision = vision;
         this.manualRotationSpeed = manualRotationSpeed;
 
         ShuffleboardHelper.addOutput("State", Constants.TURRET_TAB, () -> currentState.getClass().getName());
-    }
 
-    public static enum TurretStates {
-        idle, trackTarget, wanderLeft, wanderRight, manual
+        ShuffleboardHelper.addOutput("Has Target", Constants.TURRET_TAB,
+                () -> ((TrackTarget) getState(TurretStates.TRACK_TARGET)).targetInRange);
     }
 
     /** Switches the current state, and calls appropriate entry and exit methods. */
@@ -52,7 +53,7 @@ public class TurretStateMachine {
         currentState.onStateExit();
 
         if (newState == null)
-            setState(TurretStates.idle);
+            setState(TurretStates.IDLE);
         else
             currentState = newState;
 
@@ -62,6 +63,11 @@ public class TurretStateMachine {
     /** @return the state the turret is currently in */
     public TurretState getCurrentState() {
         return currentState;
+    }
+
+    /** @return the instance of a state */
+    public TurretState getState(TurretStates state) {
+        return states.get(state);
     }
 
     /**
@@ -74,7 +80,7 @@ public class TurretStateMachine {
 
         // If the manual control trigger is pressed, switch to the manual control state
         if (Math.abs(manualRotationSpeed.getAsDouble()) > Constants.AXIS_THRESHOLD) {
-            setState(TurretStates.manual);
+            setState(TurretStates.MANUAL);
         }
 
         currentState.execute();
@@ -101,7 +107,10 @@ public class TurretStateMachine {
 
     /** Tracks a target until it is not seen, then switches to wander. */
     public class TrackTarget implements TurretState {
-        PhotonTrackedTarget target = null;
+        private PhotonTrackedTarget target = null;
+        public boolean targetInRange;
+
+        public Event targetEnteredRange = new Event();
 
         @Override
         public void execute() {
@@ -111,14 +120,20 @@ public class TurretStateMachine {
                 // Wander in the direction the turret is currently rotating
                 // TODO: test if it goes the right direction when it switches to wander
                 if (Math.signum(turret.getTurretVelocity()) >= 0)
-                    setState(TurretStates.wanderRight);
+                    setState(TurretStates.WANDER_RIGHT);
                 else
-                    setState(TurretStates.wanderLeft);
+                    setState(TurretStates.WANDER_LEFT);
                 return;
             }
 
             // Sets the target rotation to the current rotation plus the target's yaw
             turret.setTargetRotation(turret.getCurrentRotation() + target.getYaw());
+            targetInRange = Math.abs(target.getYaw()) < TurretConfig.TARGET_YAW_TOLERENCE;
+        }
+
+        @Override
+        public void onStateExit() {
+            targetInRange = false;
         }
     }
 
@@ -143,13 +158,13 @@ public class TurretStateMachine {
 
             // If a target is found, track it
             if (target != null) {
-                setState(TurretStates.trackTarget);
+                setState(TurretStates.TRACK_TARGET);
                 return;
             }
 
             // If the wander limit is reached, switch directions
             if (currentRotation > wanderLimit) {
-                setState(TurretStates.wanderLeft);
+                setState(TurretStates.WANDER_LEFT);
             }
         }
 
@@ -181,13 +196,13 @@ public class TurretStateMachine {
 
             // If a target is found, track it
             if (target != null) {
-                setState(TurretStates.trackTarget);
+                setState(TurretStates.TRACK_TARGET);
                 return;
             }
 
             // If the wander limit is reached, switch directions
             if (currentRotation < -wanderLimit) {
-                setState(TurretStates.wanderRight);
+                setState(TurretStates.WANDER_RIGHT);
             }
         }
 
@@ -208,11 +223,15 @@ public class TurretStateMachine {
 
             // Switch back to wander state if the trigger is no longer pressed
             if (Math.abs(manualSpeed) < Constants.AXIS_THRESHOLD) {
-                setState(TurretStates.wanderRight);
+                setState(TurretStates.WANDER_RIGHT);
                 return;
             }
 
             turret.changeTargetRotation(manualSpeed);
         }
+    }
+
+    public static enum TurretStates {
+        IDLE, TRACK_TARGET, WANDER_LEFT, WANDER_RIGHT, MANUAL
     }
 }
