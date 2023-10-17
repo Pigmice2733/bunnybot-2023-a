@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -17,6 +20,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final ShuffleboardTab HOOD_TAB = Shuffleboard.getTab("Hood");
+
     public static final double AXIS_THRESHOLD = 0.1;
 
     public static final class CANConfig {
@@ -53,12 +58,14 @@ public final class Constants {
         private static final double ROTATION_GEAR_RATIO = 1;
         public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
 
-        public static final double ROTATION_P = 0.001;
-        public static final double ROTATION_I = 0.0;
-        public static final double ROTATION_D = 0.0;
+        public static final double HOOD_P = 0.0;
+        public static final double HOOD_I = 0.0;
+        public static final double HOOD_D = 0.0;
 
-        public static final double MAX_VELOSITY = 30; // deg/sec
+        public static final double MAX_VELOCITY = 30; // deg/sec
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
+
+        public static final double ROTATION_CONVERSION = 1; // encoder rotaiton to arm rotations (TODO)
     }
 
     public static final class IntakeConfig {
