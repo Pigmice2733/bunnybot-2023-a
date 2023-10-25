@@ -39,6 +39,7 @@ public final class Constants {
     public static final ShuffleboardTab GRABBER_TAB = Shuffleboard.getTab("Grabber");
     public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
     public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
+    public static final ShuffleboardTab INTAKE_TAB = Shuffleboard.getTab("Intake");
 
     public static final double AXIS_THRESHOLD = 0.1;
 
@@ -66,6 +67,8 @@ public final class Constants {
         public static final int INDEXER_BELT = 50;
 
         public static final int HOOD_ROTATION = 60;
+
+        public static final int INTAKE_WHEELS = 70;
     }
 
     public static final class TurretConfig {
@@ -132,7 +135,7 @@ public final class Constants {
     }
 
     public static final class IntakeConfig {
-
+        public static final double INTAKE_SPEED = 0.2;
     }
 
     public static final class IndexerConfig {
