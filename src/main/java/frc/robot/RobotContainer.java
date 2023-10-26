@@ -14,7 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConfig;
-import frc.robot.commands.RunTurretStateMachine;
+import frc.robot.commands.turret.RunTurretStateMachine;
+import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
@@ -30,6 +35,11 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
     public final Turret turret = new Turret();
     private final Vision vision = new Vision();
+    private final Grabber grabber = new Grabber();
+    private final Hood hood = new Hood();
+    private final Indexer indexer = new Indexer();
+    private final Intake intake = new Intake();
+    private final Shooter shooter = new Shooter();
 
     private SwerveDrivetrain drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
 
@@ -47,6 +57,7 @@ public class RobotContainer {
 
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
                 controls::getManualTurretRotationSpeed));
+
         configureButtonBindings();
     }
 
@@ -59,9 +70,8 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        // new JoystickButton(driver, Button.kY.value).whileTrue(new
-        // RetracePath(drivetrain));
         new JoystickButton(driver, Button.kX.value).onTrue(Commands.runOnce(() -> drivetrain.resetOdometry()));
+
     }
 
     /**
