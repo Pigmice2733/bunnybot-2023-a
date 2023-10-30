@@ -4,29 +4,17 @@
 
 package frc.robot.commands.actions;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConfig;
 import frc.robot.subsystems.Indexer;
 
-public class FeedShooter extends CommandBase {
+public class FeedShooter extends SequentialCommandGroup {
   /** Feeds a single ball into the shooter */
   public FeedShooter(Indexer indexer) {
-
-  }
-
-  @Override
-  public void initialize() {
-  }
-
-  @Override
-  public void execute() {
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
+    addCommands(
+        indexer.spinBeltForward(),
+        Commands.waitSeconds(AutoConfig.FEED_SHOOTER_INDEX_TIME),
+        indexer.stopBelt());
   }
 }

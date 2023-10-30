@@ -4,27 +4,21 @@
 
 package frc.robot.commands.actions;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConfig;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
-public class EjectAll extends CommandBase {
-    /** Ejects all balls backwards */
-    public EjectAll() {
-    }
+public class EjectAll extends SequentialCommandGroup {
+    /** Ejects all balls backward through the indexer and intake */
+    public EjectAll(Intake intake, Indexer indexer, Shooter shooter) {
+        addCommands(intake.spinBackward(), indexer.spinBeltBackward(),
+                shooter.setFlywheelSpeed(AutoConfig.SHOOTER_EJECTION_SPEED),
+                Commands.waitSeconds(AutoConfig.EJECT_ALL_TIME),
+                intake.stopWheels(), indexer.stopBelt(), shooter.stopFlywheel());
 
-    @Override
-    public void initialize() {
-    }
-
-    @Override
-    public void execute() {
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
+        addRequirements(intake, indexer);
     }
 }

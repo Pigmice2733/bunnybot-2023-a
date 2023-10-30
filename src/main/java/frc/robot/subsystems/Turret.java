@@ -110,4 +110,9 @@ public class Turret extends SubsystemBase {
     public void setPIDConstraints(Constraints constraints) {
         rotationController.setConstraints(constraints);
     }
+
+    // TODO: return true if the turret is aimed at a targeted at an ok velocity
+    public boolean hasTarget() {
+        return false;
+    }
 }

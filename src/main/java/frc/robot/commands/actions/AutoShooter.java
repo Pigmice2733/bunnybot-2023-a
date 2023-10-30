@@ -5,26 +5,34 @@
 package frc.robot.commands.actions;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 public class AutoShooter extends CommandBase {
-    /** Automatically runs the shooter, but only when there is a target in range */
-    public AutoShooter() {
-    }
+    private final Turret turret;
 
-    @Override
-    public void initialize() {
+    private boolean isShooting;
+    private RunShooter shootCommand;
+
+    /** Automatically runs the shooter, but only when there is a target in range */
+    public AutoShooter(Shooter shooter, Turret turret, Indexer indexer) {
+        this.turret = turret;
+
+        shootCommand = new RunShooter(indexer, shooter);
+        addRequirements(shooter, indexer);
     }
 
     @Override
     public void execute() {
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
+        if (turret.hasTarget()) {
+            if (!isShooting) {
+                isShooting = true;
+                shootCommand.schedule();
+            }
+        } else if (isShooting) {
+            isShooting = false;
+            shootCommand.cancel();
+        }
     }
 }

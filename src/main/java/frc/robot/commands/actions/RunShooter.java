@@ -4,27 +4,19 @@
 
 package frc.robot.commands.actions;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConfig;
+import frc.robot.Constants.ShooterConfig;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
 
-public class RunShooter extends CommandBase {
+public class RunShooter extends SequentialCommandGroup {
     /** Runs and feeds the shooter */
-    public RunShooter() {
-    }
-
-    @Override
-    public void initialize() {
-    }
-
-    @Override
-    public void execute() {
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
+    public RunShooter(Indexer indexer, Shooter shooter) {
+        addCommands(
+                shooter.setFlywheelSpeed(ShooterConfig.DEFAULT_OUTPUT),
+                Commands.waitSeconds(AutoConfig.SHOOTER_SPINUP_TIME),
+                new FeedShooter(indexer));
     }
 }

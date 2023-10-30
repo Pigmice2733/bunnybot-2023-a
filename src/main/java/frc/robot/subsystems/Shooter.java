@@ -8,6 +8,8 @@ import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
@@ -21,11 +23,11 @@ public class Shooter extends SubsystemBase {
         rotationMotor.restoreFactoryDefaults();
         rotationMotor.getEncoder().setPositionConversionFactor(ShooterConfig.ROTATION_MOTOR_CONVERSION);
 
-        ShuffleboardHelper.addOutput("Current Percent", Constants.SHOOTER_TAB, () -> getCurrentPercent())
+        ShuffleboardHelper.addOutput("Current Percent", Constants.SHOOTER_TAB, () -> rotationMotor.get())
                 .asDial(-1, 1);
     }
 
-    public void enableManual(double percentOutput) {
+    private void outputToMotor(double percentOutput) {
         rotationMotor.set(percentOutput);
     }
 
@@ -33,12 +35,15 @@ public class Shooter extends SubsystemBase {
         rotationMotor.set(ShooterConfig.DEFAULT_OUTPUT);
     }
 
+    public Command setFlywheelSpeed(double percentOutput) {
+        return Commands.runOnce(() -> outputToMotor(percentOutput));
+    }
+
+    public Command stopFlywheel() {
+        return Commands.runOnce(() -> outputToMotor(0));
+    }
+
     public void disable() {
         rotationMotor.set(0);
     }
-
-    public double getCurrentPercent() {
-        return rotationMotor.get();
-    }
-
 }
