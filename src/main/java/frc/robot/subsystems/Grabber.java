@@ -6,7 +6,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,8 +20,6 @@ public class Grabber extends SubsystemBase {
     private final ProfiledPIDController rotationController;
 
     private double targetRotation, currentRotation;
-
-    private final GenericEntry rotationOutputEntry, flywheelsOutputEntry;
 
     public Grabber() {
         rotationMotor = new CANSparkMax(CANConfig.GRABBER_ROTATION, MotorType.kBrushless);
@@ -45,8 +42,8 @@ public class Grabber extends SubsystemBase {
         ShuffleboardHelper.addOutput("Target", Constants.GRABBER_TAB, () -> targetRotation)
                 .asDial(-180, 180);
 
-        rotationOutputEntry = Constants.GRABBER_TAB.add("Rotation Output", 0).getEntry();
-        flywheelsOutputEntry = Constants.GRABBER_TAB.add("FLywheels Output", 0).getEntry();
+        ShuffleboardHelper.addOutput("Rotation Output", Constants.GRABBER_TAB, () -> rotationMotor.get());
+        ShuffleboardHelper.addOutput("Flywheels Output", Constants.GRABBER_TAB, () -> flywheelsMotor.get());
     }
 
     @Override
@@ -64,13 +61,11 @@ public class Grabber extends SubsystemBase {
     /** Sets the rotation motor percent output */
     public void outputToRotationMotor(double output) {
         rotationMotor.set(output);
-        rotationOutputEntry.setDouble(output);
     }
 
     /** Sets the flywheels motor percent output */
     public void outputToFlywheelsMotor(double output) {
         flywheelsMotor.set(output);
-        flywheelsOutputEntry.setDouble(output);
     }
 
     /** Sets the angle that the arm will go to */

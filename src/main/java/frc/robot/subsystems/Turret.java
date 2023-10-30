@@ -4,13 +4,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,15 +17,14 @@ import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
-    private final TalonSRX rotationMotor; // TODO: when ready to test on the actual robot, switch to a CANSparkMax
+    private final CANSparkMax rotationMotor; // TODO: when ready to test on the actual robot, switch to a CANSparkMax
     private final ProfiledPIDController rotationController;
-    private final GenericEntry motorOutputEntry;
 
     private double targetRotation;
 
     public Turret() {
-        rotationMotor = new TalonSRX(CANConfig.ROTATE_TURRET);
-        rotationMotor.setSelectedSensorPosition(0, 0, 0);
+        rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
+        rotationMotor.getEncoder().setPosition(0);
         rotationMotor.setInverted(false);
 
         rotationController = new ProfiledPIDController(
@@ -42,9 +40,9 @@ public class Turret extends SubsystemBase {
         ShuffleboardHelper.addOutput("Setpoint", Constants.TURRET_TAB, () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
 
-        motorOutputEntry = Constants.TURRET_TAB.add("Motor Output (%)", 0).getEntry();
+        ShuffleboardHelper.addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get());
 
-        Constants.TURRET_TAB.add("Reset Encoder", new InstantCommand(() -> rotationMotor.setSelectedSensorPosition(0)));
+        Constants.TURRET_TAB.add("Reset Encoder", new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
     }
 
     public void resetRotationController() {
@@ -74,16 +72,15 @@ public class Turret extends SubsystemBase {
         if (currentRotation < -TurretConfig.MAX_ALLOWED_ROTATION)
             percentOutput = Math.max(0, percentOutput);
 
-        rotationMotor.set(TalonSRXControlMode.PercentOutput, -percentOutput);
-        motorOutputEntry.setDouble(percentOutput / 10);
+        rotationMotor.set(percentOutput);
     }
 
     /** @return the turrets current rotation in degrees */
     public double getCurrentRotation() {
-        // 4090 is sensor ticks per rotation, and 360 converts rotations to degrees
+        // 360 converts rotations to degrees
         // TODO: once design is finalized, figure out the gear ratio and actual sensor
         // conversion and put in constants
-        return (rotationMotor.getSelectedSensorPosition() / 4096) * 360;
+        return (rotationMotor.getEncoder().getPosition()) * 360;
     }
 
     /** Sets the turrets actual rotation */
@@ -98,7 +95,7 @@ public class Turret extends SubsystemBase {
 
     /** @return the current velocity of the turret in degrees / sec */
     public double getTurretVelocity() {
-        return rotationMotor.getSelectedSensorVelocity();
+        return rotationMotor.getEncoder().getVelocity();
     }
 
     /** @return the current rotation of the turret in degrees */

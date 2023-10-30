@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
@@ -21,7 +20,6 @@ public class Hood extends SubsystemBase {
     private final ProfiledPIDController rotationController;
 
     private double targetRotation, currentRotation;
-    private GenericEntry motorOutputEntry;
 
     public Hood() {
         rotationMotor = new CANSparkMax(CANConfig.HOOD_ROTATION, MotorType.kBrushless);
@@ -44,7 +42,7 @@ public class Hood extends SubsystemBase {
         ShuffleboardHelper.addOutput("Target", Constants.HOOD_TAB, () -> targetRotation)
                 .asDial(-180, 180);
 
-        motorOutputEntry = Constants.HOOD_TAB.add("Motor Output", 0).getEntry();
+        ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
     }
 
     @Override
@@ -62,7 +60,6 @@ public class Hood extends SubsystemBase {
     /** Sets the percent output of the hood rotation motor */
     public void outputToMotor(double percentOutput) {
         rotationMotor.set(percentOutput);
-        motorOutputEntry.setDouble(percentOutput);
     }
 
     /** @return the hood current rotation in degrees */

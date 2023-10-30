@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
         rotationMotor.restoreFactoryDefaults();
         rotationMotor.getEncoder().setPositionConversionFactor(ShooterConfig.ROTATION_MOTOR_CONVERSION);
 
-        ShuffleboardHelper.addOutput("Current Percent", Constants.SHOOTER_TAB, () -> rotationMotor.get())
+        ShuffleboardHelper.addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get())
                 .asDial(-1, 1);
     }
 
