@@ -4,8 +4,8 @@
 
 package frc.robot;
 
-import com.pigmice.frc.lib.swerve.SwerveDrivetrain;
-import com.pigmice.frc.lib.swerve.commands.DriveWithJoysticks;
+import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
+import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -47,7 +47,7 @@ public class RobotContainer {
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
 
-        drivetrain.setDefaultCommand(new DriveWithJoysticks(drivetrain,
+        drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
                 controls::getDriveSpeedY,
                 controls::getTurnSpeed,

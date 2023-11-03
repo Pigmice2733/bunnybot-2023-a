@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
+import com.pigmice.frc.lib.utils.Utils;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -70,10 +71,7 @@ public class Turret extends SubsystemBase {
         double currentRotation = getCurrentRotation();
 
         // TODO: assumes (+ output) => (+ rotation). Verify this in later testing.
-        if (currentRotation > TurretConfig.MAX_ALLOWED_ROTATION)
-            percentOutput = Math.min(0, percentOutput);
-        if (currentRotation < -TurretConfig.MAX_ALLOWED_ROTATION)
-            percentOutput = Math.max(0, percentOutput);
+        percentOutput = Utils.rotationStop(currentRotation, percentOutput, TurretConfig.MAX_ALLOWED_ROTATION);
 
         rotationMotor.set(TalonSRXControlMode.PercentOutput, percentOutput);
         motorOutputEntry.setDouble(percentOutput / 10);
