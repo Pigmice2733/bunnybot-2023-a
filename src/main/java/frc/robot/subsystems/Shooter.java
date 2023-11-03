@@ -25,18 +25,22 @@ public class Shooter extends SubsystemBase {
                 .asDial(-1, 1);
     }
 
+    /** Manually set the percent output of the motor. */
     public void enableManual(double percentOutput) {
         rotationMotor.set(percentOutput);
     }
 
+    /** Set the motor output to the default speed. */
     public void enableDefault() {
         rotationMotor.set(ShooterConfig.DEFAULT_OUTPUT);
     }
 
+    /** Set the motor to zero output. */
     public void disable() {
         rotationMotor.set(0);
     }
 
+    /** Returns the current speed of the motor. */
     public double getCurrentPercent() {
         return rotationMotor.get();
     }

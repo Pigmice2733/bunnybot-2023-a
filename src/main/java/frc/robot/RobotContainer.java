@@ -28,25 +28,33 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    public final Turret turret = new Turret();
-    private final Vision vision = new Vision();
+    public final Turret turret;
+    private final Vision vision;
+    private final SwerveDrivetrain drivetrain;
 
-    private SwerveDrivetrain drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
-
-    private final XboxController driver = new XboxController(0);
-    private final XboxController operator = new XboxController(1);
-    private final Controls controls = new Controls(driver, operator);
+    private final XboxController driver;
+    private final XboxController operator;
+    private final Controls controls;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        turret = new Turret();
+        vision = new Vision();
+        drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
+        driver = new XboxController(0);
+        operator = new XboxController(1);
+        controls = new Controls(driver, operator);
+
         drivetrain.setDefaultCommand(new DriveWithJoysticks(drivetrain,
                 controls::getDriveSpeedX,
-                controls::getDriveSpeedY, controls::getTurnSpeed, () -> true));
-
+                controls::getDriveSpeedY,
+                controls::getTurnSpeed,
+                () -> true));
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
                 controls::getManualTurretRotationSpeed));
+
         configureButtonBindings();
     }
 
@@ -61,12 +69,13 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // new JoystickButton(driver, Button.kY.value).whileTrue(new
         // RetracePath(drivetrain));
-        new JoystickButton(driver, Button.kX.value).onTrue(Commands.runOnce(() -> drivetrain.resetOdometry()));
+        new JoystickButton(driver, Button.kX.value)
+                .onTrue(Commands.runOnce(drivetrain::resetOdometry));
     }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
+     * 
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {

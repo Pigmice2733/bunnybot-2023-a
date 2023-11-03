@@ -11,7 +11,9 @@ public class Controls {
     XboxController driver;
     XboxController operator;
 
-    private double threshold = Constants.AXIS_THRESHOLD; // If a value from a joystick is less than this, it will return 0.
+    // If a value from a joystick is less than this, it will return 0.
+    private double threshold = Constants.AXIS_THRESHOLD;
+
     private double joystickTurret, joystickY, joystickX, joystickTurn;
 
     public Controls(XboxController driver, XboxController operator) {
@@ -19,6 +21,11 @@ public class Controls {
         this.operator = operator;
     }
 
+    /**
+     * Returns the controller input multiplied by the drive speed. The right trigger
+     * moves in the positive direction, and the left moves in the negative
+     * direction, so controller input is defined as right minus left.
+     */
     public double getManualTurretRotationSpeed() {
         joystickTurret = MathUtil.applyDeadband(operator.getRightTriggerAxis(), threshold) -
                 MathUtil.applyDeadband(operator.getLeftTriggerAxis(), threshold);
@@ -27,25 +34,27 @@ public class Controls {
 
     LinearFilter driveSpeedYFilter = LinearFilter.singlePoleIIR(0.05, 0.02);
 
-    /** @return The Left Y Axis multiplied by the drive speed. */
+    /** Returns the left joystick y-axis multiplied by the drive speed. */
     public double getDriveSpeedY() {
         joystickY = MathUtil.applyDeadband(-driver.getLeftY(), threshold);
-        // joystickValue = driveSpeedYFilter.calculate(joystickValue); // input smoothing
+        // joystickValue = driveSpeedYFilter.calculate(joystickValue); // input
+        // smoothing
         return joystickY * DrivetrainConfig.MAX_DRIVE_SPEED;
     }
 
     LinearFilter driveSpeedXFilter = LinearFilter.singlePoleIIR(0.05, 0.02);
 
-    /** @return The Left X Axis multiplied by the drive speed. */
+    /** Returns the left joystick x-axis multiplied by the drive speed. */
     public double getDriveSpeedX() {
         joystickX = MathUtil.applyDeadband(-driver.getLeftX(), threshold);
-        // joystickValue = driveSpeedXFilter.calculate(joystickValue); // input smoothing
+        // joystickValue = driveSpeedXFilter.calculate(joystickValue); // input
+        // smoothing
         return joystickX * DrivetrainConfig.MAX_DRIVE_SPEED;
     }
 
     LinearFilter turnSpeedFilter = LinearFilter.singlePoleIIR(0.05, 0.02);
 
-    /** @return The Right X Axis multiplied by the turn speed. */
+    /** Returns the right joystick x-axis multiplied by the drive speed. */
     public double getTurnSpeed() {
         joystickTurn = MathUtil.applyDeadband(driver.getRightX(), threshold);
         // joystickValue = turnSpeedFilter.calculate(joystickValue); // input smoothing

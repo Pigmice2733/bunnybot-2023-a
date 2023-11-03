@@ -25,14 +25,17 @@ public class Intake extends SubsystemBase {
         motorSpeedEntry.setDouble(percent);
     }
 
+    /** Spins intake wheels to intake balls. */
     public Command spinForward() {
         return Commands.runOnce(() -> outputToMotor(IntakeConfig.INTAKE_SPEED));
     }
 
+    /** Spins intake wheels to eject balls. */
     public Command spinBackward() {
         return Commands.runOnce(() -> outputToMotor(-IntakeConfig.INTAKE_SPEED));
     }
 
+    /** Sets intake wheels to zero output. */
     public Command stopWheels() {
         return Commands.runOnce(() -> outputToMotor(0));
     }

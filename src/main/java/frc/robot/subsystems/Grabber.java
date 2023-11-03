@@ -55,55 +55,55 @@ public class Grabber extends SubsystemBase {
         updateClosedLoopControl();
     }
 
-    /** Calculates and applys the next output from the PID controller */
+    /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
         double calculatedOutput = rotationController.calculate(getCurrentRotation(), targetRotation);
         outputToRotationMotor(calculatedOutput);
     }
 
-    /** Sets the rotation motor percent output */
+    /** Sets the rotation motor percent output. */
     public void outputToRotationMotor(double output) {
         rotationMotor.set(output);
         rotationOutputEntry.setDouble(output);
     }
 
-    /** Sets the flywheels motor percent output */
+    /** Sets the flywheels motor percent output. */
     public void outputToFlywheelsMotor(double output) {
         flywheelsMotor.set(output);
         flywheelsOutputEntry.setDouble(output);
     }
 
-    /** Sets the angle that the arm will go to */
+    /** Sets the angle that the arm will go to. */
     public void setTargetRotation(double targetRotation) {
         this.targetRotation = targetRotation;
     }
 
-    /** @return the arms target rotation */
+    /** Returns the arm's target rotation. */
     public double getTargetRotation() {
         return targetRotation;
     }
 
-    /** @return the arms current rotation */
+    /** Returns the arm's current rotation. */
     public double getCurrentRotation() {
         return currentRotation;
     }
 
-    /** Sets the flywheels to intake bunnies */
-    public Command runFlywheelsIntakeCommand(double percent) {
+    /** Sets the flywheels to intake bunnies. */
+    public Command runFlywheelsIntakeCommand() {
         return Commands.runOnce(() -> outputToFlywheelsMotor(GrabberConfig.FLYWHEEL_INTAKE_SPEED));
     }
 
-    /** Sets the flywheels to eject bunnies */
-    public Command runFlywheelsEjectCommand(double percent) {
+    /** Sets the flywheels to eject bunnies. */
+    public Command runFlywheelsEjectCommand() {
         return Commands.runOnce(() -> outputToFlywheelsMotor(GrabberConfig.FLYWHEEL_EJECT_SPEED));
     }
 
-    /** Sets the flywheels to zero output */
+    /** Sets the flywheels to zero output. */
     public Command stopFlywheelsCommand() {
         return Commands.runOnce(() -> outputToFlywheelsMotor(0));
     }
 
-    /** Sends the arm to the specified position */
+    /** Sends the arm to the specified position. */
     public Command setTargetArmAngleCommand(ArmPosition position) {
         return Commands.runOnce(() -> setTargetRotation(position.getAngle()));
     }

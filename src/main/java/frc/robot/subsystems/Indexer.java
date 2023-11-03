@@ -12,11 +12,12 @@ import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.IndexerConfig;
 
 public class Indexer extends SubsystemBase {
-    private final CANSparkMax beltMotor = new CANSparkMax(CANConfig.INDEXER_BELT, MotorType.kBrushless);
+    private final CANSparkMax beltMotor;
 
     private final GenericEntry motorOutputEntry;
 
     public Indexer() {
+        beltMotor = new CANSparkMax(CANConfig.INDEXER_BELT, MotorType.kBrushless);
         motorOutputEntry = Constants.INDEXER_TAB.add("Belt Motor Output", 0).getEntry();
     }
 
@@ -25,14 +26,17 @@ public class Indexer extends SubsystemBase {
         motorOutputEntry.setDouble(percent);
     }
 
+    /** Runs the indexer belt forward. */
     public Command spinBeltForward() {
         return Commands.runOnce(() -> outputToMotor(IndexerConfig.BELT_SPEED));
     }
 
+    /** Runs the indexer belt backward. */
     public Command spinBeltBackward() {
         return Commands.runOnce(() -> outputToMotor(-IndexerConfig.BELT_SPEED));
     }
 
+    /** Sets the indexer belt to zero output. */
     public Command stopBelt() {
         return Commands.runOnce(() -> outputToMotor(0));
     }

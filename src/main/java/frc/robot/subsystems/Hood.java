@@ -53,34 +53,34 @@ public class Hood extends SubsystemBase {
         updateClosedLoopControl();
     }
 
-    /** Calculates and applys the next output from the PID controller */
+    /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
         double calculatedOutput = rotationController.calculate(getHoodRotation(), targetRotation);
         setTargetRotation(calculatedOutput);
     }
 
-    /** Sets the percent output of the hood rotation motor */
+    /** Sets the percent output of the hood rotation motor. */
     public void outputToMotor(double percentOutput) {
         rotationMotor.set(percentOutput);
         motorOutputEntry.setDouble(percentOutput);
     }
 
-    /** @return the hood current rotation in degrees */
+    /** Returns the hood's current rotation in degrees. */
     public double getHoodRotation() {
         return rotationMotor.getEncoder().getPosition();
     }
 
-    /** Sets the hood actual rotation */
+    /** Sets the hood's target position. */
     public void setTargetRotation(double targetDegrees) {
         targetRotation = targetDegrees;
     }
 
-    /** Changes the hood target rotaiton */
+    /** Adjusts the hood's target position by the given amount. */
     public void changeTargetRotation(double delta) {
         targetRotation += delta;
     }
 
-    /** Getst the hood target rotation */
+    /** Returns the hood's target rotation in degrees. */
     public double getTargetRotation() {
         return targetRotation;
     }

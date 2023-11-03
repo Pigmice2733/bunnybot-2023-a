@@ -27,7 +27,7 @@ public class Turret extends SubsystemBase {
     public Turret() {
         rotationMotor = new TalonSRX(CANConfig.ROTATE_TURRET);
         rotationMotor.setSelectedSensorPosition(0, 0, 0);
-        rotationMotor.setInverted(false);
+        rotationMotor.setInverted(true);
 
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
@@ -47,6 +47,7 @@ public class Turret extends SubsystemBase {
         Constants.TURRET_TAB.add("Reset Encoder", new InstantCommand(() -> rotationMotor.setSelectedSensorPosition(0)));
     }
 
+    /** Resets the controller to the turret's current rotation. */
     public void resetRotationController() {
         double currentRotation = getCurrentRotation();
         targetRotation = currentRotation;
@@ -58,27 +59,27 @@ public class Turret extends SubsystemBase {
         updateClosedLoopControl();
     }
 
-    /** Calculates and applys the next output from the PID controller */
+    /** Calculates and appliess the next output from the PID controller. */
     private void updateClosedLoopControl() {
         double calculatedOutput = rotationController.calculate(getCurrentRotation(), targetRotation);
         outputToMotor(calculatedOutput);
     }
 
-    /** Sets the percent output of the turret rotation motor */
+    /** Sets the percent output of the turret rotation motor. */
     public void outputToMotor(double percentOutput) {
         double currentRotation = getCurrentRotation();
 
-        // TODO: assumes (+ output) => (+ rotation). Verify this in later testing
+        // TODO: assumes (+ output) => (+ rotation). Verify this in later testing.
         if (currentRotation > TurretConfig.MAX_ALLOWED_ROTATION)
             percentOutput = Math.min(0, percentOutput);
         if (currentRotation < -TurretConfig.MAX_ALLOWED_ROTATION)
             percentOutput = Math.max(0, percentOutput);
 
-        rotationMotor.set(TalonSRXControlMode.PercentOutput, -percentOutput);
+        rotationMotor.set(TalonSRXControlMode.PercentOutput, percentOutput);
         motorOutputEntry.setDouble(percentOutput / 10);
     }
 
-    /** @return the turrets current rotation in degrees */
+    /** Returns the turret's current rotation in degrees. */
     public double getCurrentRotation() {
         // 4090 is sensor ticks per rotation, and 360 converts rotations to degrees
         // TODO: once design is finalized, figure out the gear ratio and actual sensor
@@ -86,27 +87,29 @@ public class Turret extends SubsystemBase {
         return (rotationMotor.getSelectedSensorPosition() / 4096) * 360;
     }
 
-    /** Sets the turrets actual rotation */
+    /** Sets the turret's target position. */
     public void setTargetRotation(double targetDegrees) {
         targetRotation = targetDegrees;
     }
 
-    /** Changes the turrets target rotaiton */
+    /** Adjusts the turret's target position by the given amount. */
     public void changeTargetRotation(double delta) {
         targetRotation += delta;
     }
 
-    /** @return the current velocity of the turret in degrees / sec */
+    /** Returns the current velocity of the turret in degrees per second. */
     public double getTurretVelocity() {
         return rotationMotor.getSelectedSensorVelocity();
     }
 
-    /** @return the current rotation of the turret in degrees */
+    /** Returns the current rotation of the turret in degrees. */
     public double getTargetRotation() {
         return targetRotation;
     }
 
-    /** Sets the velocity and acceleration of the turret */
+    /**
+     * Sets the max velocity and acceleration of the turret as a Constraints object.
+     */
     public void setPIDConstraints(Constraints constraints) {
         rotationController.setConstraints(constraints);
     }
