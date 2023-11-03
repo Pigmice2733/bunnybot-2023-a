@@ -5,11 +5,13 @@
 package frc.robot.subsystems;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
+import com.pigmice.frc.lib.utils.Utils;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,7 +19,7 @@ import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
-    private final CANSparkMax rotationMotor; // TODO: when ready to test on the actual robot, switch to a CANSparkMax
+    private final CANSparkMax rotationMotor;
     private final ProfiledPIDController rotationController;
 
     private double targetRotation;
@@ -25,7 +27,7 @@ public class Turret extends SubsystemBase {
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
         rotationMotor.getEncoder().setPosition(0);
-        rotationMotor.setInverted(false);
+        rotationMotor.setInverted(true);
 
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
@@ -45,6 +47,7 @@ public class Turret extends SubsystemBase {
         Constants.TURRET_TAB.add("Reset Encoder", new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
     }
 
+    /** Resets the controller to the turret's current rotation. */
     public void resetRotationController() {
         double currentRotation = getCurrentRotation();
         targetRotation = currentRotation;
@@ -56,26 +59,23 @@ public class Turret extends SubsystemBase {
         updateClosedLoopControl();
     }
 
-    /** Calculates and applys the next output from the PID controller */
+    /** Calculates and appliess the next output from the PID controller. */
     private void updateClosedLoopControl() {
         double calculatedOutput = rotationController.calculate(getCurrentRotation(), targetRotation);
         outputToMotor(calculatedOutput);
     }
 
-    /** Sets the percent output of the turret rotation motor */
+    /** Sets the percent output of the turret rotation motor. */
     public void outputToMotor(double percentOutput) {
         double currentRotation = getCurrentRotation();
 
-        // TODO: assumes (+ output) => (+ rotation). Verify this in later testing
-        if (currentRotation > TurretConfig.MAX_ALLOWED_ROTATION)
-            percentOutput = Math.min(0, percentOutput);
-        if (currentRotation < -TurretConfig.MAX_ALLOWED_ROTATION)
-            percentOutput = Math.max(0, percentOutput);
+        // TODO: assumes (+ output) => (+ rotation). Verify this in later testing.
+        percentOutput = Utils.rotationStop(currentRotation, percentOutput, TurretConfig.MAX_ALLOWED_ROTATION);
 
         rotationMotor.set(percentOutput);
     }
 
-    /** @return the turrets current rotation in degrees */
+    /** Returns the turret's current rotation in degrees. */
     public double getCurrentRotation() {
         // 360 converts rotations to degrees
         // TODO: once design is finalized, figure out the gear ratio and actual sensor
@@ -83,27 +83,29 @@ public class Turret extends SubsystemBase {
         return (rotationMotor.getEncoder().getPosition()) * 360;
     }
 
-    /** Sets the turrets actual rotation */
+    /** Sets the turret's target position. */
     public void setTargetRotation(double targetDegrees) {
         targetRotation = targetDegrees;
     }
 
-    /** Changes the turrets target rotaiton */
+    /** Adjusts the turret's target position by the given amount. */
     public void changeTargetRotation(double delta) {
         targetRotation += delta;
     }
 
-    /** @return the current velocity of the turret in degrees / sec */
+    /** Returns the current velocity of the turret in degrees per second. */
     public double getTurretVelocity() {
         return rotationMotor.getEncoder().getVelocity();
     }
 
-    /** @return the current rotation of the turret in degrees */
+    /** Returns the current rotation of the turret in degrees. */
     public double getTargetRotation() {
         return targetRotation;
     }
 
-    /** Sets the velocity and acceleration of the turret */
+    /**
+     * Sets the max velocity and acceleration of the turret as a Constraints object.
+     */
     public void setPIDConstraints(Constraints constraints) {
         rotationController.setConstraints(constraints);
     }

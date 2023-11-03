@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.PathConstraints;
-import com.pigmice.frc.lib.swerve.SwerveConfig;
+import com.pigmice.frc.lib.drivetrain.swerve.SwerveConfig;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
 import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
@@ -103,7 +103,6 @@ public final class Constants {
         public static final double DEFAULT_OUTPUT = 0.5;
 
         public static final ShooterSetPoint[] ShooterValues = { new ShooterSetPoint(0, 0, 0) };
-
     }
 
     public static class ShooterSetPoint {
@@ -131,7 +130,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 30; // deg/sec
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotaiton to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
     }
 
     public static final class IntakeConfig {
@@ -150,7 +149,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1;// 1200; // deg/sec
         public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotaiton to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
 
         // All in degrees
         public static enum ArmPosition {
@@ -168,10 +167,6 @@ public final class Constants {
                 return angle;
             }
         }
-
-        public static final double ARM_UP_ANGLE = 0;
-        public static final double ARM_MID_ANGLE = 90;
-        public static final double ARM_DOWN_ANGLE = 180;
 
         public static final double FLYWHEEL_INTAKE_SPEED = 0.2;
         public static final double FLYWHEEL_EJECT_SPEED = -0.2;
