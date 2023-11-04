@@ -128,7 +128,7 @@ public class TurretStateMachine {
 
             // Sets the target rotation to the current rotation plus the target's yaw
             turret.setTargetRotation(turret.getCurrentRotation() + target.getYaw());
-            targetInRange = Math.abs(target.getYaw()) < TurretConfig.TARGET_YAW_TOLERENCE;
+            targetInRange = Math.abs(target.getYaw()) < TurretConfig.TARGET_YAW_TOLERANCE;
         }
 
         @Override

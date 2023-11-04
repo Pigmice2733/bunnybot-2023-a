@@ -75,7 +75,9 @@ public final class Constants {
         public static final double MANUAL_ROTATION_MULTIPLIER = 3;
 
         private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
+                                                                                          // rot to
+                                                                                          // deg
 
         public static final double ROTATION_P = 0.009;
         public static final double ROTATION_I = 0.0001;
@@ -90,14 +92,18 @@ public final class Constants {
         public static final double MAX_ALLOWED_ROTATION = 180; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
-        public static final double TARGET_YAW_TOLERENCE = 3.5;
+        public static final double TARGET_YAW_TOLERANCE = 3.5;
+
+        public static final double SHOOT_VELOCITY = 20;
     }
 
     public static final class ShooterConfig {
         private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
+                                                                                          // rot to
+                                                                                          // deg
 
-        public static final double MAX_VELOSITY = 50; // deg/sec
+        public static final double MAX_VELOCITY = 50; // deg/sec
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
         public static final double DEFAULT_OUTPUT = 0.5;
@@ -115,13 +121,21 @@ public final class Constants {
             flywheelSpeed = f;
             height = h;
         }
+
+        public ShooterSetPoint(double d, double f, double h) {
+            distance = d;
+            flywheelSpeed = f;
+            height = h;
+        }
     }
 
     public static final class HoodConfig {
         public static final double MANUAL_ROTATION_SPEED = 3;
 
         private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
+                                                                                          // rot to
+                                                                                          // deg
 
         public static final double HOOD_P = 0.0;
         public static final double HOOD_I = 0.0;
@@ -130,7 +144,8 @@ public final class Constants {
         public static final double MAX_VELOCITY = 30; // deg/sec
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations
+                                                            // (TODO)
     }
 
     public static final class IntakeConfig {
@@ -149,7 +164,8 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1;// 1200; // deg/sec
         public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations
+                                                            // (TODO)
 
         // All in degrees
         public static enum ArmPosition {
@@ -183,7 +199,8 @@ public final class Constants {
         public static final double MAX_DRIVE_SPEED = 3; // max meters / second
         public static final double MAX_TURN_SPEED = 6; // max radians / second
 
-        private static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one wheel to
+        private static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
+                                                                 // wheel to
                                                                  // another
 
         private final static SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
@@ -246,7 +263,8 @@ public final class Constants {
                 .withSteerEncoderPort(CANConfig.BACK_RIGHT_ABS_ENCODER)
                 .withSteerOffset(-Math.toRadians(252));
 
-        public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE,
+        public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(FRONT_LEFT_MODULE,
+                FRONT_RIGHT_MODULE,
                 BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
                 PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID,
                 MAX_DRIVE_SPEED, MAX_TURN_SPEED, KINEMATICS,

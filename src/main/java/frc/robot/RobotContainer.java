@@ -12,9 +12,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConfig;
-import frc.robot.commands.turret.RunTurretStateMachine;
+import frc.robot.Constants.GrabberConfig.ArmPosition;
+import frc.robot.commands.RunTurretStateMachine;
+import frc.robot.commands.functions.IntakeAndShoot;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
@@ -34,34 +37,46 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer {
     public final SwerveDrivetrain drivetrain;
+    private final Grabber grabber;
+    private final Hood hood;
+    private final Indexer indexer;
+    private final Intake intake;
+    private final Shooter shooter;
     public final Turret turret;
     private final Vision vision;
-    private final Grabber grabber = new Grabber();
-    private final Hood hood = new Hood();
-    private final Indexer indexer = new Indexer();
-    private final Intake intake = new Intake();
-    private final Shooter shooter = new Shooter();
 
     private final XboxController driver;
     private final XboxController operator;
     private final Controls controls;
 
+    private final IntakeAndShoot autoBallCommand;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
+        grabber = new Grabber();
+        hood = new Hood();
+        indexer = new Indexer();
+        intake = new Intake();
+        shooter = new Shooter();
         turret = new Turret();
         vision = new Vision();
-        drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
+
         driver = new XboxController(0);
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
 
+        autoBallCommand = new IntakeAndShoot(intake, indexer, shooter, turret);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
                 controls::getDriveSpeedY,
                 controls::getTurnSpeed,
                 () -> true));
+        indexer.setDefaultCommand(autoBallCommand);
+        intake.setDefaultCommand(autoBallCommand);
+        shooter.setDefaultCommand(autoBallCommand);
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
                 controls::getManualTurretRotationSpeed));
 
@@ -79,8 +94,16 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // new JoystickButton(driver, Button.kY.value).whileTrue(new
         // RetracePath(drivetrain));
-        new JoystickButton(driver, Button.kX.value)
-                .onTrue(Commands.runOnce(drivetrain::resetOdometry));
+        new JoystickButton(driver, Button.kB.value)
+                .onTrue(new InstantCommand(drivetrain::resetOdometry));
+        // new JoystickButton(driver, Button.kY.value).onTrue(slowmode).onFalse(normal);
+
+        new JoystickButton(operator, Button.kY.value)
+                .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.UP));
+        new JoystickButton(operator, Button.kX.value)
+                .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE));
+        new JoystickButton(operator, Button.kA.value)
+                .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.DOWN));
     }
 
     /**

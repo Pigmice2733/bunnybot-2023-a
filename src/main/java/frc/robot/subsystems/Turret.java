@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,6 +20,7 @@ import frc.robot.Constants.TurretConfig;
 public class Turret extends SubsystemBase {
     private final CANSparkMax rotationMotor;
     private final ProfiledPIDController rotationController;
+    private final Vision vision;
 
     private double targetRotation;
 
@@ -33,18 +33,25 @@ public class Turret extends SubsystemBase {
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
                 new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION));
 
-        ShuffleboardHelper.addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
+        ShuffleboardHelper
+                .addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
                 .asDial(-180, 180);
 
         ShuffleboardHelper.addOutput("Target Rotation", Constants.TURRET_TAB, () -> targetRotation)
                 .asDial(-180, 180);
 
-        ShuffleboardHelper.addOutput("Setpoint", Constants.TURRET_TAB, () -> rotationController.getSetpoint().position)
+        ShuffleboardHelper
+                .addOutput("Setpoint", Constants.TURRET_TAB,
+                        () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
 
-        ShuffleboardHelper.addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get());
+        ShuffleboardHelper.addOutput("Motor Output", Constants.SHOOTER_TAB,
+                () -> rotationMotor.get());
 
-        Constants.TURRET_TAB.add("Reset Encoder", new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
+        Constants.TURRET_TAB.add("Reset Encoder",
+                new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
+
+        vision = new Vision();
     }
 
     /** Resets the controller to the turret's current rotation. */
@@ -61,7 +68,8 @@ public class Turret extends SubsystemBase {
 
     /** Calculates and appliess the next output from the PID controller. */
     private void updateClosedLoopControl() {
-        double calculatedOutput = rotationController.calculate(getCurrentRotation(), targetRotation);
+        double calculatedOutput = rotationController.calculate(getCurrentRotation(),
+                targetRotation);
         outputToMotor(calculatedOutput);
     }
 
@@ -70,7 +78,8 @@ public class Turret extends SubsystemBase {
         double currentRotation = getCurrentRotation();
 
         // TODO: assumes (+ output) => (+ rotation). Verify this in later testing.
-        percentOutput = Utils.rotationStop(currentRotation, percentOutput, TurretConfig.MAX_ALLOWED_ROTATION);
+        percentOutput = Utils.rotationStop(currentRotation, percentOutput,
+                TurretConfig.MAX_ALLOWED_ROTATION);
 
         rotationMotor.set(percentOutput);
     }
@@ -110,8 +119,8 @@ public class Turret extends SubsystemBase {
         rotationController.setConstraints(constraints);
     }
 
-    // TODO: return true if the turret is aimed at a targeted at an ok velocity
     public boolean hasTarget() {
-        return false;
+        return vision.getCurrentTarget() != null
+                && getTurretVelocity() < TurretConfig.SHOOT_VELOCITY;
     }
 }

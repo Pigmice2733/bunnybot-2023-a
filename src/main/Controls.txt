@@ -4,7 +4,7 @@ Drive team actions:
         Slow mode (Usualy a held button)
         Use drivetrain to aim (prob a held button, will override control of turning)
     Operator:
-        Maual aim (probably triggers?)
+        Manual aim (probably triggers?)
         Force shoot (prob button, will shoot no matter what)
         Auto shoot mode (will shoot when the turret is lined up with a robot, prob a held button)
         Toggle intake motors (prob a button, might be automated but an override would be good in case it breaks)
@@ -16,12 +16,13 @@ Controls:
         Turn - Right stick X
         *Slow mode - y (held)
     Operator:
-        **Manual aim clockwise - 
-        **Manual aim counter-clockwise - 
-        ** Force shoot - (held)
+        **Manual aim clockwise (+) - right trigger
+        **Manual aim counter-clockwise (-) - left trigger
+        **Force shoot - (held)
         **Auto shoot mode - (held)
-        **Toggle intake motors - 
+        **Toggle intake motors - B
         **Eject all balls - (held)
+        **Grabber up, flat, down - Y, X, A
 
 * = not implemented
-** = undecided
+** = undecided/unconfirmed

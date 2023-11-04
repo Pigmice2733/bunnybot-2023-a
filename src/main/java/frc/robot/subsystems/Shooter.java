@@ -32,15 +32,12 @@ public class Shooter extends SubsystemBase {
         rotationMotor.set(percentOutput);
     }
 
-    /** Set the motor output to the default speed. */
-    public void enableDefault() {
-        rotationMotor.set(ShooterConfig.DEFAULT_OUTPUT);
-    }
-
+    /** Spins the shooter flywheels at the given speed. */
     public Command setFlywheelSpeed(double percentOutput) {
         return Commands.runOnce(() -> outputToMotor(percentOutput));
     }
 
+    /** Sets the flywheel speed. */
     public Command stopFlywheel() {
         return Commands.runOnce(() -> outputToMotor(0));
     }
