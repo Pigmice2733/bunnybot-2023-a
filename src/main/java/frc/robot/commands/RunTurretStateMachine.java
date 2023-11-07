@@ -35,14 +35,18 @@ public class RunTurretStateMachine extends CommandBase {
 
     @Override
     public void execute() {
-        // PhotonTrackedTarget target = vision.getCurrentTarget();
+        double turretVelocity = turret.getTurretVelocity();
+        double currentManualSpeed = manualRotationSpeed.getAsDouble();
 
-        // if (target == null) {
-        // setState(TurretStates.TRACK_TARGET);
-        // return;
-        // }
+        PhotonTrackedTarget target = vision.getCurrentTarget();
+        boolean hasTarget = target == null;
 
-        stateMachine.execute(new TurretData(turret.getTurretVelocity(), manualRotationSpeed.getAsDouble()));
+        double targetYaw = hasTarget ? target.getYaw() : 0;
+        double targetPitch = hasTarget ? target.getPitch() : 0;
+
+        TurretData turretData = new TurretData(turretVelocity, currentManualSpeed, hasTarget, targetYaw, targetPitch);
+
+        stateMachine.execute(turretData);
     }
 
     public enum TurretState {
@@ -56,10 +60,18 @@ public class RunTurretStateMachine extends CommandBase {
     public class TurretData {
         public final double turretVelocity;
         public final double manualRotationSpeed;
+        public final boolean hasTarget;
+        public final double targetYaw;
+        public final double targetPitch;
 
-        public TurretData(double turretVelocity, double manualRotationSpeed) {
+        public TurretData(double turretVelocity, double manualRotationSpeed, boolean hasTarget, double targetYaw,
+                double targetPitch) {
+
             this.turretVelocity = turretVelocity;
             this.manualRotationSpeed = manualRotationSpeed;
+            this.hasTarget = hasTarget;
+            this.targetYaw = targetYaw;
+            this.targetPitch = targetPitch;
         }
     }
 }
