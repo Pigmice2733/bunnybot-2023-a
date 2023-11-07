@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -38,11 +39,15 @@ public class RunTurretStateMachine extends CommandBase {
         hasTarget = vision.getCurrentTarget() != null;
 
         if (!stateMachine.execute(new TurretData(
+                turret.getCurrentRotation(),
                 turret.getTurretVelocity(),
                 manualRotationSpeed.getAsDouble(),
                 hasTarget,
                 hasTarget ? vision.getCurrentTarget().getYaw() : 0,
-                hasTarget ? vision.getCurrentTarget().getPitch() : 0))) {
+                hasTarget ? vision.getCurrentTarget().getPitch() : 0,
+                turret,
+                (value) -> turret.setTargetRotation(value),
+                (value) -> turret.changeTargetRotation(value)))) {
             System.out.println("Turret state machine encountered an error.");
         }
     }
@@ -56,20 +61,29 @@ public class RunTurretStateMachine extends CommandBase {
     }
 
     public class TurretData {
+        public final Turret turret;
+        public final double turretRotation;
         public final double turretVelocity;
         public final double manualRotationSpeed;
         public final boolean hasTarget;
         public final double targetYaw;
         public final double targetPitch;
+        public final DoubleConsumer setTargetRotation;
+        public final DoubleConsumer changeTargetRotation;
 
-        public TurretData(double turretVelocity, double manualRotationSpeed, boolean hasTarget,
-                double targetYaw, double targetPitch) {
+        public TurretData(double turretRotation, double turretVelocity, double manualRotationSpeed,
+                boolean hasTarget, double targetYaw, double targetPitch, Turret turret,
+                DoubleConsumer setTargetRotation, DoubleConsumer changeTargetRotation) {
 
+            this.turret = turret;
+            this.turretRotation = turretRotation;
             this.turretVelocity = turretVelocity;
             this.manualRotationSpeed = manualRotationSpeed;
             this.hasTarget = hasTarget;
             this.targetYaw = targetYaw;
             this.targetPitch = targetPitch;
+            this.setTargetRotation = setTargetRotation;
+            this.changeTargetRotation = changeTargetRotation;
         }
     }
 }

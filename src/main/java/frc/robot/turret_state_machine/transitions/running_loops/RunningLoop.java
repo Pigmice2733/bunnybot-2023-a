@@ -15,9 +15,9 @@ public abstract class RunningLoop<State extends Enum<?>, RobotData> extends Tran
 
     @Override
     public final State execute(RobotData robotData) {
-        run();
+        run(robotData);
         return to;
     }
 
-    protected abstract void run();
+    protected abstract void run(RobotData robotData);
 }
