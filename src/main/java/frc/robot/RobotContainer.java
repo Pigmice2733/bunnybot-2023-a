@@ -4,22 +4,25 @@
 
 package frc.robot;
 
-import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
+import frc.robot.Constants.ShooterConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
+import frc.robot.commands.functions.AutoShooter;
+import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.IntakeAndShoot;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.Hood;
+// import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -36,9 +39,9 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    public final SwerveDrivetrain drivetrain;
+    public final Drivetrain drivetrain;
     private final Grabber grabber;
-    private final Hood hood;
+    // private final Hood hood;
     private final Indexer indexer;
     private final Intake intake;
     private final Shooter shooter;
@@ -51,13 +54,15 @@ public class RobotContainer {
 
     private final IntakeAndShoot autoBallCommand;
 
+    private boolean intakeToggle, forceShootToggle;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
+        drivetrain = new Drivetrain(DrivetrainConfig.SWERVE_CONFIG);
         grabber = new Grabber();
-        hood = new Hood();
+        // hood = new Hood();
         indexer = new Indexer();
         intake = new Intake();
         shooter = new Shooter();
@@ -67,6 +72,8 @@ public class RobotContainer {
         driver = new XboxController(0);
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
+
+        intakeToggle = forceShootToggle = false;
 
         autoBallCommand = new IntakeAndShoot(intake, indexer, shooter, turret);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
@@ -92,18 +99,29 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        // new JoystickButton(driver, Button.kY.value).whileTrue(new
-        // RetracePath(drivetrain));
+
         new JoystickButton(driver, Button.kB.value)
                 .onTrue(new InstantCommand(drivetrain::resetOdometry));
-        // new JoystickButton(driver, Button.kY.value).onTrue(slowmode).onFalse(normal);
+        new JoystickButton(driver, Button.kY.value)
+                .onTrue(new InstantCommand(drivetrain::enableSlow))
+                .onFalse(new InstantCommand(drivetrain::disableSlow));
 
-        new JoystickButton(operator, Button.kY.value)
+        new POVButton(operator, 0)
                 .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.UP));
-        new JoystickButton(operator, Button.kX.value)
+        new POVButton(operator, 90)
                 .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE));
-        new JoystickButton(operator, Button.kA.value)
+        new POVButton(operator, 180)
                 .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.DOWN));
+        new JoystickButton(operator, Button.kLeftBumper.value)
+                .onTrue(new EjectAll(intake, indexer, shooter));
+        new JoystickButton(operator, Button.kRightBumper.value)
+                .toggleOnTrue(new AutoShooter(indexer, shooter, turret));
+        new JoystickButton(operator, Button.kB.value)
+                .onTrue(intakeToggle ? intake.spinForward() : intake.stopWheels());
+        new JoystickButton(operator, Button.kY.value)
+                .onTrue(forceShootToggle
+                        ? shooter.setFlywheelSpeed(ShooterConfig.DEFAULT_OUTPUT)
+                        : shooter.stopFlywheel());
     }
 
     /**

@@ -199,9 +199,10 @@ public final class Constants {
         public static final double MAX_DRIVE_SPEED = 3; // max meters / second
         public static final double MAX_TURN_SPEED = 6; // max radians / second
 
-        private static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
-                                                                 // wheel to
-                                                                 // another
+        public static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
+                                                                // wheel to another
+
+        public static final double SLOWMODE_MULTIPLIER = 0.25; // TODO discuss with drive team
 
         private final static SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(TRACK_WIDTH_METERS / 2, TRACK_WIDTH_METERS / 2), // Front left

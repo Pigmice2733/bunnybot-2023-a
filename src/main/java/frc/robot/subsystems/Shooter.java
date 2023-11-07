@@ -21,9 +21,11 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_SHOOTER, MotorType.kBrushless);
         rotationMotor.restoreFactoryDefaults();
-        rotationMotor.getEncoder().setPositionConversionFactor(ShooterConfig.ROTATION_MOTOR_CONVERSION);
+        rotationMotor.getEncoder()
+                .setPositionConversionFactor(ShooterConfig.ROTATION_MOTOR_CONVERSION);
 
-        ShuffleboardHelper.addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get())
+        ShuffleboardHelper
+                .addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get())
                 .asDial(-1, 1);
     }
 
@@ -37,7 +39,7 @@ public class Shooter extends SubsystemBase {
         return Commands.runOnce(() -> outputToMotor(percentOutput));
     }
 
-    /** Sets the flywheel speed. */
+    /** Sets the flywheel speed to zero. */
     public Command stopFlywheel() {
         return Commands.runOnce(() -> outputToMotor(0));
     }

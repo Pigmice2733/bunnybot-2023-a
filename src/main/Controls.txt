@@ -14,15 +14,16 @@ Controls:
     Driver:
         Drive - Left stick X & Y
         Turn - Right stick X
-        *Slow mode - y (held)
+        Slow mode - Y (held)
+        Reset odometry - B
     Operator:
         **Manual aim clockwise (+) - right trigger
         **Manual aim counter-clockwise (-) - left trigger
-        **Force shoot - (held)
-        **Auto shoot mode - (held)
+        **Force shoot - Y (toggle)
+        **Auto shoot mode - right bumper (toggle)
         **Toggle intake motors - B
-        **Eject all balls - (held)
-        **Grabber up, flat, down - Y, X, A
+        **Eject all balls - left bumper
+        **Grabber up, flat, down - D-pad up, right, down (NEEDS TESTING)
 
 * = not implemented
 ** = undecided/unconfirmed
