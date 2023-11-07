@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -21,8 +19,8 @@ public class RunTurretStateMachine extends CommandBase {
 
     private final Turret turret;
     private final Vision vision;
-
     private final DoubleSupplier manualRotationSpeed;
+    private boolean hasTarget;
 
     public RunTurretStateMachine(Turret turret, Vision vision, DoubleSupplier manualRotationSpeed) {
         stateMachine = new FiniteStateMachine<TurretState, TurretData>(TurretState.BeginWander,
@@ -31,22 +29,22 @@ public class RunTurretStateMachine extends CommandBase {
         this.turret = turret;
         this.vision = vision;
         this.manualRotationSpeed = manualRotationSpeed;
+
+        addRequirements(turret, vision);
     }
 
     @Override
     public void execute() {
-        double turretVelocity = turret.getTurretVelocity();
-        double currentManualSpeed = manualRotationSpeed.getAsDouble();
+        hasTarget = vision.getCurrentTarget() != null;
 
-        PhotonTrackedTarget target = vision.getCurrentTarget();
-        boolean hasTarget = target == null;
-
-        double targetYaw = hasTarget ? target.getYaw() : 0;
-        double targetPitch = hasTarget ? target.getPitch() : 0;
-
-        TurretData turretData = new TurretData(turretVelocity, currentManualSpeed, hasTarget, targetYaw, targetPitch);
-
-        stateMachine.execute(turretData);
+        if (!stateMachine.execute(new TurretData(
+                turret.getTurretVelocity(),
+                manualRotationSpeed.getAsDouble(),
+                hasTarget,
+                hasTarget ? vision.getCurrentTarget().getYaw() : 0,
+                hasTarget ? vision.getCurrentTarget().getPitch() : 0))) {
+            System.out.println("Turret state machine encountered an error.");
+        }
     }
 
     public enum TurretState {
@@ -64,8 +62,8 @@ public class RunTurretStateMachine extends CommandBase {
         public final double targetYaw;
         public final double targetPitch;
 
-        public TurretData(double turretVelocity, double manualRotationSpeed, boolean hasTarget, double targetYaw,
-                double targetPitch) {
+        public TurretData(double turretVelocity, double manualRotationSpeed, boolean hasTarget,
+                double targetYaw, double targetPitch) {
 
             this.turretVelocity = turretVelocity;
             this.manualRotationSpeed = manualRotationSpeed;

@@ -13,7 +13,7 @@ public class ManualReleased extends Transition<TurretState, TurretData> {
 
     @Override
     public boolean shouldExecute(TurretData turretData) {
-        return Math.abs(turretData.manualRotationSpeed) > Constants.AXIS_THRESHOLD;
+        return Math.abs(turretData.manualRotationSpeed) < Constants.AXIS_THRESHOLD;
     }
 
     @Override

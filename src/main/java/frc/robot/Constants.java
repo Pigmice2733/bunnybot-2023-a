@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.PathConstraints;
-import com.pigmice.frc.lib.swerve.SwerveConfig;
+import com.pigmice.frc.lib.drivetrain.swerve.SwerveConfig;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
 import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;

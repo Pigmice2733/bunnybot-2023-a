@@ -4,8 +4,8 @@
 
 package frc.robot;
 
-import com.pigmice.frc.lib.swerve.SwerveDrivetrain;
-import com.pigmice.frc.lib.swerve.commands.DriveWithJoysticks;
+import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
+import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -28,48 +28,48 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    public final Turret turret = new Turret();
-    private final Vision vision = new Vision();
+        public final Turret turret = new Turret();
+        private final Vision vision = new Vision();
 
-    private SwerveDrivetrain drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
+        private SwerveDrivetrain drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
 
-    private final XboxController driver = new XboxController(0);
-    private final XboxController operator = new XboxController(1);
-    private final Controls controls = new Controls(driver, operator);
+        private final XboxController driver = new XboxController(0);
+        private final XboxController operator = new XboxController(1);
+        private final Controls controls = new Controls(driver, operator);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        drivetrain.setDefaultCommand(new DriveWithJoysticks(drivetrain,
-                controls::getDriveSpeedX,
-                controls::getDriveSpeedY, controls::getTurnSpeed, () -> true));
+        /**
+         * The container for the robot. Contains subsystems, OI devices, and commands.
+         */
+        public RobotContainer() {
+                drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
+                                controls::getDriveSpeedX,
+                                controls::getDriveSpeedY, controls::getTurnSpeed, () -> true));
 
-        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
-                controls::getManualTurretRotationSpeed));
-        configureButtonBindings();
-    }
+                turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
+                                controls::getManualTurretRotationSpeed));
+                configureButtonBindings();
+        }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-     * it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings() {
-        // new JoystickButton(driver, Button.kY.value).whileTrue(new
-        // RetracePath(drivetrain));
-        new JoystickButton(driver, Button.kX.value).onTrue(Commands.runOnce(() -> drivetrain.resetOdometry()));
-    }
+        /**
+         * Use this method to define your button->command mappings. Buttons can be
+         * created by
+         * instantiating a {@link GenericHID} or one of its subclasses ({@link
+         * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+         * it to a {@link
+         * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+         */
+        private void configureButtonBindings() {
+                // new JoystickButton(driver, Button.kY.value).whileTrue(new
+                // RetracePath(drivetrain));
+                new JoystickButton(driver, Button.kX.value).onTrue(Commands.runOnce(() -> drivetrain.resetOdometry()));
+        }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return null;
-    }
+        /**
+         * Use this to pass the autonomous command to the main {@link Robot} class.
+         *
+         * @return the command to run in autonomous
+         */
+        public Command getAutonomousCommand() {
+                return null;
+        }
 }
