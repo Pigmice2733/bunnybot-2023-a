@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -35,6 +36,7 @@ public class RunTurretStateMachine extends CommandBase {
 
     @Override
     public void execute() {
+        double turretRotation = turret.getCurrentRotation();
         double turretVelocity = turret.getTurretVelocity();
         double currentManualSpeed = manualRotationSpeed.getAsDouble();
 
@@ -44,7 +46,11 @@ public class RunTurretStateMachine extends CommandBase {
         double targetYaw = hasTarget ? target.getYaw() : 0;
         double targetPitch = hasTarget ? target.getPitch() : 0;
 
-        TurretData turretData = new TurretData(turretVelocity, currentManualSpeed, hasTarget, targetYaw, targetPitch);
+        Consumer<Double> setTargetRotation = (value) -> turret.setTargetRotation(value);
+        Consumer<Double> changeTargetRotation = (value) -> turret.changeTargetRotation(value);
+
+        TurretData turretData = new TurretData(turretRotation, turretVelocity, currentManualSpeed, hasTarget, targetYaw,
+                targetPitch, turret, setTargetRotation, changeTargetRotation);
 
         stateMachine.execute(turretData);
     }
@@ -58,20 +64,29 @@ public class RunTurretStateMachine extends CommandBase {
     }
 
     public class TurretData {
+        public final double turretRotation;
         public final double turretVelocity;
         public final double manualRotationSpeed;
         public final boolean hasTarget;
         public final double targetYaw;
         public final double targetPitch;
 
-        public TurretData(double turretVelocity, double manualRotationSpeed, boolean hasTarget, double targetYaw,
-                double targetPitch) {
+        public final Consumer<Double> setTargetRotation;
+        public final Consumer<Double> changeTargetRotation;
 
+        public TurretData(double turretRotation, double turretVelocity, double manualRotationSpeed, boolean hasTarget,
+                double targetYaw, double targetPitch, Turret turret,
+                Consumer<Double> setTargetRotation, Consumer<Double> changeTargetRotation) {
+
+            this.turretRotation = turretRotation;
             this.turretVelocity = turretVelocity;
             this.manualRotationSpeed = manualRotationSpeed;
             this.hasTarget = hasTarget;
             this.targetYaw = targetYaw;
             this.targetPitch = targetPitch;
+
+            this.setTargetRotation = setTargetRotation;
+            this.changeTargetRotation = changeTargetRotation;
         }
     }
 }

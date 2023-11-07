@@ -10,7 +10,7 @@ public class RunTrackTarget extends RunningLoop<TurretState, TurretData> {
     }
 
     @Override
-    protected void run() {
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
+    protected void run(TurretData turretData) {
+        turretData.setTargetRotation.accept(turretData.turretRotation + turretData.targetYaw);
     }
 }

@@ -9,15 +9,15 @@ public abstract class RunningLoop<State extends Enum<?>, RobotData> extends Tran
     }
 
     @Override
-    public final boolean shouldExecute(Object robotData) {
+    public final boolean shouldExecute(RobotData robotData) {
         return true;
     }
 
     @Override
-    public final State execute(Object robotData) {
-        run();
+    public final State execute(RobotData robotData) {
+        run(robotData);
         return to;
     }
 
-    protected abstract void run();
+    protected abstract void run(RobotData robotData);
 }
