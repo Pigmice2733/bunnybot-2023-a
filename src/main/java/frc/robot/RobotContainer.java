@@ -118,10 +118,17 @@ public class RobotContainer {
         new JoystickButton(operator, Button.kX.value)
                 .whileTrue(new RunShooter());
 
-        // B (hold) - move bunny arm down and run bunny intake
+        // B (hold) - intake bunnies
         new JoystickButton(operator, Button.kX.value)
                 .onTrue(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.DOWN),
                         grabber.runFlywheelsIntakeCommand()))
+                .onFalse(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.UP),
+                        grabber.stopFlywheelsCommand()));
+
+        // Y (hold) - eject bunnies
+        new JoystickButton(operator, Button.kX.value)
+                .onTrue(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE),
+                        grabber.runFlywheelsEjectCommand()))
                 .onFalse(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.UP),
                         grabber.stopFlywheelsCommand()));
 

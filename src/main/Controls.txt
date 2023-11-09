@@ -17,14 +17,13 @@ Controls:
         *Slow mode - Y (held)
         Reset odometry - B
     Operator:
-        *Manual aim clockwise (+) - right trigger
-        *Manual aim counter-clockwise (-) - left trigger
-        *Fire - X (hold)
-        *Auto shoot  - right bumper (toggle)
-        *Toggle intake motors - A
-        *Eject all balls - left bumper (hold to run, release to cancel)
-        *Bunny arm down & active - B (hold)
-        *Eject bunny - 
+        Manual aim clockwise (+) - right trigger
+        Manual aim counter-clockwise (-) - left trigger
+        Fire - X (hold)
+        Auto shoot  - right bumper (toggle)
+        Eject all balls - left bumper (hold to run, release to cancel)
+        Intake bunnies - B (hold)
+        Eject bunnies - Y (hold)
 
 * = not implemented
 ** = undecided/unconfirmed
