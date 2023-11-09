@@ -14,12 +14,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.AutoConfig;
 import frc.robot.Constants.DrivetrainConfig;
+import frc.robot.Constants.ShooterConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
+import frc.robot.commands.actions.FeedShooter;
+import frc.robot.commands.actions.RunAndFeed;
 import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.IntakeAndShoot;
+import frc.robot.commands.functions.RepeatFireShooter;
 import frc.robot.commands.functions.RunShooter;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Hood;
@@ -116,7 +121,8 @@ public class RobotContainer {
 
         // X (hold) - fire shooter
         new JoystickButton(operator, Button.kX.value)
-                .whileTrue(new RunShooter());
+                .whileTrue(new RepeatFireShooter(indexer, shooter))
+                .onFalse(shooter.stopFlywheel());
 
         // B (hold) - intake bunnies
         new JoystickButton(operator, Button.kX.value)
