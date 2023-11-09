@@ -4,6 +4,7 @@ import frc.robot.turret_state_machine.Transition;
 
 public abstract class RunningLoop<State extends Enum<?>, RobotData> extends Transition<State, RobotData> {
 
+    /** A transition leading from a node back into the same node */
     public RunningLoop(State runningState) {
         super(runningState);
     }
@@ -19,5 +20,6 @@ public abstract class RunningLoop<State extends Enum<?>, RobotData> extends Tran
         return to;
     }
 
+    /** Called periodically while the node is running */
     protected abstract void run(RobotData robotData);
 }
