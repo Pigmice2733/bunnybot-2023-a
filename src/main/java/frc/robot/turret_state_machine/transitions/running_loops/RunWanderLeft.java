@@ -5,8 +5,8 @@ import frc.robot.commands.RunTurretStateMachine.TurretData;
 import frc.robot.commands.RunTurretStateMachine.TurretState;
 
 public class RunWanderLeft extends RunningLoop<TurretState, TurretData> {
-    public RunWanderLeft(TurretState runningState) {
-        super(runningState);
+    public RunWanderLeft() {
+        super(TurretState.WanderLeft);
     }
 
     @Override

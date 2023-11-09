@@ -5,8 +5,8 @@ import frc.robot.commands.RunTurretStateMachine.TurretState;
 
 public class RunTrackTarget extends RunningLoop<TurretState, TurretData> {
 
-    public RunTrackTarget(TurretState runningState) {
-        super(runningState);
+    public RunTrackTarget() {
+        super(TurretState.TrackTarget);
     }
 
     @Override

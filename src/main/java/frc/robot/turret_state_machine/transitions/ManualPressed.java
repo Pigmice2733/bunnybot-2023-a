@@ -6,8 +6,8 @@ import frc.robot.commands.RunTurretStateMachine.TurretState;
 import frc.robot.turret_state_machine.Transition;
 
 public class ManualPressed extends Transition<TurretState, TurretData> {
-    public ManualPressed(TurretState from, TurretState to) {
-        super(from, to);
+    public ManualPressed() {
+        super(TurretState.Manual);
     }
 
     @Override

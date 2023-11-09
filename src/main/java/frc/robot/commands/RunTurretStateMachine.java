@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
@@ -13,7 +11,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 import frc.robot.turret_state_machine.FiniteStateMachine;
-import frc.robot.turret_state_machine.Transition;
+import frc.robot.turret_state_machine.transitions.LeftBoundReached;
+import frc.robot.turret_state_machine.transitions.ManualPressed;
+import frc.robot.turret_state_machine.transitions.ManualReleased;
+import frc.robot.turret_state_machine.transitions.TargetFound;
+import frc.robot.turret_state_machine.transitions.TargetLost;
+import frc.robot.turret_state_machine.transitions.VelocityLeft;
+import frc.robot.turret_state_machine.transitions.VelocityRight;
+import frc.robot.turret_state_machine.transitions.running_loops.RunManual;
+import frc.robot.turret_state_machine.transitions.running_loops.RunTrackTarget;
+import frc.robot.turret_state_machine.transitions.running_loops.RunWanderLeft;
+import frc.robot.turret_state_machine.transitions.running_loops.RunWanderRight;
 
 public class RunTurretStateMachine extends CommandBase {
     private final FiniteStateMachine<TurretState, TurretData> stateMachine;
@@ -24,8 +32,34 @@ public class RunTurretStateMachine extends CommandBase {
     private boolean hasTarget;
 
     public RunTurretStateMachine(Turret turret, Vision vision, DoubleSupplier manualRotationSpeed) {
-        stateMachine = new FiniteStateMachine<TurretState, TurretData>(TurretState.BeginWander,
-                new HashMap<TurretState, List<Transition<TurretState, TurretData>>>());
+        stateMachine = new FiniteStateMachine<TurretState, TurretData>(TurretState.BeginWander);
+
+        stateMachine.addTransitionsFromState(TurretState.BeginWander,
+                new ManualPressed(),
+                new TargetFound(TurretState.TrackTarget),
+                new VelocityLeft(TurretState.WanderLeft),
+                new VelocityRight(TurretState.WanderRight));
+
+        stateMachine.addTransitionsFromState(TurretState.WanderLeft,
+                new ManualPressed(),
+                new TargetFound(TurretState.TrackTarget),
+                new LeftBoundReached(TurretState.WanderRight),
+                new RunWanderLeft());
+
+        stateMachine.addTransitionsFromState(TurretState.WanderRight,
+                new ManualPressed(),
+                new TargetFound(TurretState.TrackTarget),
+                new LeftBoundReached(TurretState.WanderLeft),
+                new RunWanderRight());
+
+        stateMachine.addTransitionsFromState(TurretState.Manual,
+                new ManualReleased(TurretState.BeginWander),
+                new TargetLost(TurretState.BeginWander),
+                new RunManual());
+
+        stateMachine.addTransitionsFromState(TurretState.TrackTarget,
+                new ManualPressed(),
+                new RunTrackTarget());
 
         this.turret = turret;
         this.vision = vision;

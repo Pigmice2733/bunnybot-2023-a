@@ -6,8 +6,8 @@ import frc.robot.turret_state_machine.Transition;
 
 public class VelocityRight extends Transition<TurretState, TurretData> {
 
-    public VelocityRight(TurretState from, TurretState to) {
-        super(from, to);
+    public VelocityRight(TurretState to) {
+        super(to);
     }
 
     @Override

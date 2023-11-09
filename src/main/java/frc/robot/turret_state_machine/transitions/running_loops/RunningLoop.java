@@ -5,7 +5,7 @@ import frc.robot.turret_state_machine.Transition;
 public abstract class RunningLoop<State extends Enum<?>, RobotData> extends Transition<State, RobotData> {
 
     public RunningLoop(State runningState) {
-        super(runningState, runningState);
+        super(runningState);
     }
 
     @Override

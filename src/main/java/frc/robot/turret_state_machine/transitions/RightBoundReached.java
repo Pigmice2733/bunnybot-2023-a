@@ -1,18 +1,19 @@
 package frc.robot.turret_state_machine.transitions;
 
+import frc.robot.Constants.TurretConfig;
 import frc.robot.commands.RunTurretStateMachine.TurretData;
 import frc.robot.commands.RunTurretStateMachine.TurretState;
 import frc.robot.turret_state_machine.Transition;
 
-public class VelocityLeft extends Transition<TurretState, TurretData> {
+public class RightBoundReached extends Transition<TurretState, TurretData> {
 
-    public VelocityLeft(TurretState to) {
+    public RightBoundReached(TurretState to) {
         super(to);
     }
 
     @Override
     public boolean shouldExecute(TurretData turretData) {
-        return turretData.turretVelocity <= 0;
+        return turretData.turretRotation > TurretConfig.WANDER_LIMIT;
     }
 
     @Override

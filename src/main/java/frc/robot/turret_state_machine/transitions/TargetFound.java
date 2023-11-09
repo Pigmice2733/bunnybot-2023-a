@@ -6,8 +6,8 @@ import frc.robot.turret_state_machine.Transition;
 
 public class TargetFound extends Transition<TurretState, TurretData> {
 
-    public TargetFound(TurretState from, TurretState to) {
-        super(from, to);
+    public TargetFound(TurretState to) {
+        super(to);
     }
 
     @Override
