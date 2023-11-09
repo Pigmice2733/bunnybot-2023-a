@@ -11,16 +11,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
-import frc.robot.Constants.ShooterConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.IntakeAndShoot;
+import frc.robot.commands.functions.RunShooter;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
@@ -54,8 +54,6 @@ public class RobotContainer {
 
     private final IntakeAndShoot autoBallCommand;
 
-    private boolean intakeToggle, forceShootToggle;
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -72,8 +70,6 @@ public class RobotContainer {
         driver = new XboxController(0);
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
-
-        intakeToggle = forceShootToggle = false;
 
         autoBallCommand = new IntakeAndShoot(intake, indexer, shooter, turret);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
@@ -99,23 +95,39 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        /*
+         * Driver
+         */
 
+        // B (press) - Reset Odometry
         new JoystickButton(driver, Button.kB.value)
                 .onTrue(new InstantCommand(drivetrain::resetOdometry));
-        // new JoystickButton(driver, Button.kY.value)
-        // .onTrue(new InstantCommand(drivetrain::enableSlow))
-        // .onFalse(new InstantCommand(drivetrain::disableSlow));
 
-        new JoystickButton(operator, Button.kLeftBumper.value)
-                .onTrue(new EjectAll(intake, indexer, shooter));
+        // TODO: add slow mode to swervedrivetrain in robolib
+        // Y (hold) - drivetrain slow mode
+
+        /*
+         * Operator
+         */
+
+        // Right Bumper (toggle) - toggle auto shooter
         new JoystickButton(operator, Button.kRightBumper.value)
                 .toggleOnTrue(new AutoShooter(indexer, shooter, turret));
-        new JoystickButton(operator, Button.kB.value)
-                .onTrue(intakeToggle ? intake.spinForward() : intake.stopWheels());
-        new JoystickButton(operator, Button.kY.value)
-                .onTrue(forceShootToggle
-                        ? shooter.setFlywheelSpeed(ShooterConfig.DEFAULT_OUTPUT)
-                        : shooter.stopFlywheel());
+
+        // X (hold) - fire shooter
+        new JoystickButton(operator, Button.kX.value)
+                .whileTrue(new RunShooter());
+
+        // B (hold) - move bunny arm down and run bunny intake
+        new JoystickButton(operator, Button.kX.value)
+                .onTrue(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.DOWN),
+                        grabber.runFlywheelsIntakeCommand()))
+                .onFalse(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.UP),
+                        grabber.stopFlywheelsCommand()));
+
+        // Left Bumper (hold) - eject balls through intake
+        new JoystickButton(operator, Button.kLeftBumper.value)
+                .whileTrue(new EjectAll(intake, indexer, shooter));
     }
 
     /**
