@@ -6,7 +6,6 @@ import java.util.function.DoubleSupplier;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
-import com.pigmice.frc.lib.utils.Event;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -109,8 +108,6 @@ public class TurretStateMachine {
     public class TrackTarget implements TurretState {
         private PhotonTrackedTarget target = null;
         public boolean targetInRange;
-
-        public Event targetEnteredRange = new Event();
 
         @Override
         public void execute() {

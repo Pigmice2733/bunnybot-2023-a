@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -20,9 +21,8 @@ import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.IntakeAndShoot;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
-// import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -39,9 +39,9 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    public final Drivetrain drivetrain;
+    public final SwerveDrivetrain drivetrain;
     private final Grabber grabber;
-    // private final Hood hood;
+    private final Hood hood;
     private final Indexer indexer;
     private final Intake intake;
     private final Shooter shooter;
@@ -60,9 +60,9 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        drivetrain = new Drivetrain(DrivetrainConfig.SWERVE_CONFIG);
+        drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
         grabber = new Grabber();
-        // hood = new Hood();
+        hood = new Hood();
         indexer = new Indexer();
         intake = new Intake();
         shooter = new Shooter();
@@ -102,16 +102,10 @@ public class RobotContainer {
 
         new JoystickButton(driver, Button.kB.value)
                 .onTrue(new InstantCommand(drivetrain::resetOdometry));
-        new JoystickButton(driver, Button.kY.value)
-                .onTrue(new InstantCommand(drivetrain::enableSlow))
-                .onFalse(new InstantCommand(drivetrain::disableSlow));
+        // new JoystickButton(driver, Button.kY.value)
+        // .onTrue(new InstantCommand(drivetrain::enableSlow))
+        // .onFalse(new InstantCommand(drivetrain::disableSlow));
 
-        new POVButton(operator, 0)
-                .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.UP));
-        new POVButton(operator, 90)
-                .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE));
-        new POVButton(operator, 180)
-                .onTrue(grabber.setTargetArmAngleCommand(ArmPosition.DOWN));
         new JoystickButton(operator, Button.kLeftBumper.value)
                 .onTrue(new EjectAll(intake, indexer, shooter));
         new JoystickButton(operator, Button.kRightBumper.value)
