@@ -5,6 +5,7 @@ import frc.robot.commands.RunTurretStateMachine.TurretState;
 
 public class RunTrackTarget extends RunningLoop<TurretState, TurretData> {
 
+    /** Automatically track the best target using vision */
     public RunTrackTarget() {
         super(TurretState.TrackTarget);
     }

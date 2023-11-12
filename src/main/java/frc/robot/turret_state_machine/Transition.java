@@ -12,7 +12,7 @@ public abstract class Transition<State extends Enum<?>, RobotData> {
     public abstract boolean shouldExecute(RobotData robotData);
 
     /**
-     * Any code in execture is run when this transition is used
+     * Any code in execute is run when this transition is used
      * 
      * @return the new state that is transitioned to
      **/

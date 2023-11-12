@@ -7,6 +7,7 @@ import frc.robot.turret_state_machine.Transition;
 
 public class ManualReleased extends Transition<TurretState, TurretData> {
 
+    /** Triggers a transition when the manual button is not pressed because */
     public ManualReleased(TurretState to) {
         super(to);
     }

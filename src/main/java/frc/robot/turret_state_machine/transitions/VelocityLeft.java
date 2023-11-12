@@ -6,6 +6,7 @@ import frc.robot.turret_state_machine.Transition;
 
 public class VelocityLeft extends Transition<TurretState, TurretData> {
 
+    /** Triggers a transition when the turret velocity is negative */
     public VelocityLeft(TurretState to) {
         super(to);
     }

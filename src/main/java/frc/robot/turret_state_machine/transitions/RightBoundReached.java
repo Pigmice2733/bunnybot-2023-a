@@ -7,6 +7,7 @@ import frc.robot.turret_state_machine.Transition;
 
 public class RightBoundReached extends Transition<TurretState, TurretData> {
 
+    /** Triggers a transition when the turret has reached it's right boundary */
     public RightBoundReached(TurretState to) {
         super(to);
     }

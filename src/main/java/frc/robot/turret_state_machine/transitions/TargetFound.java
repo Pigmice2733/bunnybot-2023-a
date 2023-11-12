@@ -6,6 +6,7 @@ import frc.robot.turret_state_machine.Transition;
 
 public class TargetFound extends Transition<TurretState, TurretData> {
 
+    /** Triggers a transition when a valid target can be seen */
     public TargetFound(TurretState to) {
         super(to);
     }

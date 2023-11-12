@@ -90,14 +90,14 @@ public final class Constants {
         public static final double MAX_ALLOWED_ROTATION = 180; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
-        public static final double TARGET_YAW_TOLERENCE = 3.5;
+        public static final double TARGET_YAW_TOLERANCE = 3.5;
     }
 
     public static final class ShooterConfig {
         private static final double ROTATION_GEAR_RATIO = 1;
         public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder rot to deg
 
-        public static final double MAX_VELOSITY = 50; // deg/sec
+        public static final double MAX_VELOCITY = 50; // deg/sec
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
         public static final double DEFAULT_OUTPUT = 0.5;
@@ -131,7 +131,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 30; // deg/sec
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotaiton to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
     }
 
     public static final class IntakeConfig {
@@ -150,7 +150,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1;// 1200; // deg/sec
         public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotaiton to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
 
         // All in degrees
         public static enum ArmPosition {
@@ -202,7 +202,7 @@ public final class Constants {
         private static final SimpleMotorFeedforward DRIVE_FEED_FORWARD = new SimpleMotorFeedforward(
                 0.35493, 2.3014, 0.12872);
 
-        // From what I have seen, it is common to only use a P value in pathfollowing
+        // From what I have seen, it is common to only use a P value in path following
         private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(1, 1); // 3, 2.5
         private static final PIDController PATH_DRIVE_PID = new PIDController(0.3, 0, 0);
         private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
