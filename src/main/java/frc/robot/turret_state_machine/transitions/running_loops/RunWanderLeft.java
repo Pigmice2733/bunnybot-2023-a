@@ -6,7 +6,7 @@ import frc.robot.commands.RunTurretStateMachine.TurretState;
 
 public class RunWanderLeft extends RunningLoop<TurretState, TurretData> {
 
-    /** Rotate the turret left to scan for targets */
+    /** Rotate the turret left to scan for targets. */
     public RunWanderLeft() {
         super(TurretState.WanderLeft);
     }

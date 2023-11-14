@@ -5,13 +5,13 @@ import frc.robot.commands.RunTurretStateMachine.TurretState;
 
 public class RunManual extends RunningLoop<TurretState, TurretData> {
 
-    /** Manual control of the turret using controller triggers */
+    /** Manual control of the turret using controller triggers. */
     public RunManual() {
         super(TurretState.Manual);
     }
 
     @Override
     protected void run(TurretData turretData) {
-        turretData.changeTargetRotation.accept(turretData.manualRotationSpeed);
+        turretData.setTargetRotation.accept(turretData.manualRotationSpeed);
     }
 }
