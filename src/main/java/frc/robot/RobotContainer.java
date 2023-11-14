@@ -103,9 +103,6 @@ public class RobotContainer {
         new JoystickButton(driver, Button.kB.value)
                 .onTrue(new InstantCommand(drivetrain::resetOdometry));
 
-        // TODO: add slow mode to swervedrivetrain in robolib
-        // Y (hold) - drivetrain slow mode
-
         /*
          * Operator
          */
@@ -114,28 +111,28 @@ public class RobotContainer {
         new JoystickButton(operator, Button.kRightBumper.value)
                 .toggleOnTrue(new AutoShooter(indexer, shooter, turret));
 
+        // Left Bumper (hold) - eject balls through intake
+        new JoystickButton(operator, Button.kLeftBumper.value)
+                .whileTrue(new EjectAll(intake, indexer, shooter));
+
         // X (hold) - fire shooter
         new JoystickButton(operator, Button.kX.value)
                 .whileTrue(new RepeatFireShooter(indexer, shooter))
                 .onFalse(shooter.stopFlywheel());
 
         // B (hold) - intake bunnies
-        new JoystickButton(operator, Button.kX.value)
+        new JoystickButton(operator, Button.kB.value)
                 .onTrue(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.DOWN),
                         grabber.runFlywheelsIntakeCommand()))
                 .onFalse(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.UP),
                         grabber.stopFlywheelsCommand()));
 
         // Y (hold) - eject bunnies
-        new JoystickButton(operator, Button.kX.value)
+        new JoystickButton(operator, Button.kY.value)
                 .onTrue(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE),
                         grabber.runFlywheelsEjectCommand()))
                 .onFalse(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.UP),
                         grabber.stopFlywheelsCommand()));
-
-        // Left Bumper (hold) - eject balls through intake
-        new JoystickButton(operator, Button.kLeftBumper.value)
-                .whileTrue(new EjectAll(intake, indexer, shooter));
     }
 
     /**

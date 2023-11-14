@@ -14,7 +14,7 @@ Controls:
     Driver:
         Drive - Left stick X & Y
         Turn - Right stick X
-        *Slow mode - Y (held)
+        Slow mode - Y (held)
         Reset odometry - B
     Operator:
         Manual aim clockwise (+) - right trigger
