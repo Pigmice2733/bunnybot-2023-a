@@ -29,7 +29,8 @@ public class Grabber extends SubsystemBase {
         flywheelsMotor.restoreFactoryDefaults();
 
         // Convert to arm rotations in degrees
-        rotationMotor.getEncoder().setPositionConversionFactor(GrabberConfig.ROTATION_CONVERSION * 360);
+        rotationMotor.getEncoder()
+                .setPositionConversionFactor(GrabberConfig.ROTATION_CONVERSION * 360);
 
         rotationController = new ProfiledPIDController(
                 GrabberConfig.ARM_P, GrabberConfig.ARM_I, GrabberConfig.ARM_D,
@@ -37,13 +38,17 @@ public class Grabber extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Current", Constants.GRABBER_TAB, () -> currentRotation)
                 .asDial(-180, 180);
-        ShuffleboardHelper.addOutput("Setpoint", Constants.GRABBER_TAB, () -> rotationController.getSetpoint())
+        ShuffleboardHelper
+                .addOutput("Setpoint", Constants.GRABBER_TAB,
+                        () -> rotationController.getSetpoint())
                 .asDial(-180, 180);
         ShuffleboardHelper.addOutput("Target", Constants.GRABBER_TAB, () -> targetRotation)
                 .asDial(-180, 180);
 
-        ShuffleboardHelper.addOutput("Rotation Output", Constants.GRABBER_TAB, () -> rotationMotor.get());
-        ShuffleboardHelper.addOutput("Flywheels Output", Constants.GRABBER_TAB, () -> flywheelsMotor.get());
+        ShuffleboardHelper.addOutput("Rotation Output", Constants.GRABBER_TAB,
+                () -> rotationMotor.get());
+        ShuffleboardHelper.addOutput("Flywheels Output", Constants.GRABBER_TAB,
+                () -> flywheelsMotor.get());
     }
 
     @Override
@@ -54,7 +59,8 @@ public class Grabber extends SubsystemBase {
 
     /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
-        double calculatedOutput = rotationController.calculate(getCurrentRotation(), targetRotation);
+        double calculatedOutput = rotationController.calculate(getCurrentRotation(),
+                targetRotation);
         outputToRotationMotor(calculatedOutput);
     }
 
@@ -100,6 +106,15 @@ public class Grabber extends SubsystemBase {
 
     /** Sends the arm to the specified position. */
     public Command setTargetArmAngleCommand(ArmPosition position) {
-        return Commands.runOnce(() -> setTargetRotation(position.getAngle()));
+        switch (position) {
+            case UP:
+                return Commands.runOnce(() -> setTargetRotation(0));
+            case MIDDLE:
+                return Commands.runOnce(() -> setTargetRotation(90));
+            case DOWN:
+                return Commands.runOnce(() -> setTargetRotation(180));
+            default:
+                return Commands.none();
+        }
     }
 }
