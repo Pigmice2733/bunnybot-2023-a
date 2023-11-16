@@ -266,7 +266,7 @@ public final class Constants {
                 FRONT_RIGHT_MODULE,
                 BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
                 PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID,
-                MAX_DRIVE_SPEED, MAX_TURN_SPEED, KINEMATICS,
+                MAX_DRIVE_SPEED, MAX_TURN_SPEED, SLOWMODE_MULTIPLIER, KINEMATICS,
                 DRIVE_FEED_FORWARD, SWERVE_TAB);
     }
 
