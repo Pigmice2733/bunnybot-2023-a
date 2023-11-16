@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final ShuffleboardTab DRIVER_TAB = Shuffleboard.getTab("Driver");
     public static final ShuffleboardTab HOOD_TAB = Shuffleboard.getTab("Hood");
     public static final ShuffleboardTab TURRET_TAB = Shuffleboard.getTab("Turret");
     public static final ShuffleboardTab SWERVE_TAB = Shuffleboard.getTab("Drivetrain");

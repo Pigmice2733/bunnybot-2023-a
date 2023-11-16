@@ -4,15 +4,19 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
@@ -52,7 +56,8 @@ public class RobotContainer {
     private final XboxController operator;
     private final Controls controls;
 
-    private final IntakeAndShoot autoBallCommand;
+    private final SendableChooser<Command> autoChooserBunny = new SendableChooser<Command>();
+    private final SendableChooser<Command> autoChooserShooter = new SendableChooser<Command>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -71,7 +76,13 @@ public class RobotContainer {
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
 
-        autoBallCommand = new IntakeAndShoot(intake, indexer, shooter, turret);
+        configureDefaultCommands();
+        configureAutoChoosers();
+        configureButtonBindings();
+    }
+
+    private void configureDefaultCommands() {
+        IntakeAndShoot autoBallCommand = new IntakeAndShoot(intake, indexer, shooter, turret);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
                 controls::getDriveSpeedY,
@@ -82,8 +93,28 @@ public class RobotContainer {
         shooter.setDefaultCommand(autoBallCommand);
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
                 controls::getManualTurretRotationSpeed));
+    }
 
-        configureButtonBindings();
+    private void configureAutoChoosers() {
+        // Commands to fetch a bunny
+        List<Command> bunnyCommands = List.of(); // TODO: create all commands
+
+        // Commands to fire at opposing robots
+        List<Command> shooterCommands = List.of(); // TODO: create all commands
+
+        Constants.DRIVER_TAB.add("Bunny Auto", autoChooserBunny);
+        Constants.DRIVER_TAB.add("Shooter Auto", autoChooserShooter);
+
+        bunnyCommands.forEach(command -> {
+            autoChooserBunny.addOption(command.getName(), command);
+        });
+
+        shooterCommands.forEach(command -> {
+            autoChooserShooter.addOption(command.getName(), command);
+        });
+
+        autoChooserBunny.setDefaultOption("None", new InstantCommand());
+        autoChooserShooter.setDefaultOption("None", new InstantCommand());
     }
 
     /**
