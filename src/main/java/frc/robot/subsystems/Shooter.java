@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
 
         ShuffleboardHelper
                 .addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get())
-                .asDial(-1, 1);
+                .asNumberBar(-1, 1);
     }
 
     /** Manually set the percent output of the motor. */

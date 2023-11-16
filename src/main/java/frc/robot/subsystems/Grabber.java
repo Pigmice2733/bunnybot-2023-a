@@ -40,15 +40,17 @@ public class Grabber extends SubsystemBase {
                 .asDial(-180, 180);
         ShuffleboardHelper
                 .addOutput("Setpoint", Constants.GRABBER_TAB,
-                        () -> rotationController.getSetpoint())
+                        () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
         ShuffleboardHelper.addOutput("Target", Constants.GRABBER_TAB, () -> targetRotation)
                 .asDial(-180, 180);
 
         ShuffleboardHelper.addOutput("Rotation Output", Constants.GRABBER_TAB,
-                () -> rotationMotor.get());
+                () -> rotationMotor.get()).asNumberBar(-1, 1);
+        ;
         ShuffleboardHelper.addOutput("Flywheels Output", Constants.GRABBER_TAB,
-                () -> flywheelsMotor.get());
+                () -> flywheelsMotor.get()).asNumberBar(-1, 1);
+        ;
     }
 
     @Override

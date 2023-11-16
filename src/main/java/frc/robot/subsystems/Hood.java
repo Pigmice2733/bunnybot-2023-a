@@ -37,12 +37,12 @@ public class Hood extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Current", Constants.HOOD_TAB, () -> currentRotation)
                 .asDial(-180, 180);
-        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint())
+        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
         ShuffleboardHelper.addOutput("Target", Constants.HOOD_TAB, () -> targetRotation)
                 .asDial(-180, 180);
 
-        ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
+        ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get()).asNumberBar(-1, 1);
     }
 
     @Override

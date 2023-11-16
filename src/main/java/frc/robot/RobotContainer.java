@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
+import frc.robot.commands.auto_routines.FetchBunny;
 import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.IntakeAndShoot;
@@ -56,7 +57,10 @@ public class RobotContainer {
     private final XboxController operator;
     private final Controls controls;
 
+    // Commands to fetch bunnies
     private final SendableChooser<Command> autoChooserBunny = new SendableChooser<Command>();
+
+    // Commands to run the shooter
     private final SendableChooser<Command> autoChooserShooter = new SendableChooser<Command>();
 
     /**
@@ -82,7 +86,7 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
-        IntakeAndShoot autoBallCommand = new IntakeAndShoot(intake, indexer, shooter, turret);
+        IntakeAndShoot autoBallCommand = new IntakeAndShoot(intake, indexer, shooter, turret, vision);
 
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
@@ -97,11 +101,11 @@ public class RobotContainer {
     }
 
     private void configureAutoChoosers() {
-        // Commands to fetch a bunny
-        List<Command> bunnyCommands = List.of(); // TODO: create all commands
+        List<Command> bunnyCommands = List.of(
+                new FetchBunny(drivetrain, grabber));
 
-        // Commands to fire at opposing robots
-        List<Command> shooterCommands = List.of(); // TODO: create all commands
+        List<Command> shooterCommands = List.of(
+                new AutoShooter(indexer, shooter, turret, vision));
 
         Constants.DRIVER_TAB.add("Bunny Auto", autoChooserBunny);
         Constants.DRIVER_TAB.add("Shooter Auto", autoChooserShooter);
@@ -138,7 +142,7 @@ public class RobotContainer {
 
         // Right Bumper (toggle) - toggle auto shooter
         new JoystickButton(operator, Button.kRightBumper.value)
-                .toggleOnTrue(new AutoShooter(indexer, shooter, turret));
+                .toggleOnTrue(new AutoShooter(indexer, shooter, turret, vision));
 
         // Left Bumper (hold) - eject balls through intake
         new JoystickButton(operator, Button.kLeftBumper.value)

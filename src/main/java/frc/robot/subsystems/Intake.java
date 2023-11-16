@@ -16,7 +16,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         intakeMotor = new CANSparkMax(CANConfig.INTAKE_WHEELS, MotorType.kBrushless);
-        ShuffleboardHelper.addOutput("Motor Output", Constants.INTAKE_TAB, () -> intakeMotor.get());
+        ShuffleboardHelper.addOutput("Motor Output", Constants.INTAKE_TAB, () -> intakeMotor.get()).asNumberBar(-1, 1);
     }
 
     private void outputToMotor(double percent) {
@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
 
     /** Spins intake wheels to intake balls. */
     public Command spinForward() {
-        return Commands.runOnce(() -> outputToMotor(IntakeConfig.INTAKE_SPEED));
+        return Commands.runOnce(() -> outputToMotor(IntakeConfig.INTAKE_SPEED), this);
     }
 
     /** Spins intake wheels to eject balls. */

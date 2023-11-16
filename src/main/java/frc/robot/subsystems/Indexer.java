@@ -16,7 +16,7 @@ public class Indexer extends SubsystemBase {
 
     public Indexer() {
         beltMotor = new CANSparkMax(CANConfig.INDEXER_BELT, MotorType.kBrushless);
-        ShuffleboardHelper.addOutput("Motor Output", Constants.INDEXER_TAB, () -> beltMotor.get());
+        ShuffleboardHelper.addOutput("Motor Output", Constants.INDEXER_TAB, () -> beltMotor.get()).asNumberBar(-1, 1);
     }
 
     private void outputToMotor(double percent) {
