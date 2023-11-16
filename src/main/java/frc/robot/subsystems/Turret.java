@@ -120,6 +120,6 @@ public class Turret extends SubsystemBase {
 
     public boolean hasTarget() {
         return vision.getCurrentTarget() != null
-                && getTurretVelocity() < TurretConfig.SHOOT_VELOCITY;
+                && getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY;
     }
 }

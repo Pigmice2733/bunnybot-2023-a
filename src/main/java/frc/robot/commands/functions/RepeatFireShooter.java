@@ -13,7 +13,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
 public class RepeatFireShooter extends SequentialCommandGroup {
-    /** Repeatedly shoots at a set interval until stopped. */
+    /** Fires the shooter at a set interval until canceled. */
     public RepeatFireShooter(Indexer indexer, Shooter shooter) {
         addCommands(
                 shooter.setFlywheelSpeed(ShooterConfig.DEFAULT_OUTPUT),

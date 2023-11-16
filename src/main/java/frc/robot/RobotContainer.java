@@ -100,16 +100,15 @@ public class RobotContainer {
         new JoystickButton(driver, Button.kB.value)
                 .onTrue(new InstantCommand(drivetrain::resetOdometry));
 
-        // Y (hold) - drivetrain slow mode
-        new JoystickButton(driver, Button.kY.value)
-                .onTrue(new InstantCommand(() -> drivetrain.setSlowmode(true)))
-                .onFalse(new InstantCommand(() -> drivetrain.setSlowmode(false)));
-
         /* OPERATOR */
 
         // Right Bumper (toggle) - toggle auto shooter
         new JoystickButton(operator, Button.kRightBumper.value)
                 .toggleOnTrue(new AutoShooter(indexer, shooter, turret));
+
+        // Left Bumper (hold) - eject balls through intake
+        new JoystickButton(operator, Button.kLeftBumper.value)
+                .whileTrue(new EjectAll(intake, indexer, shooter));
 
         // X (hold) - fire shooter
         new JoystickButton(operator, Button.kX.value)
@@ -132,10 +131,6 @@ public class RobotContainer {
                 .onFalse(Commands.parallel(
                         grabber.setTargetArmAngleCommand(ArmPosition.UP),
                         grabber.stopFlywheelsCommand()));
-
-        // Left Bumper (hold) - eject balls through intake
-        new JoystickButton(operator, Button.kLeftBumper.value)
-                .whileTrue(new EjectAll(intake, indexer, shooter));
     }
 
     /**

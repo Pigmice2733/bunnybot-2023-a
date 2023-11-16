@@ -94,7 +94,7 @@ public final class Constants {
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
 
-        public static final double SHOOT_VELOCITY = 20;
+        public static final double MAX_FIRE_VELOCITY = 1; // max vel a shot is allowed at (TODO)
     }
 
     public static final class ShooterConfig {
@@ -133,9 +133,9 @@ public final class Constants {
         public static final double MANUAL_ROTATION_SPEED = 3;
 
         private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
-                                                                                          // rot to
-                                                                                          // deg
+
+        // Encoder rotations to degrees
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360;
 
         public static final double HOOD_P = 0.0;
         public static final double HOOD_I = 0.0;
@@ -144,8 +144,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 30; // deg/sec
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations
-                                                            // (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
     }
 
     public static final class IntakeConfig {
@@ -164,8 +163,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1; // 1200; // deg/sec
         public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations
-                                                            // (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
 
         // All in degrees
         public static enum ArmPosition {
@@ -203,7 +201,7 @@ public final class Constants {
         private static final SimpleMotorFeedforward DRIVE_FEED_FORWARD = new SimpleMotorFeedforward(
                 0.35493, 2.3014, 0.12872);
 
-        // From what I have seen, it is common to only use a P value in pathfollowing
+        // From what I have seen, it is common to only use a P value in path following
         private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(1, 1); // 3, 2.5
         private static final PIDController PATH_DRIVE_PID = new PIDController(0.3, 0, 0);
         private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);

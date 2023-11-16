@@ -39,22 +39,32 @@ public class Controls {
         joystickY = MathUtil.applyDeadband(-driver.getLeftY(), threshold);
         // joystickValue = driveSpeedYFilter.calculate(joystickValue); // input
         // smoothing
-        return joystickY * DrivetrainConfig.MAX_DRIVE_SPEED;
+        return joystickY * DrivetrainConfig.MAX_DRIVE_SPEED
+                * (driver.getYButton() ? DrivetrainConfig.SLOWMODE_MULTIPLIER : 1);
     }
 
     LinearFilter driveSpeedXFilter = LinearFilter.singlePoleIIR(0.05, 0.02);
 
-    /** Returns the left joystick x-axis multiplied by the drive speed. */
+    /**
+     * Returns the left joystick x-axis multiplied by the drive speed. When the Y
+     * button is held, the result is multiplied by the slowmode multiplier before
+     * returning.
+     */
     public double getDriveSpeedX() {
         joystickX = MathUtil.applyDeadband(-driver.getLeftX(), threshold);
         // joystickValue = driveSpeedXFilter.calculate(joystickValue); // input
         // smoothing
-        return joystickX * DrivetrainConfig.MAX_DRIVE_SPEED;
+        return joystickX * DrivetrainConfig.MAX_DRIVE_SPEED
+                * (driver.getYButton() ? DrivetrainConfig.SLOWMODE_MULTIPLIER : 1);
     }
 
     LinearFilter turnSpeedFilter = LinearFilter.singlePoleIIR(0.05, 0.02);
 
-    /** Returns the right joystick x-axis multiplied by the drive speed. */
+    /**
+     * Returns the right joystick x-axis multiplied by the drive speed. When the Y
+     * button is held, the result is multiplied by the slowmode multiplier before
+     * returning.
+     */
     public double getTurnSpeed() {
         joystickTurn = MathUtil.applyDeadband(driver.getRightX(), threshold);
         // joystickValue = turnSpeedFilter.calculate(joystickValue); // input smoothing
