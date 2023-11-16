@@ -11,17 +11,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 import frc.robot.turret_state_machine.FiniteStateMachine;
-import frc.robot.turret_state_machine.transitions.LeftBoundReached;
-import frc.robot.turret_state_machine.transitions.ManualPressed;
-import frc.robot.turret_state_machine.transitions.ManualReleased;
-import frc.robot.turret_state_machine.transitions.TargetFound;
-import frc.robot.turret_state_machine.transitions.TargetLost;
-import frc.robot.turret_state_machine.transitions.VelocityLeft;
-import frc.robot.turret_state_machine.transitions.VelocityRight;
-import frc.robot.turret_state_machine.transitions.running_loops.RunManual;
-import frc.robot.turret_state_machine.transitions.running_loops.RunTrackTarget;
-import frc.robot.turret_state_machine.transitions.running_loops.RunWanderLeft;
-import frc.robot.turret_state_machine.transitions.running_loops.RunWanderRight;
+import frc.robot.turret_state_machine.transitions.*;
+import frc.robot.turret_state_machine.transitions.running_loops.*;
 
 public class RunTurretStateMachine extends CommandBase {
     private final FiniteStateMachine<TurretState, TurretData> stateMachine;
@@ -29,36 +20,35 @@ public class RunTurretStateMachine extends CommandBase {
     private final Turret turret;
     private final Vision vision;
     private final DoubleSupplier manualRotationSpeed;
-    private boolean hasTarget;
 
     public RunTurretStateMachine(Turret turret, Vision vision, DoubleSupplier manualRotationSpeed) {
         stateMachine = new FiniteStateMachine<TurretState, TurretData>(TurretState.BeginWander);
 
         stateMachine.addTransitionsFromState(TurretState.BeginWander,
                 new ManualPressed(),
-                new TargetFound(TurretState.TrackTarget),
-                new VelocityLeft(TurretState.WanderLeft),
-                new VelocityRight(TurretState.WanderRight));
+                new TargetFound(),
+                new VelocityLeft(),
+                new VelocityRight());
 
         stateMachine.addTransitionsFromState(TurretState.WanderLeft,
                 new ManualPressed(),
-                new TargetFound(TurretState.TrackTarget),
-                new LeftBoundReached(TurretState.WanderRight),
+                new TargetFound(),
+                new LeftBoundReached(),
                 new RunWanderLeft());
 
         stateMachine.addTransitionsFromState(TurretState.WanderRight,
                 new ManualPressed(),
-                new TargetFound(TurretState.TrackTarget),
-                new LeftBoundReached(TurretState.WanderLeft),
+                new TargetFound(),
+                new RightBoundReached(),
                 new RunWanderRight());
 
         stateMachine.addTransitionsFromState(TurretState.Manual,
-                new ManualReleased(TurretState.BeginWander),
-                new TargetLost(TurretState.BeginWander),
+                new ManualReleased(),
                 new RunManual());
 
         stateMachine.addTransitionsFromState(TurretState.TrackTarget,
                 new ManualPressed(),
+                new TargetLost(),
                 new RunTrackTarget());
 
         this.turret = turret;
@@ -70,18 +60,7 @@ public class RunTurretStateMachine extends CommandBase {
 
     @Override
     public void execute() {
-        hasTarget = vision.getCurrentTarget() != null;
-
-        if (!stateMachine.execute(new TurretData(
-                turret.getCurrentRotation(),
-                turret.getTurretVelocity(),
-                manualRotationSpeed.getAsDouble(),
-                hasTarget,
-                hasTarget ? vision.getCurrentTarget().getYaw() : 0,
-                hasTarget ? vision.getCurrentTarget().getPitch() : 0,
-                turret,
-                (value) -> turret.setTargetRotation(value),
-                (value) -> turret.changeTargetRotation(value)))) {
+        if (!stateMachine.execute(new TurretData(turret, vision, manualRotationSpeed))) {
             System.out.println("Turret state machine encountered an error.");
         }
     }
@@ -95,7 +74,6 @@ public class RunTurretStateMachine extends CommandBase {
     }
 
     public class TurretData {
-        public final Turret turret;
         public final double turretRotation;
         public final double turretVelocity;
         public final double manualRotationSpeed;
@@ -105,19 +83,15 @@ public class RunTurretStateMachine extends CommandBase {
         public final DoubleConsumer setTargetRotation;
         public final DoubleConsumer changeTargetRotation;
 
-        public TurretData(double turretRotation, double turretVelocity, double manualRotationSpeed,
-                boolean hasTarget, double targetYaw, double targetPitch, Turret turret,
-                DoubleConsumer setTargetRotation, DoubleConsumer changeTargetRotation) {
-
-            this.turret = turret;
-            this.turretRotation = turretRotation;
-            this.turretVelocity = turretVelocity;
-            this.manualRotationSpeed = manualRotationSpeed;
-            this.hasTarget = hasTarget;
-            this.targetYaw = targetYaw;
-            this.targetPitch = targetPitch;
-            this.setTargetRotation = setTargetRotation;
-            this.changeTargetRotation = changeTargetRotation;
+        public TurretData(Turret turret, Vision vision, DoubleSupplier RotationSpeed) {
+            turretRotation = turret.getCurrentRotation();
+            turretVelocity = turret.getTurretVelocity();
+            manualRotationSpeed = RotationSpeed.getAsDouble();
+            hasTarget = vision.getCurrentTarget() != null;
+            targetYaw = hasTarget ? vision.getCurrentTarget().getYaw() : 0;
+            targetPitch = hasTarget ? vision.getCurrentTarget().getPitch() : 0;
+            setTargetRotation = turret::setTargetRotation;
+            changeTargetRotation = turret::changeTargetRotation;
         }
     }
 }

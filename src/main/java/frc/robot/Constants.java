@@ -161,26 +161,14 @@ public final class Constants {
         public static final double ARM_I = 0.000;
         public static final double ARM_D = 0.000;
 
-        public static final double MAX_VELOCITY = 1;// 1200; // deg/sec
+        public static final double MAX_VELOCITY = 1; // 1200; // deg/sec
         public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
 
         public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
 
         // All in degrees
         public static enum ArmPosition {
-            UP(0),
-            MIDDLE(90),
-            DOWN(180);
-
-            private double angle;
-
-            ArmPosition(double angle) {
-                this.angle = angle;
-            }
-
-            public double getAngle() {
-                return angle;
-            }
+            UP, MIDDLE, DOWN
         }
 
         public static final double FLYWHEEL_INTAKE_SPEED = 0.2;
@@ -228,7 +216,7 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.FRONT_LEFT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.FRONT_LEFT_STEER)
                 .withSteerEncoderPort(CANConfig.FRONT_LEFT_ABS_ENCODER)
-                .withSteerOffset(-Math.toRadians(290));
+                .withSteerOffset(Math.toRadians(70));
 
         private static final MkSwerveModuleBuilder FRONT_RIGHT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -239,7 +227,7 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.FRONT_RIGHT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.FRONT_RIGHT_STEER)
                 .withSteerEncoderPort(CANConfig.FRONT_RIGHT_ABS_ENCODER)
-                .withSteerOffset(-Math.toRadians(319));
+                .withSteerOffset(Math.toRadians(41));
 
         private static final MkSwerveModuleBuilder BACK_LEFT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -250,7 +238,7 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.BACK_LEFT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.BACK_LEFT_STEER)
                 .withSteerEncoderPort(CANConfig.BACK_LEFT_ABS_ENCODER)
-                .withSteerOffset(-Math.toRadians(312));
+                .withSteerOffset(Math.toRadians(48));
 
         private static final MkSwerveModuleBuilder BACK_RIGHT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -261,14 +249,12 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.BACK_RIGHT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.BACK_RIGHT_STEER)
                 .withSteerEncoderPort(CANConfig.BACK_RIGHT_ABS_ENCODER)
-                .withSteerOffset(-Math.toRadians(252));
+                .withSteerOffset(Math.toRadians(108));
 
-        public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(FRONT_LEFT_MODULE,
-                FRONT_RIGHT_MODULE,
-                BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
-                PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID,
-                MAX_DRIVE_SPEED, MAX_TURN_SPEED, KINEMATICS,
-                DRIVE_FEED_FORWARD, SWERVE_TAB);
+        public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(
+                FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE, BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
+                PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID, MAX_DRIVE_SPEED, MAX_TURN_SPEED,
+                SLOWMODE_MULTIPLIER, KINEMATICS, DRIVE_FEED_FORWARD, SWERVE_TAB);
     }
 
     public static class AutoConfig {
