@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DrivetrainConfig;
+import frc.robot.Constants.HoodConfig;
 import frc.robot.Constants.TurretConfig;
 
 public class Controls {
@@ -14,7 +15,7 @@ public class Controls {
     // If a value from a joystick is less than this, it will return 0.
     private double threshold = Constants.AXIS_THRESHOLD;
 
-    private double joystickTurret, joystickY, joystickX, joystickTurn;
+    private double joystickTurret, joystickY, joystickX, joystickTurn, joystickHood;
 
     public Controls(XboxController driver, XboxController operator) {
         this.driver = driver;
@@ -71,4 +72,8 @@ public class Controls {
         return joystickTurn * DrivetrainConfig.MAX_TURN_SPEED;
     }
 
+    public double getManualHoodSpeed() {
+        joystickHood = MathUtil.applyDeadband(operator.getLeftY(), threshold);
+        return joystickHood * HoodConfig.MANUAL_ROTATION_SPEED;
+    }
 }

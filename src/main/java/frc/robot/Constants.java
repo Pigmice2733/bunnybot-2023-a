@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pigmice.frc.lib.drivetrain.swerve.SwerveConfig;
 import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
@@ -108,25 +109,8 @@ public final class Constants {
 
         public static final double DEFAULT_OUTPUT = 0.5;
 
-        public static final ShooterSetPoint[] ShooterValues = { new ShooterSetPoint(0, 0, 0) };
-    }
-
-    public static class ShooterSetPoint {
-        public final double distance;
-        public final double flywheelSpeed;
-        public final double height;
-
-        public ShooterSetPoint(int d, int f, int h) {
-            distance = d;
-            flywheelSpeed = f;
-            height = h;
-        }
-
-        public ShooterSetPoint(double d, double f, double h) {
-            distance = d;
-            flywheelSpeed = f;
-            height = h;
-        }
+        public static final Double[] TEST_INPUTS = { 1.0 }; // distance (TODO)
+        public static final Double[][] TEST_OUTPUTS = { { 1.0, 1.0 } }; // angle, speed (TODO)
     }
 
     public static final class HoodConfig {
@@ -144,7 +128,8 @@ public final class Constants {
         public static final double MAX_VELOCITY = 30; // deg/sec
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations
+                                                            // (TODO)
     }
 
     public static final class IntakeConfig {
@@ -163,9 +148,9 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1; // 1200; // deg/sec
         public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations
+                                                            // (TODO)
 
-        // All in degrees
         public static enum ArmPosition {
             UP, MIDDLE, DOWN
         }
@@ -175,7 +160,8 @@ public final class Constants {
     }
 
     public static final class VisionConfig {
-        public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42); // TODO
+        public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42);
+        public static final double AIM_HEIGHT_METERS = Units.inchesToMeters(37.25);
 
         public static final double CAMERA_HEIGHT_METERS = 1; // TODO
         public static final double CAMERA_PITCH_RADIANS = 0; // TODO
