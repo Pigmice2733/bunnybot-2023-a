@@ -12,9 +12,7 @@ import frc.robot.subsystems.Indexer;
 public class FeedShooter extends SequentialCommandGroup {
     /** Feeds a single ball into the shooter. */
     public FeedShooter(Indexer indexer) {
-        addCommands(
-                indexer.spinBeltForward(),
-                new WaitCommand(AutoConfig.FEED_SHOOTER_INDEX_TIME),
-                indexer.stopBelt());
+        addCommands( // TODO: add indexer wheel to indexer subsystem
+                new WaitCommand(AutoConfig.FEED_SHOOTER_INDEX_TIME));
     }
 }
