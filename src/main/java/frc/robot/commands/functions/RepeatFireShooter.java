@@ -20,6 +20,7 @@ public class RepeatFireShooter extends SequentialCommandGroup {
                 Commands.waitSeconds(AutoConfig.SHOOTER_SPINUP_TIME),
                 Commands.repeatingSequence(
                         new FeedShooter(indexer),
-                        Commands.waitSeconds(AutoConfig.TIME_BETWEEN_SHOTS)));
+                        Commands.waitSeconds(AutoConfig.TIME_BETWEEN_SHOTS)),
+                shooter.stopFlywheel());
     }
 }

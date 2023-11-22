@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
-import frc.robot.commands.actions.ManualHood;
 import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.RepeatFireShooter;
@@ -52,6 +51,8 @@ public class RobotContainer {
     private final XboxController operator;
     private final Controls controls;
 
+    private final AutoShooter autoBallCommand;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -69,14 +70,15 @@ public class RobotContainer {
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
 
+        autoBallCommand = new AutoShooter(indexer, shooter, turret);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
                 controls::getDriveSpeedY,
                 controls::getTurnSpeed,
                 () -> true));
-        hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
-        indexer.setDefaultCommand(indexer.spinBeltForward());
+        indexer.setDefaultCommand(autoBallCommand);
         intake.setDefaultCommand(intake.spinForward());
+        shooter.setDefaultCommand(autoBallCommand);
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
                 controls::getManualTurretRotationSpeed));
 
@@ -102,8 +104,7 @@ public class RobotContainer {
 
         // Right Bumper (toggle) - toggle auto shooter
         new JoystickButton(operator, Button.kRightBumper.value)
-                .toggleOnTrue(new AutoShooter(hood, indexer, shooter, turret,
-                        vision));
+                .toggleOnTrue(new AutoShooter(indexer, shooter, turret));
 
         // Left Bumper (hold) - eject balls through intake
         new JoystickButton(operator, Button.kLeftBumper.value)
@@ -111,8 +112,7 @@ public class RobotContainer {
 
         // X (hold) - fire shooter
         new JoystickButton(operator, Button.kX.value)
-                .whileTrue(new RepeatFireShooter(indexer, shooter))
-                .onFalse(shooter.stopFlywheel());
+                .whileTrue(new RepeatFireShooter(indexer, shooter));
 
         // B (hold) - intake bunnies
         new JoystickButton(operator, Button.kB.value)
@@ -126,8 +126,7 @@ public class RobotContainer {
         // Y (hold) - eject bunnies
         new JoystickButton(operator, Button.kY.value)
                 .onTrue(Commands.parallel(
-                        grabber.setTargetArmAngleCommand(
-                                ArmPosition.MIDDLE),
+                        grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE),
                         grabber.runFlywheelsEjectCommand()))
                 .onFalse(Commands.parallel(
                         grabber.setTargetArmAngleCommand(ArmPosition.UP),
