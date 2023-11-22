@@ -12,31 +12,23 @@ import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConfig;
 
 public class Vision extends SubsystemBase {
-    private final PhotonCamera camera = new PhotonCamera("HD_Pro_Webcam_C920");
+    private final PhotonCamera camera;
     private PhotonTrackedTarget currentTarget;
 
     public Vision() {
-        ShuffleboardHelper
-                .addOutput("Yaw", Constants.VISION_TAB,
-                        () -> currentTarget == null ? 0 : currentTarget.getYaw())
-                .asDial(-180, 180);
+        camera = new PhotonCamera("HD_Pro_Webcam_C920");
 
-        ShuffleboardHelper
-                .addOutput("Pitch", Constants.VISION_TAB,
-                        () -> currentTarget == null ? 0 : currentTarget.getPitch())
-                .asDial(-180, 180);
-
-        ShuffleboardHelper
-                .addOutput("Skew", Constants.VISION_TAB,
-                        () -> currentTarget == null ? 0 : currentTarget.getSkew())
-                .asDial(-180, 180);
-
-        ShuffleboardHelper
-                .addOutput("Area", Constants.VISION_TAB,
-                        () -> currentTarget == null ? 0 : currentTarget.getArea())
-                .asDial(0, 1);
+        ShuffleboardHelper.addOutput("Yaw", Constants.VISION_TAB,
+                () -> currentTarget == null ? 0 : currentTarget.getYaw()).asDial(-180, 180);
+        ShuffleboardHelper.addOutput("Pitch", Constants.VISION_TAB,
+                () -> currentTarget == null ? 0 : currentTarget.getPitch()).asDial(-180, 180);
+        ShuffleboardHelper.addOutput("Skew", Constants.VISION_TAB,
+                () -> currentTarget == null ? 0 : currentTarget.getSkew()).asDial(-180, 180);
+        ShuffleboardHelper.addOutput("Area", Constants.VISION_TAB,
+                () -> currentTarget == null ? 0 : currentTarget.getArea()).asDial(0, 1);
     }
 
     @Override
@@ -52,5 +44,11 @@ public class Vision extends SubsystemBase {
 
     public PhotonTrackedTarget getCurrentTarget() {
         return currentTarget;
+    }
+
+    /** Returns the distance between the camera and the current target, in meters. */
+    public double distanceToTarget() {
+        return (VisionConfig.TARGET_HEIGHT_METERS - VisionConfig.CAMERA_HEIGHT_METERS)
+                / Math.tan(currentTarget.getPitch());
     }
 }

@@ -83,10 +83,10 @@ public class RunTurretStateMachine extends CommandBase {
         public final DoubleConsumer setTargetRotation;
         public final DoubleConsumer changeTargetRotation;
 
-        public TurretData(Turret turret, Vision vision, DoubleSupplier RotationSpeed) {
+        public TurretData(Turret turret, Vision vision, DoubleSupplier rotationSpeed) {
             turretRotation = turret.getCurrentRotation();
             turretVelocity = turret.getTurretVelocity();
-            manualRotationSpeed = RotationSpeed.getAsDouble();
+            manualRotationSpeed = rotationSpeed.getAsDouble();
             hasTarget = vision.getCurrentTarget() != null;
             targetYaw = hasTarget ? vision.getCurrentTarget().getYaw() : 0;
             targetPitch = hasTarget ? vision.getCurrentTarget().getPitch() : 0;

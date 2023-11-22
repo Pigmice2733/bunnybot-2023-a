@@ -20,10 +20,11 @@ Controls:
         Manual aim clockwise (+) - right trigger
         Manual aim counter-clockwise (-) - left trigger
         Fire - X (hold)
-        Auto shoot  - right bumper (toggle)
+        Auto shoot  - right bumper (toggle, on by default)
         Eject all balls - left bumper (hold to run, release to cancel)
-        Intake bunnies - B (hold)
-        Eject bunnies - Y (hold)
+        Grab bunnies - B (hold)
+        Release bunnies - Y (hold)
+        Manual hood - left stick Y
 
 * = not implemented
 ** = undecided/unconfirmed
