@@ -12,6 +12,7 @@ import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConfig;
 
 public class Vision extends SubsystemBase {
     private final PhotonCamera camera = new PhotonCamera("HD_Pro_Webcam_C920");
@@ -52,5 +53,13 @@ public class Vision extends SubsystemBase {
 
     public PhotonTrackedTarget getCurrentTarget() {
         return currentTarget;
+    }
+
+    /**
+     * Returns the distance between the camera and the current target, in meters.
+     */
+    public double distanceToTarget() {
+        return (VisionConfig.TARGET_HEIGHT_METERS - VisionConfig.CAMERA_HEIGHT_METERS)
+                / Math.tan(currentTarget.getPitch());
     }
 }
