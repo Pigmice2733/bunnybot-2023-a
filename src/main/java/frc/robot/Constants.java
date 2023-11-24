@@ -98,6 +98,7 @@ public final class Constants {
     }
 
     public static final class ShooterConfig {
+
         private static final double ROTATION_GEAR_RATIO = 1;
         public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
                                                                                           // rot to
@@ -108,26 +109,28 @@ public final class Constants {
 
         public static final double DEFAULT_OUTPUT = 0.5;
 
-        public static final ShooterSetPoint[] ShooterValues = { new ShooterSetPoint(0, 0, 0) };
+        public static final Double[] TEST_INPUTS = { 1.0 }; // distance (TODO)
+        public static final Double[][] TEST_OUTPUTS = { { 1.0, 1.0 } }; // angle, speed (TODO)
     }
 
-    public static class ShooterSetPoint {
-        public final double distance;
-        public final double flywheelSpeed;
-        public final double height;
-
-        public ShooterSetPoint(int d, int f, int h) {
-            distance = d;
-            flywheelSpeed = f;
-            height = h;
-        }
-
-        public ShooterSetPoint(double d, double f, double h) {
-            distance = d;
-            flywheelSpeed = f;
-            height = h;
-        }
-    }
+    /*
+     * public static class ShooterSetPoint {
+     * public final double distance;
+     * public final double flywheelSpeed;
+     * public final double height;
+     * 
+     * public ShooterSetPoint(int d, int f, int h) {
+     * distance = d;
+     * flywheelSpeed = f;
+     * height = h;
+     * }
+     * 
+     * public ShooterSetPoint(double d, double f, double h) {
+     * distance = d;
+     * flywheelSpeed = f;
+     * height = h;
+     * }
+     */
 
     public static final class HoodConfig {
         public static final double MANUAL_ROTATION_SPEED = 3;
@@ -175,7 +178,8 @@ public final class Constants {
     }
 
     public static final class VisionConfig {
-        public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42); // TODO
+        public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42);
+        public static final double AIM_HEIGHT_METERS = Units.inchesToMeters(37.25);
 
         public static final double CAMERA_HEIGHT_METERS = 1; // TODO
         public static final double CAMERA_PITCH_RADIANS = 0; // TODO

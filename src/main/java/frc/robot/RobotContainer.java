@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
+import frc.robot.commands.actions.ManualHood;
 import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.RepeatFireShooter;
@@ -70,13 +71,16 @@ public class RobotContainer {
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
 
-        autoBallCommand = new AutoShooter(indexer, shooter, turret);
+        autoBallCommand = new AutoShooter(hood, indexer, shooter, turret, vision);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
                 controls::getDriveSpeedY,
                 controls::getTurnSpeed,
                 () -> true));
+        hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
         indexer.setDefaultCommand(autoBallCommand);
+        indexer.setDefaultCommand(indexer.spinBeltForward());
+        intake.setDefaultCommand(intake.spinForward());
         intake.setDefaultCommand(intake.spinForward());
         shooter.setDefaultCommand(autoBallCommand);
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
@@ -104,7 +108,8 @@ public class RobotContainer {
 
         // Right Bumper (toggle) - toggle auto shooter
         new JoystickButton(operator, Button.kRightBumper.value)
-                .toggleOnTrue(new AutoShooter(indexer, shooter, turret));
+                .toggleOnTrue(new AutoShooter(hood, indexer, shooter, turret,
+                        vision));
 
         // Left Bumper (hold) - eject balls through intake
         new JoystickButton(operator, Button.kLeftBumper.value)
@@ -112,7 +117,8 @@ public class RobotContainer {
 
         // X (hold) - fire shooter
         new JoystickButton(operator, Button.kX.value)
-                .whileTrue(new RepeatFireShooter(indexer, shooter));
+                .whileTrue(new RepeatFireShooter(indexer, shooter))
+                .onFalse(shooter.stopFlywheel());
 
         // B (hold) - intake bunnies
         new JoystickButton(operator, Button.kB.value)
