@@ -22,6 +22,9 @@ public class Indexer extends SubsystemBase {
         indexerMotor = new CANSparkMax(CANConfig.INDEXER, MotorType.kBrushless);
         feederWheelMotor = new CANSparkMax(CANConfig.FEEDER_WHEEL, MotorType.kBrushless);
 
+        indexerMotor.restoreFactoryDefaults();
+        feederWheelMotor.restoreFactoryDefaults();
+
         ShuffleboardHelper.addOutput("Indexer Output", Constants.INDEXER_TAB, () -> indexerMotor.get());
         ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB, () -> feederWheelMotor.get());
     }
