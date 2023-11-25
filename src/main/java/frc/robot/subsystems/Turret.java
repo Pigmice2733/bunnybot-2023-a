@@ -20,7 +20,6 @@ import frc.robot.Constants.TurretConfig;
 public class Turret extends SubsystemBase {
     private final CANSparkMax rotationMotor;
     private final ProfiledPIDController rotationController;
-    private final Vision vision;
 
     private double targetRotation;
 
@@ -50,8 +49,6 @@ public class Turret extends SubsystemBase {
 
         Constants.TURRET_TAB.add("Reset Encoder",
                 new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
-
-        vision = new Vision();
     }
 
     /** Resets the controller to the turret's current rotation. */
@@ -116,10 +113,5 @@ public class Turret extends SubsystemBase {
      */
     public void setPIDConstraints(Constraints constraints) {
         rotationController.setConstraints(constraints);
-    }
-
-    public boolean hasTarget() {
-        return vision.getCurrentTarget() != null
-                && getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY;
     }
 }
