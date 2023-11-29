@@ -12,29 +12,41 @@ import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.IntakeConfig;
 
 public class Intake extends SubsystemBase {
-    private final CANSparkMax intakeMotor;
+    private final CANSparkMax topMotor;
+    private final CANSparkMax bottomMotor;
 
     public Intake() {
-        intakeMotor = new CANSparkMax(CANConfig.INTAKE_WHEELS, MotorType.kBrushless);
-        ShuffleboardHelper.addOutput("Motor Output", Constants.INTAKE_TAB, () -> intakeMotor.get());
+        topMotor = new CANSparkMax(CANConfig.INTAKE_WHEELS, MotorType.kBrushless);
+        bottomMotor = new CANSparkMax(CANConfig.INTAKE_WHEELS, MotorType.kBrushless);
+
+        topMotor.restoreFactoryDefaults();
+        bottomMotor.restoreFactoryDefaults();
+
+        topMotor.setInverted(false);
+        bottomMotor.setInverted(true);
+
+        ShuffleboardHelper.addOutput("Top Output", Constants.INTAKE_TAB, () -> topMotor.get());
+        ShuffleboardHelper.addOutput("Bottom Output", Constants.INTAKE_TAB, () -> bottomMotor.get());
+
     }
 
-    private void outputToMotor(double percent) {
-        intakeMotor.set(percent);
+    private void outputToMotors(double percent) {
+        topMotor.set(percent);
+        bottomMotor.set(percent);
     }
 
     /** Spins intake wheels to intake balls. */
     public Command spinForward() {
-        return Commands.runOnce(() -> outputToMotor(IntakeConfig.INTAKE_SPEED));
+        return Commands.runOnce(() -> outputToMotors(IntakeConfig.INTAKE_SPEED));
     }
 
     /** Spins intake wheels to eject balls. */
     public Command spinBackward() {
-        return Commands.runOnce(() -> outputToMotor(-IntakeConfig.INTAKE_SPEED));
+        return Commands.runOnce(() -> outputToMotors(-IntakeConfig.INTAKE_SPEED));
     }
 
     /** Sets intake wheels to zero output. */
     public Command stopWheels() {
-        return Commands.runOnce(() -> outputToMotor(0));
+        return Commands.runOnce(() -> outputToMotors(0));
     }
 }

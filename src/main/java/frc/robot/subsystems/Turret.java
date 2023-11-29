@@ -25,6 +25,8 @@ public class Turret extends SubsystemBase {
 
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
+
+        rotationMotor.restoreFactoryDefaults();
         rotationMotor.getEncoder().setPosition(0);
         rotationMotor.setInverted(true);
 
@@ -63,7 +65,7 @@ public class Turret extends SubsystemBase {
         updateClosedLoopControl();
     }
 
-    /** Calculates and appliess the next output from the PID controller. */
+    /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
         double calculatedOutput = rotationController.calculate(getCurrentRotation(),
                 targetRotation);

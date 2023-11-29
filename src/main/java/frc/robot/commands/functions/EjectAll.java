@@ -16,11 +16,11 @@ public class EjectAll extends SequentialCommandGroup {
     public EjectAll(Intake intake, Indexer indexer, Shooter shooter) {
         addCommands(
                 intake.spinBackward(),
-                indexer.spinBeltBackward(),
+                indexer.spinFeederBackward(),
                 shooter.setFlywheelSpeed(AutoConfig.SHOOTER_EJECTION_SPEED),
                 new WaitCommand(AutoConfig.EJECT_ALL_TIME),
                 intake.stopWheels(),
-                indexer.stopBelt(),
+                indexer.stopFeeder(),
                 shooter.stopFlywheel());
 
         addRequirements(intake, indexer, shooter);

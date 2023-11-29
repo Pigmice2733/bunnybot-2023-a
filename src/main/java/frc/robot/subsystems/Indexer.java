@@ -12,29 +12,35 @@ import frc.robot.Constants.CANConfig;
 import frc.robot.Constants.IndexerConfig;
 
 public class Indexer extends SubsystemBase {
-    private final CANSparkMax beltMotor;
+    // Controls the belt and mecanum wheels
+
+    // Controls the wheel that feeds balls into the shooter
+    private final CANSparkMax feederWheelMotor;
 
     public Indexer() {
-        beltMotor = new CANSparkMax(CANConfig.INDEXER_BELT, MotorType.kBrushless);
-        ShuffleboardHelper.addOutput("Motor Output", Constants.INDEXER_TAB, () -> beltMotor.get());
+        feederWheelMotor = new CANSparkMax(CANConfig.FEEDER_WHEEL, MotorType.kBrushless);
+
+        feederWheelMotor.restoreFactoryDefaults();
+
+        ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB, () -> feederWheelMotor.get());
     }
 
-    private void outputToMotor(double percent) {
-        beltMotor.set(percent);
+    private void outputToFeeder(double percent) {
+        feederWheelMotor.set(percent);
     }
 
-    /** Runs the indexer belt forward. */
-    public Command spinBeltForward() {
-        return Commands.runOnce(() -> outputToMotor(IndexerConfig.BELT_SPEED));
+    /** Runs the feeder wheel forward. */
+    public Command spinFeederForward() {
+        return Commands.runOnce(() -> outputToFeeder(IndexerConfig.FEEDER_SPEED));
     }
 
-    /** Runs the indexer belt backward. */
-    public Command spinBeltBackward() {
-        return Commands.runOnce(() -> outputToMotor(-IndexerConfig.BELT_SPEED));
+    /** Runs the feeder wheel backward. */
+    public Command spinFeederBackward() {
+        return Commands.runOnce(() -> outputToFeeder(-IndexerConfig.FEEDER_SPEED));
     }
 
-    /** Sets the indexer belt to zero output. */
-    public Command stopBelt() {
-        return Commands.runOnce(() -> outputToMotor(0));
+    /** Sets the feeder wheel to zero output. */
+    public Command stopFeeder() {
+        return Commands.runOnce(() -> outputToFeeder(0));
     }
 }

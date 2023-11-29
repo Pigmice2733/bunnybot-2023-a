@@ -64,7 +64,8 @@ public final class Constants {
         public static final int GRABBER_ROTATION = 40;
         public static final int GRABBER_FLYWHEELS = 41;
 
-        public static final int INDEXER_BELT = 50;
+        public static final int INDEXER = 50;
+        public static final int FEEDER_WHEEL = 51;
 
         public static final int HOOD_ROTATION = 60;
 
@@ -156,6 +157,7 @@ public final class Constants {
 
     public static final class IndexerConfig {
         public static final double BELT_SPEED = 0.15;
+        public static final double FEEDER_SPEED = 0.2;
     }
 
     public static final class GrabberConfig {
