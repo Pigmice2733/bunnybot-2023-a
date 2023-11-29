@@ -13,43 +13,20 @@ import frc.robot.Constants.IndexerConfig;
 
 public class Indexer extends SubsystemBase {
     // Controls the belt and mecanum wheels
-    private final CANSparkMax indexerMotor;
 
     // Controls the wheel that feeds balls into the shooter
     private final CANSparkMax feederWheelMotor;
 
     public Indexer() {
-        indexerMotor = new CANSparkMax(CANConfig.INDEXER, MotorType.kBrushless);
         feederWheelMotor = new CANSparkMax(CANConfig.FEEDER_WHEEL, MotorType.kBrushless);
 
-        indexerMotor.restoreFactoryDefaults();
         feederWheelMotor.restoreFactoryDefaults();
 
-        ShuffleboardHelper.addOutput("Indexer Output", Constants.INDEXER_TAB, () -> indexerMotor.get());
         ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB, () -> feederWheelMotor.get());
-    }
-
-    private void outputToIndexer(double percent) {
-        indexerMotor.set(percent);
     }
 
     private void outputToFeeder(double percent) {
         feederWheelMotor.set(percent);
-    }
-
-    /** Runs the indexer belt forward. */
-    public Command spinBeltForward() {
-        return Commands.runOnce(() -> outputToIndexer(IndexerConfig.BELT_SPEED));
-    }
-
-    /** Runs the indexer belt backward. */
-    public Command spinBeltBackward() {
-        return Commands.runOnce(() -> outputToIndexer(-IndexerConfig.BELT_SPEED));
-    }
-
-    /** Sets the indexer belt to zero output. */
-    public Command stopBelt() {
-        return Commands.runOnce(() -> outputToIndexer(0));
     }
 
     /** Runs the feeder wheel forward. */

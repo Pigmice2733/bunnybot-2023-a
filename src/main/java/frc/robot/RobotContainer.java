@@ -79,8 +79,6 @@ public class RobotContainer {
                 () -> true));
         hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
         indexer.setDefaultCommand(autoBallCommand);
-        indexer.setDefaultCommand(indexer.spinBeltForward());
-        intake.setDefaultCommand(intake.spinForward());
         intake.setDefaultCommand(intake.spinForward());
         shooter.setDefaultCommand(autoBallCommand);
         turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
