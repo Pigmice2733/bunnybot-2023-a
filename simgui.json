@@ -1,7 +1,9 @@
 {
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Drivetrain/Heading": "Gyro",
+      "/Shuffleboard/Turret/Reset Encoder": "Command"
     }
   }
 }

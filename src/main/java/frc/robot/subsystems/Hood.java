@@ -37,7 +37,7 @@ public class Hood extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Current", Constants.HOOD_TAB, () -> currentRotation)
                 .asDial(-180, 180);
-        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint())
+        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
         ShuffleboardHelper.addOutput("Target", Constants.HOOD_TAB, () -> targetRotation)
                 .asDial(-180, 180);
@@ -45,8 +45,10 @@ public class Hood extends SubsystemBase {
         ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
 
         // TODO: Remove after initial tuning
-        ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) -> setTargetRotation(value));
-        Constants.HOOD_TAB.add(rotationController);
+        ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) -> setTargetRotation((double) value),
+                getHoodRotation());
+        ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.HOOD_TAB, rotationController,
+                HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION);
     }
 
     @Override

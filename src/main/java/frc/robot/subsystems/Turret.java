@@ -46,15 +46,17 @@ public class Turret extends SubsystemBase {
                         () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
 
-        ShuffleboardHelper.addOutput("Motor Output", Constants.SHOOTER_TAB,
+        ShuffleboardHelper.addOutput("Motor Output", Constants.TURRET_TAB,
                 () -> rotationMotor.get());
 
         Constants.TURRET_TAB.add("Reset Encoder",
                 new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
 
         // TODO: Remove after initial tuning
-        ShuffleboardHelper.addInput("Angle Input", Constants.TURRET_TAB, (value) -> setTargetRotation(value));
-        Constants.TURRET_TAB.add(rotationController);
+        ShuffleboardHelper.addInput("Angle Input", Constants.TURRET_TAB, (value) -> setTargetRotation((double) value),
+                getCurrentRotation());
+        ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.TURRET_TAB, rotationController,
+                TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION);
     }
 
     /** Resets the controller to the turret's current rotation. */

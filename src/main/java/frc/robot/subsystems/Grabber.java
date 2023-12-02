@@ -40,7 +40,7 @@ public class Grabber extends SubsystemBase {
                 .asDial(-180, 180);
         ShuffleboardHelper
                 .addOutput("Setpoint", Constants.GRABBER_TAB,
-                        () -> rotationController.getSetpoint())
+                        () -> rotationController.getSetpoint().position)
                 .asDial(-180, 180);
         ShuffleboardHelper.addOutput("Target", Constants.GRABBER_TAB, () -> targetRotation)
                 .asDial(-180, 180);
@@ -51,8 +51,10 @@ public class Grabber extends SubsystemBase {
                 () -> flywheelsMotor.get());
 
         // TODO: Remove after initial tuning
-        ShuffleboardHelper.addInput("Angle Input", Constants.GRABBER_TAB, (value) -> setTargetRotation(value));
-        Constants.GRABBER_TAB.add(rotationController);
+        ShuffleboardHelper.addInput("Angle Input", Constants.GRABBER_TAB, (value) -> setTargetRotation((double) value),
+                getCurrentRotation());
+        ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.GRABBER_TAB, rotationController,
+                GrabberConfig.MAX_VELOCITY, GrabberConfig.MAX_ACCELERATION);
     }
 
     @Override
