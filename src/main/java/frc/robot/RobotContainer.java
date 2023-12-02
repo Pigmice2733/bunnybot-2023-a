@@ -40,49 +40,49 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer {
     public final SwerveDrivetrain drivetrain;
-    private final Grabber grabber;
-    private final Hood hood;
-    private final Indexer indexer;
-    private final Intake intake;
-    private final Shooter shooter;
-    public final Turret turret;
-    private final Vision vision;
+    // private final Grabber grabber;
+    // private final Hood hood;
+    // private final Indexer indexer;
+    // private final Intake intake;
+    // private final Shooter shooter;
+    // public final Turret turret;
+    // private final Vision vision;
 
     private final XboxController driver;
     private final XboxController operator;
     private final Controls controls;
 
-    private final AutoShooter autoBallCommand;
+    // private final AutoShooter autoBallCommand;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
-        grabber = new Grabber();
-        hood = new Hood();
-        indexer = new Indexer();
-        intake = new Intake();
-        shooter = new Shooter();
-        turret = new Turret();
-        vision = new Vision();
+        // grabber = new Grabber();
+        // hood = new Hood();
+        // indexer = new Indexer();
+        // intake = new Intake();
+        // shooter = new Shooter();
+        // turret = new Turret();
+        // vision = new Vision();
 
         driver = new XboxController(0);
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
 
-        autoBallCommand = new AutoShooter(hood, indexer, shooter, turret, vision);
+        // autoBallCommand = new AutoShooter(hood, indexer, shooter, turret, vision);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
                 controls::getDriveSpeedY,
                 controls::getTurnSpeed,
                 () -> true));
-        hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
-        indexer.setDefaultCommand(autoBallCommand);
-        intake.setDefaultCommand(intake.spinForward());
-        shooter.setDefaultCommand(autoBallCommand);
-        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
-                controls::getManualTurretRotationSpeed));
+        // hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
+        // indexer.setDefaultCommand(autoBallCommand);
+        // intake.setDefaultCommand(intake.spinForward());
+        // shooter.setDefaultCommand(autoBallCommand);
+        // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
+        // controls::getManualTurretRotationSpeed));
 
         configureButtonBindings();
     }
@@ -104,37 +104,37 @@ public class RobotContainer {
 
         /* OPERATOR */
 
+        // // B (hold) - intake bunnies
+        // new JoystickButton(operator, Button.kB.value)
+        // .onTrue(Commands.parallel(
+        // grabber.setTargetArmAngleCommand(ArmPosition.DOWN),
+        // grabber.runFlywheelsIntakeCommand()))
+        // .onFalse(Commands.parallel(
+        // grabber.setTargetArmAngleCommand(ArmPosition.UP),
+        // grabber.stopFlywheelsCommand()));
+
         // Right Bumper (toggle) - toggle auto shooter
-        new JoystickButton(operator, Button.kRightBumper.value)
-                .toggleOnTrue(new AutoShooter(hood, indexer, shooter, turret,
-                        vision));
+        // new JoystickButton(operator, Button.kRightBumper.value)
+        // .toggleOnTrue(new AutoShooter(hood, indexer, shooter, turret,
+        // vision));
 
-        // Left Bumper (hold) - eject balls through intake
-        new JoystickButton(operator, Button.kLeftBumper.value)
-                .whileTrue(new EjectAll(intake, indexer, shooter));
+        // // Left Bumper (hold) - eject balls through intake
+        // new JoystickButton(operator, Button.kLeftBumper.value)
+        // .whileTrue(new EjectAll(intake, indexer, shooter));
 
-        // X (hold) - fire shooter
-        new JoystickButton(operator, Button.kX.value)
-                .whileTrue(new RepeatFireShooter(indexer, shooter))
-                .onFalse(shooter.stopFlywheel());
+        // // X (hold) - fire shooter
+        // new JoystickButton(operator, Button.kX.value)
+        // .whileTrue(new RepeatFireShooter(indexer, shooter))
+        // .onFalse(shooter.stopFlywheel());
 
-        // B (hold) - intake bunnies
-        new JoystickButton(operator, Button.kB.value)
-                .onTrue(Commands.parallel(
-                        grabber.setTargetArmAngleCommand(ArmPosition.DOWN),
-                        grabber.runFlywheelsIntakeCommand()))
-                .onFalse(Commands.parallel(
-                        grabber.setTargetArmAngleCommand(ArmPosition.UP),
-                        grabber.stopFlywheelsCommand()));
-
-        // Y (hold) - eject bunnies
-        new JoystickButton(operator, Button.kY.value)
-                .onTrue(Commands.parallel(
-                        grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE),
-                        grabber.runFlywheelsEjectCommand()))
-                .onFalse(Commands.parallel(
-                        grabber.setTargetArmAngleCommand(ArmPosition.UP),
-                        grabber.stopFlywheelsCommand()));
+        // // Y (hold) - eject bunnies
+        // new JoystickButton(operator, Button.kY.value)
+        // .onTrue(Commands.parallel(
+        // grabber.setTargetArmAngleCommand(ArmPosition.MIDDLE),
+        // grabber.runFlywheelsEjectCommand()))
+        // .onFalse(Commands.parallel(
+        // grabber.setTargetArmAngleCommand(ArmPosition.UP),
+        // grabber.stopFlywheelsCommand()));
     }
 
     /**
