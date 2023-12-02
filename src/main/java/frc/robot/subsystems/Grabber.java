@@ -49,6 +49,10 @@ public class Grabber extends SubsystemBase {
                 () -> rotationMotor.get());
         ShuffleboardHelper.addOutput("Flywheels Output", Constants.GRABBER_TAB,
                 () -> flywheelsMotor.get());
+
+        // TODO: Remove after initial tuning
+        ShuffleboardHelper.addInput("Angle Input", Constants.GRABBER_TAB, (value) -> setTargetRotation(value));
+        Constants.GRABBER_TAB.add(rotationController);
     }
 
     @Override

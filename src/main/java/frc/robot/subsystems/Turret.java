@@ -51,6 +51,10 @@ public class Turret extends SubsystemBase {
 
         Constants.TURRET_TAB.add("Reset Encoder",
                 new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
+
+        // TODO: Remove after initial tuning
+        ShuffleboardHelper.addInput("Angle Input", Constants.TURRET_TAB, (value) -> setTargetRotation(value));
+        Constants.TURRET_TAB.add(rotationController);
     }
 
     /** Resets the controller to the turret's current rotation. */

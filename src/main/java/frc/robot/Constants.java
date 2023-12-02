@@ -158,6 +158,7 @@ public final class Constants {
     public static final class IndexerConfig {
         public static final double BELT_SPEED = 0.15;
         public static final double FEEDER_SPEED = 0.2;
+        public static final double BACKWARD_FEEDER_SPEED = -0.25;
     }
 
     public static final class GrabberConfig {

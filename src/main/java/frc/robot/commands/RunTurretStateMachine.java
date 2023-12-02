@@ -55,7 +55,7 @@ public class RunTurretStateMachine extends CommandBase {
         this.vision = vision;
         this.manualRotationSpeed = manualRotationSpeed;
 
-        addRequirements(turret, vision);
+        addRequirements(turret);
     }
 
     @Override

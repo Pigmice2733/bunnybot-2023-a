@@ -81,6 +81,8 @@ public class RobotContainer {
         // indexer.setDefaultCommand(autoBallCommand);
         // intake.setDefaultCommand(intake.spinForward());
         // shooter.setDefaultCommand(autoBallCommand);
+        // turret.setDefaultCommand(new ManuelTurret(turret,
+        // controls::getManualTurretRotationSpeed))
         // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
         // controls::getManualTurretRotationSpeed));
 

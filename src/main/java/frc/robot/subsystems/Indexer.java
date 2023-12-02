@@ -35,12 +35,12 @@ public class Indexer extends SubsystemBase {
     }
 
     /** Runs the feeder wheel backward. */
-    public Command spinFeederBackward() {
-        return Commands.runOnce(() -> outputToFeeder(-IndexerConfig.FEEDER_SPEED));
+    public Command spinFeederBackwards() {
+        return Commands.runOnce(() -> outputToFeeder(IndexerConfig.BACKWARD_FEEDER_SPEED));
     }
 
-    /** Sets the feeder wheel to zero output. */
-    public Command stopFeeder() {
-        return Commands.runOnce(() -> outputToFeeder(0));
-    }
+    // /** Sets the feeder wheel to zero output. */
+    // public Command stopFeeder() {
+    // return Commands.runOnce(() -> outputToFeeder(0));
+    // }
 }

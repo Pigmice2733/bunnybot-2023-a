@@ -53,5 +53,4 @@ public class Shooter extends SubsystemBase {
     public double getCurrentPercent() {
         return rotationMotor.get();
     }
-
 }

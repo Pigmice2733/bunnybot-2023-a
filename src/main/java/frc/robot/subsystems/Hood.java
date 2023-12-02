@@ -43,6 +43,10 @@ public class Hood extends SubsystemBase {
                 .asDial(-180, 180);
 
         ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
+
+        // TODO: Remove after initial tuning
+        ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) -> setTargetRotation(value));
+        Constants.HOOD_TAB.add(rotationController);
     }
 
     @Override
