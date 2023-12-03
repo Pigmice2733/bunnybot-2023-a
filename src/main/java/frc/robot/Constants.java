@@ -213,6 +213,9 @@ public final class Constants {
         private static final PIDController PATH_DRIVE_PID = new PIDController(0.3, 0, 0);
         private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
 
+        // Offset from chassis center that the robot will rotate about
+        private static final Translation2d ROTATION_CENTER_OFFSET = new Translation2d(0, 0);
+
         private static final MkSwerveModuleBuilder FRONT_LEFT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
                         .getLayout("Front Left", BuiltInLayouts.kList)
@@ -260,7 +263,7 @@ public final class Constants {
         public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(
                 FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE, BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
                 PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID, MAX_DRIVE_SPEED, MAX_TURN_SPEED,
-                SLOWMODE_MULTIPLIER, KINEMATICS, DRIVE_FEED_FORWARD, SWERVE_TAB);
+                SLOWMODE_MULTIPLIER, KINEMATICS, DRIVE_FEED_FORWARD, SWERVE_TAB, ROTATION_CENTER_OFFSET);
     }
 
     public static class AutoConfig {
