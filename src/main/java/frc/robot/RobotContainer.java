@@ -55,7 +55,8 @@ public class RobotContainer {
     private final AutoShooter autoBallCommand;
 
     /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
+     * The container for the robot. Contains subsystems, OI devices, and
+     * commands.
      */
     public RobotContainer() {
         drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
@@ -71,13 +72,15 @@ public class RobotContainer {
         operator = new XboxController(1);
         controls = new Controls(driver, operator);
 
-        autoBallCommand = new AutoShooter(hood, indexer, shooter, turret, vision);
+        autoBallCommand = new AutoShooter(hood, indexer, shooter, turret,
+                vision);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
                 controls::getDriveSpeedX,
                 controls::getDriveSpeedY,
                 controls::getTurnSpeed,
                 () -> true));
-        hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
+        hood.setDefaultCommand(
+                new ManualHood(hood, controls::getManualHoodSpeed));
         indexer.setDefaultCommand(autoBallCommand);
         intake.setDefaultCommand(intake.spinForward());
         shooter.setDefaultCommand(autoBallCommand);
@@ -91,7 +94,8 @@ public class RobotContainer {
      * Use this method to define your button->command mappings. Buttons can be
      * created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+     * passing
      * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */

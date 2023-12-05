@@ -12,34 +12,43 @@ import frc.robot.subsystems.Vision;
 
 public class AutoShooter extends CommandBase {
     private final Hood hood;
+    private final Indexer indexer;
     private final Shooter shooter;
     private final Turret turret;
     private final Vision vision;
 
     private boolean isShooting;
     private Command shootCommand;
+    private Command indexerCommand;
 
     /** Automatically runs the shooter when there is a target in range. */
-    public AutoShooter(Hood hood, Indexer indexer, Shooter shooter, Turret turret, Vision vision) {
+    public AutoShooter(Hood hood, Indexer indexer, Shooter shooter,
+            Turret turret, Vision vision) {
         this.hood = hood;
+        this.indexer = indexer;
         this.shooter = shooter;
         this.turret = turret;
         this.vision = vision;
 
-        addRequirements(hood, shooter, indexer);
+        addRequirements(hood, shooter);
     }
 
     @Override
     public void execute() {
         if (vision.getCurrentTarget() != null
-                && turret.getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY) {
+                && turret.getTurretVelocity() < TurretConfig.MAX_SHOOT_VELO) {
             if (!isShooting) {
                 isShooting = true;
                 shootCommand = new ShootTarget(hood, shooter, vision);
+                indexerCommand = indexer.spinFeederForward();
             }
         } else if (isShooting) {
             isShooting = false;
             shootCommand.cancel();
+            indexerCommand.cancel();
+            indexer.spinFeederBackward();
+        } else {
+            indexer.spinFeederBackward();
         }
     }
 }

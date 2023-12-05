@@ -10,7 +10,9 @@ import frc.robot.subsystems.Vision;
 
 public class IntakeAndShoot extends ParallelCommandGroup {
     /** Runs the intake and shoots when there is a target in range. */
-    public IntakeAndShoot(Intake intake, Indexer indexer, Shooter shooter, Turret turret, Hood hood, Vision vision) {
-        addCommands(intake.spinForward(), new AutoShooter(hood, indexer, shooter, turret, vision));
+    public IntakeAndShoot(Intake intake, Indexer indexer, Shooter shooter,
+            Turret turret, Hood hood, Vision vision) {
+        addCommands(intake.spinForward(),
+                new AutoShooter(hood, indexer, shooter, turret, vision));
     }
 }

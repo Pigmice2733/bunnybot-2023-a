@@ -30,7 +30,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // Instantiate our RobotContainer. This will perform all our button
+    // bindings,
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -56,7 +57,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    ShuffleboardHelper.update();
+    ShuffleboardHelper.update(false);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

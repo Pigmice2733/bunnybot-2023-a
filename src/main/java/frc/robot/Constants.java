@@ -33,13 +33,20 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
  */
 public final class Constants {
     public static final ShuffleboardTab HOOD_TAB = Shuffleboard.getTab("Hood");
-    public static final ShuffleboardTab TURRET_TAB = Shuffleboard.getTab("Turret");
-    public static final ShuffleboardTab SWERVE_TAB = Shuffleboard.getTab("Drivetrain");
-    public static final ShuffleboardTab VISION_TAB = Shuffleboard.getTab("Vision");
-    public static final ShuffleboardTab GRABBER_TAB = Shuffleboard.getTab("Grabber");
-    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
-    public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
-    public static final ShuffleboardTab INTAKE_TAB = Shuffleboard.getTab("Intake");
+    public static final ShuffleboardTab TURRET_TAB = Shuffleboard
+            .getTab("Turret");
+    public static final ShuffleboardTab SWERVE_TAB = Shuffleboard
+            .getTab("Drivetrain");
+    public static final ShuffleboardTab VISION_TAB = Shuffleboard
+            .getTab("Vision");
+    public static final ShuffleboardTab GRABBER_TAB = Shuffleboard
+            .getTab("Grabber");
+    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard
+            .getTab("Shooter");
+    public static final ShuffleboardTab INDEXER_TAB = Shuffleboard
+            .getTab("Indexer");
+    public static final ShuffleboardTab INTAKE_TAB = Shuffleboard
+            .getTab("Intake");
 
     public static final double AXIS_THRESHOLD = 0.1;
 
@@ -76,16 +83,18 @@ public final class Constants {
         public static final double MANUAL_ROTATION_MULTIPLIER = 3;
 
         private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
-                                                                                          // rot to
-                                                                                          // deg
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO
+                * 360; // encoder
+                       // rot to
+                       // deg
 
         public static final double ROTATION_P = 0.009;
         public static final double ROTATION_I = 0.0001;
         public static final double ROTATION_D = 0.0001;
 
         public static final double MAX_VELOCITY = 2400 * 2;// 1200; // deg/sec
-        public static final double MAX_ACCELERATION = 2400 * 2; // 1200; // deg/sec/sec
+        public static final double MAX_ACCELERATION = 2400 * 2; // 1200; //
+                                                                // deg/sec/sec
 
         public static final double WANDER_VELOCITY = MAX_VELOCITY / 20; // deg/sec
         public static final double WANDER_ACCELERATION = MAX_ACCELERATION / 10; // deg/sec/sec
@@ -95,15 +104,17 @@ public final class Constants {
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
 
-        public static final double MAX_FIRE_VELOCITY = 1; // max vel a shot is allowed at (TODO)
+        public static final double MAX_SHOOT_VELO = 1; // max vel a shot is
+                                                       // allowed at (TODO)
     }
 
     public static final class ShooterConfig {
 
         private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
-                                                                                          // rot to
-                                                                                          // deg
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO
+                * 360; // encoder
+                       // rot to
+                       // deg
 
         public static final double MAX_VELOCITY = 50; // deg/sec
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
@@ -111,7 +122,9 @@ public final class Constants {
         public static final double DEFAULT_OUTPUT = 0.5;
 
         public static final Double[] TEST_INPUTS = { 1.0 }; // distance (TODO)
-        public static final Double[][] TEST_OUTPUTS = { { 1.0, 1.0 } }; // angle, speed (TODO)
+        public static final Double[][] TEST_OUTPUTS = { { 1.0, 1.0 } }; // angle,
+                                                                        // speed
+                                                                        // (TODO)
     }
 
     /*
@@ -139,7 +152,8 @@ public final class Constants {
         private static final double ROTATION_GEAR_RATIO = 1;
 
         // Encoder rotations to degrees
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360;
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO
+                * 360;
 
         public static final double HOOD_P = 0.0;
         public static final double HOOD_I = 0.0;
@@ -148,7 +162,9 @@ public final class Constants {
         public static final double MAX_VELOCITY = 30; // deg/sec
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation
+                                                            // to arm rotations
+                                                            // (TODO)
     }
 
     public static final class IntakeConfig {
@@ -156,8 +172,8 @@ public final class Constants {
     }
 
     public static final class IndexerConfig {
-        public static final double BELT_SPEED = 0.15;
-        public static final double FEEDER_SPEED = 0.2;
+        public static final double FORWARD_SPEED = 0.2;
+        public static final double BACKWARD_SPEED = 0.05; // TODO
     }
 
     public static final class GrabberConfig {
@@ -168,7 +184,9 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1; // 1200; // deg/sec
         public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 1; // encoder rotation
+                                                            // to arm rotations
+                                                            // (TODO)
 
         // All in degrees
         public static enum ArmPosition {
@@ -180,8 +198,10 @@ public final class Constants {
     }
 
     public static final class VisionConfig {
-        public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42);
-        public static final double AIM_HEIGHT_METERS = Units.inchesToMeters(37.25);
+        public static final double TARGET_HEIGHT_METERS = Units
+                .inchesToMeters(42);
+        public static final double AIM_HEIGHT_METERS = Units
+                .inchesToMeters(37.25);
 
         public static final double CAMERA_HEIGHT_METERS = 1; // TODO
         public static final double CAMERA_PITCH_RADIANS = 0; // TODO
@@ -191,26 +211,42 @@ public final class Constants {
         public static final double MAX_DRIVE_SPEED = 3; // max meters / second
         public static final double MAX_TURN_SPEED = 6; // max radians / second
 
-        public static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
-                                                                // wheel to another
+        public static final double TRACK_WIDTH_METERS = 0.5842; // distance from
+                                                                // the center of
+                                                                // one
+                                                                // wheel to
+                                                                // another
 
-        public static final double SLOWMODE_MULTIPLIER = 0.25; // TODO discuss with drive team
+        public static final double SLOWMODE_MULTIPLIER = 0.25; // TODO discuss
+                                                               // with drive
+                                                               // team
 
         private final static SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
-                new Translation2d(TRACK_WIDTH_METERS / 2, TRACK_WIDTH_METERS / 2), // Front left
-                new Translation2d(TRACK_WIDTH_METERS / 2, -TRACK_WIDTH_METERS / 2), // Front right
-                new Translation2d(-TRACK_WIDTH_METERS / 2, TRACK_WIDTH_METERS / 2), // Back left
-                new Translation2d(-TRACK_WIDTH_METERS / 2, -TRACK_WIDTH_METERS / 2) // Back right
+                new Translation2d(TRACK_WIDTH_METERS / 2,
+                        TRACK_WIDTH_METERS / 2), // Front left
+                new Translation2d(TRACK_WIDTH_METERS / 2,
+                        -TRACK_WIDTH_METERS / 2), // Front right
+                new Translation2d(-TRACK_WIDTH_METERS / 2,
+                        TRACK_WIDTH_METERS / 2), // Back left
+                new Translation2d(-TRACK_WIDTH_METERS / 2,
+                        -TRACK_WIDTH_METERS / 2) // Back right
         );
 
         // Constants found in Sysid (volts)
         private static final SimpleMotorFeedforward DRIVE_FEED_FORWARD = new SimpleMotorFeedforward(
                 0.35493, 2.3014, 0.12872);
 
-        // From what I have seen, it is common to only use a P value in path following
-        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(1, 1); // 3, 2.5
-        private static final PIDController PATH_DRIVE_PID = new PIDController(0.3, 0, 0);
-        private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
+        // From what I have seen, it is common to only use a P value in path
+        // following
+        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
+                1, 1); // 3, 2.5
+        private static final PIDController PATH_DRIVE_PID = new PIDController(
+                0.3, 0, 0);
+        private static final PIDController PATH_TURN_PID = new PIDController(
+                0.31, 0, 0);
+
+        public static final Translation2d ROTATION_OFFSET = new Translation2d(1,
+                1); // TODO
 
         private static final MkSwerveModuleBuilder FRONT_LEFT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -257,9 +293,11 @@ public final class Constants {
                 .withSteerOffset(Math.toRadians(108));
 
         public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(
-                FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE, BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
-                PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID, MAX_DRIVE_SPEED, MAX_TURN_SPEED,
-                SLOWMODE_MULTIPLIER, KINEMATICS, DRIVE_FEED_FORWARD, SWERVE_TAB);
+                FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE, BACK_LEFT_MODULE,
+                BACK_RIGHT_MODULE, PATH_CONSTRAINTS, PATH_DRIVE_PID,
+                PATH_TURN_PID, MAX_DRIVE_SPEED, MAX_TURN_SPEED,
+                SLOWMODE_MULTIPLIER, KINEMATICS, DRIVE_FEED_FORWARD, SWERVE_TAB,
+                ROTATION_OFFSET);
     }
 
     public static class AutoConfig {

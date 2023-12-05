@@ -18,11 +18,13 @@ public class Indexer extends SubsystemBase {
     private final CANSparkMax feederWheelMotor;
 
     public Indexer() {
-        feederWheelMotor = new CANSparkMax(CANConfig.FEEDER_WHEEL, MotorType.kBrushless);
+        feederWheelMotor = new CANSparkMax(CANConfig.FEEDER_WHEEL,
+                MotorType.kBrushless);
 
         feederWheelMotor.restoreFactoryDefaults();
 
-        ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB, () -> feederWheelMotor.get());
+        ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB,
+                () -> feederWheelMotor.get());
     }
 
     private void outputToFeeder(double percent) {
@@ -31,12 +33,14 @@ public class Indexer extends SubsystemBase {
 
     /** Runs the feeder wheel forward. */
     public Command spinFeederForward() {
-        return Commands.runOnce(() -> outputToFeeder(IndexerConfig.FEEDER_SPEED));
+        return Commands.runOnce(
+                () -> outputToFeeder(IndexerConfig.FORWARD_SPEED));
     }
 
     /** Runs the feeder wheel backward. */
     public Command spinFeederBackward() {
-        return Commands.runOnce(() -> outputToFeeder(-IndexerConfig.FEEDER_SPEED));
+        return Commands.runOnce(
+                () -> outputToFeeder(-IndexerConfig.BACKWARD_SPEED));
     }
 
     /** Sets the feeder wheel to zero output. */
