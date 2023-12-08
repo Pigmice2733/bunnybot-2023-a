@@ -35,9 +35,9 @@ public class ThrowBunny extends SequentialCommandGroup {
          */
         Commands.waitSeconds(1),
         Commands.runOnce(() -> drivetrain.driveChassisSpeeds(new ChassisSpeeds(-5, 0, 0))),
-        Commands.waitSeconds(0.4),
+        Commands.waitSeconds(0.6),
         Commands.runOnce(() -> drivetrain.driveChassisSpeeds(new ChassisSpeeds(0, 0, 0))),
-        Commands.waitSeconds(0.2),
+        Commands.waitSeconds(0.1),
         Commands.runOnce(() -> grabber.outputToFlywheelsMotor(-1)),
         Commands.runOnce(() -> ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 1, 1)),
         Commands.waitSeconds(0.3),

@@ -101,6 +101,7 @@ public class RobotContainer {
         intake.spinForward().schedule();
         indexer.spinFeederBackwards().schedule();
         grabber.resetPID();
+        new ZeroGrabber(grabber).schedule();
     }
 
     public void onDisable() {

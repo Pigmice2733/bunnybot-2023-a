@@ -34,9 +34,12 @@ public class ZeroGrabber extends CommandBase {
     if (!interrupted) {
       grabber.setEncoderPosition(0);
       ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.5, 1);
+    } else {
+      grabber.setTargetRotation(grabber.getCurrentRotation());
     }
 
     grabber.resetPID();
+
     grabber.runPID = true;
   }
 

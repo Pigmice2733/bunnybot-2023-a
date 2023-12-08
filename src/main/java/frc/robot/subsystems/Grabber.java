@@ -25,7 +25,7 @@ public class Grabber extends SubsystemBase {
 
     public boolean runPID = true;
 
-    private double targetRotation, currentRotation;
+    private double targetRotation;
 
     public Grabber() {
         rotationMotor = new CANSparkMax(CANConfig.GRABBER_ROTATION, MotorType.kBrushless);
@@ -54,7 +54,7 @@ public class Grabber extends SubsystemBase {
 
         setEncoderPosition(0);
 
-        ShuffleboardHelper.addOutput("Current", Constants.GRABBER_TAB, () -> currentRotation)
+        ShuffleboardHelper.addOutput("Current", Constants.GRABBER_TAB, () -> getCurrentRotation())
                 .asDial(-180, 180);
         ShuffleboardHelper
                 .addOutput("Setpoint", Constants.GRABBER_TAB,
@@ -75,7 +75,6 @@ public class Grabber extends SubsystemBase {
 
     @Override
     public void periodic() {
-        currentRotation = -rotationMotor.getEncoder().getPosition();
         updateClosedLoopControl();
     }
 
@@ -102,6 +101,7 @@ public class Grabber extends SubsystemBase {
 
     /** Sets the angle that the arm will go to. */
     public void setTargetRotation(double targetRotation) {
+        System.out.println(targetRotation);
         this.targetRotation = targetRotation;
     }
 
@@ -112,7 +112,7 @@ public class Grabber extends SubsystemBase {
 
     /** Returns the arm's current rotation. */
     public double getCurrentRotation() {
-        return currentRotation;
+        return -rotationMotor.getEncoder().getPosition();
     }
 
     /** Sets the flywheels to intake bunnies. */
@@ -164,7 +164,8 @@ public class Grabber extends SubsystemBase {
     }
 
     public void resetPID() {
-        currentRotation = rotationMotor.getEncoder().getPosition();
+        double currentRotation = getCurrentRotation();
+        System.out.println("Reset pid to " + currentRotation);
         rotationController.reset(currentRotation);
         setTargetRotation(currentRotation);
     }
