@@ -29,18 +29,16 @@ public class ZeroGrabber extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    grabber.resetPID();
-
-    grabber.runPID = true;
 
     if (!interrupted) {
       grabber.setEncoderPosition(0);
     }
+    grabber.resetPID();
+    grabber.runPID = true;
   }
 
   @Override
   public boolean isFinished() {
-    System.out.println(grabber.getRotationMotorCurrent());
-    return grabber.getRotationMotorCurrent() > GrabberConfig.MOTOR_ZERO_CURRENT_THRESHOLD;
+    return grabber.limitSwitchPressed();
   }
 }

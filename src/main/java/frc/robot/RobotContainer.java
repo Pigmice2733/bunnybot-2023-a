@@ -176,7 +176,7 @@ public class RobotContainer {
 
         // Throw bunny
         new JoystickButton(operator, Button.kStart.value)
-                .whileTrue(Commands.sequence(grabber.setTargetArmAngleCommand(ArmPosition.START),
+                .whileTrue(Commands.sequence(grabber.setTargetArmAngleCommand(ArmPosition.THROW),
                         /*
                          * grabber.setControllerConstraints(GrabberConfig.MAX_VELOCITY * 3,
                          * GrabberConfig.MAX_ACCELERATION * 3,
@@ -204,8 +204,8 @@ public class RobotContainer {
         // * GrabberConfig.MAX_ACCELERATION, GrabberConfig.ARM_P))
         // */;
 
-        // new JoystickButton(operator, Button.kStart.value)
-        // .whileTrue(new ZeroGrabber(grabber));
+        new JoystickButton(operator, Button.kA.value)
+                .whileTrue(new ZeroGrabber(grabber));
 
         // // Y (hold) - eject bunnies
         // new JoystickButton(operator, Button.kY.value)

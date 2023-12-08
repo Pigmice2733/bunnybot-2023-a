@@ -174,14 +174,14 @@ public final class Constants {
 
         public static final double ROTATION_CONVERSION = 0.00007004 * 90; // encoder rotation to arm rotations (TODO)
 
-        public static final double MOTOR_ZERO_SPEED = 0.05;
+        public static final double MOTOR_ZERO_SPEED = 0.1;
         public static final double MOTOR_ZERO_CURRENT_THRESHOLD = 0.3;
 
         public static final int LIMIT_SWITCH_PORT = 0;
 
         // All in degrees
         public static enum ArmPosition {
-            START, STORE, TOTE, GROUND
+            START, STORE, TOTE, GROUND, THROW
         }
 
         public static final double FLYWHEEL_INTAKE_SPEED = 0.3;
@@ -222,9 +222,11 @@ public final class Constants {
         private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
 
         // Offset from chassis center that the robot will rotate about
-        private static final Translation2d ROTATION_CENTER_OFFSET = new Translation2d(Units.inchesToMeters(-5),
-                Units.inchesToMeters(-10));
-        /* new Translation2d() */;
+        private static final Translation2d ROTATION_CENTER_OFFSET = /*
+                                                                     * new Translation2d(Units.inchesToMeters(-5),
+                                                                     * /* Units.inchesToMeters(-10))
+                                                                     */
+                new Translation2d();
 
         private static final MkSwerveModuleBuilder FRONT_LEFT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -280,7 +282,7 @@ public final class Constants {
         // All times in seconds
         public static final double FEED_SHOOTER_INDEX_TIME = 0.15;
         public static final double TIME_BETWEEN_SHOTS = 1;
-        public static final double SHOOTER_SPINUP_TIME = 1;
+        public static final double SHOOTER_SPINUP_TIME = 0.5;
         public static final double EJECT_ALL_TIME = 5;
 
         // All motor outputs in percent (-1 -> 1)

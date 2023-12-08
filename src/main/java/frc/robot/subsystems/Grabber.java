@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +18,8 @@ import frc.robot.Constants.GrabberConfig.ArmPosition;
 
 public class Grabber extends SubsystemBase {
     private final CANSparkMax rotationMotor, flywheelsMotorA, flywheelsMotorB;
+
+    private final DigitalInput limitSwitch;
 
     private final ProfiledPIDController rotationController;
 
@@ -38,6 +41,8 @@ public class Grabber extends SubsystemBase {
         flywheelsMotorA.setInverted(false);
         flywheelsMotorB.setInverted(true);
         rotationMotor.setIdleMode(IdleMode.kCoast);
+
+        limitSwitch = new DigitalInput(GrabberConfig.LIMIT_SWITCH_PORT);
 
         // Convert to arm rotations in degrees
         rotationMotor.getEncoder()
@@ -63,13 +68,13 @@ public class Grabber extends SubsystemBase {
         ShuffleboardHelper.addOutput("Flywheels Output", Constants.GRABBER_TAB,
                 () -> flywheelsMotorA.get()).asDial(-1, 1);
 
+        ShuffleboardHelper.addOutput("Limit Switch Pressed", Constants.GRABBER_TAB, () -> limitSwitchPressed());
         ShuffleboardHelper.addOutput("Flywheel vel", Constants.GRABBER_TAB,
-                () -> flywheelsMotorA.getEncoder().getVelocity());
+                () -> rotationMotor.getEncoder().getVelocity());
     }
 
     @Override
     public void periodic() {
-        // outputToRotationMotor(0.1);
         currentRotation = -rotationMotor.getEncoder().getPosition();
         updateClosedLoopControl();
     }
@@ -136,6 +141,8 @@ public class Grabber extends SubsystemBase {
                 return Commands.runOnce(() -> setTargetRotation(147));
             case GROUND:
                 return Commands.runOnce(() -> setTargetRotation(181));
+            case THROW:
+                return Commands.runOnce(() -> setTargetRotation(90));
             default:
                 return Commands.none();
         }
@@ -157,7 +164,12 @@ public class Grabber extends SubsystemBase {
     }
 
     public void resetPID() {
+        currentRotation = rotationMotor.getEncoder().getPosition();
         rotationController.reset(currentRotation);
         setTargetRotation(currentRotation);
+    }
+
+    public boolean limitSwitchPressed() {
+        return !limitSwitch.get();
     }
 }
