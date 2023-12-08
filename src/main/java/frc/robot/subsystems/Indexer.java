@@ -21,8 +21,10 @@ public class Indexer extends SubsystemBase {
         feederWheelMotor = new CANSparkMax(CANConfig.FEEDER_WHEEL, MotorType.kBrushless);
 
         feederWheelMotor.restoreFactoryDefaults();
+        feederWheelMotor.setInverted(false);
 
-        ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB, () -> feederWheelMotor.get());
+        ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB, () -> feederWheelMotor.get()).asDial(-1,
+                1);
     }
 
     private void outputToFeeder(double percent) {

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -15,18 +16,28 @@ import frc.robot.Constants.GrabberConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 
 public class Grabber extends SubsystemBase {
-    private final CANSparkMax rotationMotor, flywheelsMotor;
+    private final CANSparkMax rotationMotor, flywheelsMotorA, flywheelsMotorB;
 
     private final ProfiledPIDController rotationController;
+
+    public boolean runPID = true;
 
     private double targetRotation, currentRotation;
 
     public Grabber() {
         rotationMotor = new CANSparkMax(CANConfig.GRABBER_ROTATION, MotorType.kBrushless);
-        flywheelsMotor = new CANSparkMax(CANConfig.GRABBER_FLYWHEELS, MotorType.kBrushless);
+        flywheelsMotorA = new CANSparkMax(CANConfig.GRABBER_FLYWHEELS_A, MotorType.kBrushless);
+        flywheelsMotorB = new CANSparkMax(CANConfig.GRABBER_FLYWHEELS_B, MotorType.kBrushless);
 
         rotationMotor.restoreFactoryDefaults();
-        flywheelsMotor.restoreFactoryDefaults();
+        flywheelsMotorA.restoreFactoryDefaults();
+        flywheelsMotorB.restoreFactoryDefaults();
+
+        rotationMotor.setInverted(false);
+
+        flywheelsMotorA.setInverted(false);
+        flywheelsMotorB.setInverted(true);
+        rotationMotor.setIdleMode(IdleMode.kCoast);
 
         // Convert to arm rotations in degrees
         rotationMotor.getEncoder()
@@ -35,6 +46,8 @@ public class Grabber extends SubsystemBase {
         rotationController = new ProfiledPIDController(
                 GrabberConfig.ARM_P, GrabberConfig.ARM_I, GrabberConfig.ARM_D,
                 new Constraints(GrabberConfig.MAX_VELOCITY, GrabberConfig.MAX_ACCELERATION));
+
+        setEncoderPosition(0);
 
         ShuffleboardHelper.addOutput("Current", Constants.GRABBER_TAB, () -> currentRotation)
                 .asDial(-180, 180);
@@ -46,25 +59,26 @@ public class Grabber extends SubsystemBase {
                 .asDial(-180, 180);
 
         ShuffleboardHelper.addOutput("Rotation Output", Constants.GRABBER_TAB,
-                () -> rotationMotor.get());
+                () -> rotationMotor.get()).asDial(-1, 1);
         ShuffleboardHelper.addOutput("Flywheels Output", Constants.GRABBER_TAB,
-                () -> flywheelsMotor.get());
+                () -> flywheelsMotorA.get()).asDial(-1, 1);
 
-        // TODO: Remove after initial tuning
-        ShuffleboardHelper.addInput("Angle Input", Constants.GRABBER_TAB, (value) -> setTargetRotation((double) value),
-                getCurrentRotation());
-        ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.GRABBER_TAB, rotationController,
-                GrabberConfig.MAX_VELOCITY, GrabberConfig.MAX_ACCELERATION);
+        ShuffleboardHelper.addOutput("Flywheel vel", Constants.GRABBER_TAB,
+                () -> flywheelsMotorA.getEncoder().getVelocity());
     }
 
     @Override
     public void periodic() {
-        currentRotation = rotationMotor.getEncoder().getPosition();
+        // outputToRotationMotor(0.1);
+        currentRotation = -rotationMotor.getEncoder().getPosition();
         updateClosedLoopControl();
     }
 
     /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
+        if (!runPID)
+            return;
+
         double calculatedOutput = rotationController.calculate(getCurrentRotation(),
                 targetRotation);
         outputToRotationMotor(calculatedOutput);
@@ -72,12 +86,13 @@ public class Grabber extends SubsystemBase {
 
     /** Sets the rotation motor percent output. */
     public void outputToRotationMotor(double output) {
-        rotationMotor.set(output);
+        rotationMotor.set(-output);
     }
 
     /** Sets the flywheels motor percent output. */
     public void outputToFlywheelsMotor(double output) {
-        flywheelsMotor.set(output);
+        flywheelsMotorA.set(output);
+        flywheelsMotorB.set(output);
     }
 
     /** Sets the angle that the arm will go to. */
@@ -113,14 +128,36 @@ public class Grabber extends SubsystemBase {
     /** Sends the arm to the specified position. */
     public Command setTargetArmAngleCommand(ArmPosition position) {
         switch (position) {
-            case UP:
+            case START:
                 return Commands.runOnce(() -> setTargetRotation(0));
-            case MIDDLE:
-                return Commands.runOnce(() -> setTargetRotation(90));
-            case DOWN:
-                return Commands.runOnce(() -> setTargetRotation(180));
+            case STORE:
+                return Commands.runOnce(() -> setTargetRotation(45));
+            case TOTE:
+                return Commands.runOnce(() -> setTargetRotation(147));
+            case GROUND:
+                return Commands.runOnce(() -> setTargetRotation(181));
             default:
                 return Commands.none();
         }
+    }
+
+    public Command setControllerConstraints(double velocity, double acceleration, double p) {
+        return Commands.runOnce(() -> {
+            rotationController.setConstraints(new Constraints(velocity, acceleration));
+            rotationController.setP(p);
+        });
+    }
+
+    public double getRotationMotorCurrent() {
+        return rotationMotor.getOutputCurrent();
+    }
+
+    public void setEncoderPosition(double position) {
+        rotationMotor.getEncoder().setPosition(position);
+    }
+
+    public void resetPID() {
+        rotationController.reset(currentRotation);
+        setTargetRotation(currentRotation);
     }
 }

@@ -80,6 +80,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    m_robotContainer.onEnable();
   }
 
   /** This function is called periodically during autonomous. */
@@ -96,6 +98,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.onEnable();
 
     // m_robotContainer.turret.resetRotationController();
   }

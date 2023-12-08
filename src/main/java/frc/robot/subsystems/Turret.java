@@ -28,7 +28,7 @@ public class Turret extends SubsystemBase {
 
         rotationMotor.restoreFactoryDefaults();
         rotationMotor.getEncoder().setPosition(0);
-        rotationMotor.setInverted(true);
+        rotationMotor.setInverted(false);
 
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,

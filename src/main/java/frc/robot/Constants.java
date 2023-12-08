@@ -41,35 +41,38 @@ public final class Constants {
     public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
     public static final ShuffleboardTab INTAKE_TAB = Shuffleboard.getTab("Intake");
 
-    public static final double AXIS_THRESHOLD = 0.1;
+    public static final double AXIS_THRESHOLD = 0.25;
 
     public static final class CANConfig {
-        public static final int FRONT_LEFT_DRIVE = 10;
-        public static final int FRONT_LEFT_STEER = 11;
-        public static final int FRONT_RIGHT_DRIVE = 3;
-        public static final int FRONT_RIGHT_STEER = 12;
-        public static final int BACK_LEFT_DRIVE = 17;
-        public static final int BACK_LEFT_STEER = 16;
-        public static final int BACK_RIGHT_DRIVE = 14;
-        public static final int BACK_RIGHT_STEER = 15;
+        public static final int FRONT_LEFT_DRIVE = 11; // done
+        public static final int FRONT_LEFT_STEER = 10;// done
+        public static final int FRONT_RIGHT_DRIVE = 13;// done
+        public static final int FRONT_RIGHT_STEER = 12;// done
+        public static final int BACK_LEFT_DRIVE = 16;// done
+        public static final int BACK_LEFT_STEER = 17;// done
+        public static final int BACK_RIGHT_DRIVE = 14;// done
+        public static final int BACK_RIGHT_STEER = 15;// done
 
         public static final int FRONT_LEFT_ABS_ENCODER = 20;
-        public static final int FRONT_RIGHT_ABS_ENCODER = 22;
-        public static final int BACK_LEFT_ABS_ENCODER = 26;
-        public static final int BACK_RIGHT_ABS_ENCODER = 24;
+        public static final int FRONT_RIGHT_ABS_ENCODER = 24;
+        public static final int BACK_LEFT_ABS_ENCODER = 22;
+        public static final int BACK_RIGHT_ABS_ENCODER = 26;
 
-        public static final int ROTATE_TURRET = 30;
-        public static final int ROTATE_SHOOTER = 31;
+        public static final int ROTATE_TURRET = 100; // should be 30 but conflict
+        public static final int ROTATE_SHOOTER = 32;
 
-        public static final int GRABBER_ROTATION = 40;
-        public static final int GRABBER_FLYWHEELS = 41;
+        public static final int OVER_BUMPER_INTAKE = 31;// done
+
+        public static final int GRABBER_ROTATION = 40; // done
+        public static final int GRABBER_FLYWHEELS_A = 41; // done
+        public static final int GRABBER_FLYWHEELS_B = 42; // done
 
         public static final int INDEXER = 50;
-        public static final int FEEDER_WHEEL = 51;
+        public static final int FEEDER_WHEEL = 51; // done
 
         public static final int HOOD_ROTATION = 60;
 
-        public static final int INTAKE_WHEELS = 70;
+        public static final int INTAKE_WHEELS = 30;
     }
 
     public static final class TurretConfig {
@@ -108,7 +111,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 50; // deg/sec
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
-        public static final double DEFAULT_OUTPUT = 0.5;
+        public static final double DEFAULT_OUTPUT = 1;
 
         public static final Double[] TEST_INPUTS = { 1.0 }; // distance (TODO)
         public static final Double[][] TEST_OUTPUTS = { { 1.0, 1.0 } }; // angle, speed (TODO)
@@ -152,32 +155,37 @@ public final class Constants {
     }
 
     public static final class IntakeConfig {
-        public static final double INTAKE_SPEED = 0.2;
+        public static final double INTAKE_SPEED = 0.3;
     }
 
     public static final class IndexerConfig {
         public static final double BELT_SPEED = 0.15;
-        public static final double FEEDER_SPEED = 0.2;
+        public static final double FEEDER_SPEED = 0.75;
         public static final double BACKWARD_FEEDER_SPEED = -0.25;
     }
 
     public static final class GrabberConfig {
-        public static final double ARM_P = 0.000;
+        public static final double ARM_P = 0.06;
         public static final double ARM_I = 0.000;
         public static final double ARM_D = 0.000;
 
-        public static final double MAX_VELOCITY = 1; // 1200; // deg/sec
-        public static final double MAX_ACCELERATION = 1; // 1200; // deg/sec/sec
+        public static final double MAX_VELOCITY = 500; // 1200; // deg/sec
+        public static final double MAX_ACCELERATION = 900; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 0.00007004 * 90; // encoder rotation to arm rotations (TODO)
+
+        public static final double MOTOR_ZERO_SPEED = 0.05;
+        public static final double MOTOR_ZERO_CURRENT_THRESHOLD = 0.3;
+
+        public static final int LIMIT_SWITCH_PORT = 0;
 
         // All in degrees
         public static enum ArmPosition {
-            UP, MIDDLE, DOWN
+            START, STORE, TOTE, GROUND
         }
 
-        public static final double FLYWHEEL_INTAKE_SPEED = 0.2;
-        public static final double FLYWHEEL_EJECT_SPEED = -0.2;
+        public static final double FLYWHEEL_INTAKE_SPEED = 0.3;
+        public static final double FLYWHEEL_EJECT_SPEED = -0.6;
     }
 
     public static final class VisionConfig {
@@ -214,7 +222,9 @@ public final class Constants {
         private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
 
         // Offset from chassis center that the robot will rotate about
-        private static final Translation2d ROTATION_CENTER_OFFSET = new Translation2d(0, 0);
+        private static final Translation2d ROTATION_CENTER_OFFSET = new Translation2d(Units.inchesToMeters(-5),
+                Units.inchesToMeters(-10));
+        /* new Translation2d() */;
 
         private static final MkSwerveModuleBuilder FRONT_LEFT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -225,7 +235,7 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.FRONT_LEFT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.FRONT_LEFT_STEER)
                 .withSteerEncoderPort(CANConfig.FRONT_LEFT_ABS_ENCODER)
-                .withSteerOffset(Math.toRadians(70));
+                .withSteerOffset(Math.toRadians(73));
 
         private static final MkSwerveModuleBuilder FRONT_RIGHT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -236,7 +246,7 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.FRONT_RIGHT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.FRONT_RIGHT_STEER)
                 .withSteerEncoderPort(CANConfig.FRONT_RIGHT_ABS_ENCODER)
-                .withSteerOffset(Math.toRadians(41));
+                .withSteerOffset(Math.toRadians(-99));
 
         private static final MkSwerveModuleBuilder BACK_LEFT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -247,7 +257,7 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.BACK_LEFT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.BACK_LEFT_STEER)
                 .withSteerEncoderPort(CANConfig.BACK_LEFT_ABS_ENCODER)
-                .withSteerOffset(Math.toRadians(48));
+                .withSteerOffset(Math.toRadians(219));
 
         private static final MkSwerveModuleBuilder BACK_RIGHT_MODULE = new MkSwerveModuleBuilder()
                 .withLayout(SWERVE_TAB
@@ -258,7 +268,7 @@ public final class Constants {
                 .withDriveMotor(MotorType.NEO, CANConfig.BACK_RIGHT_DRIVE)
                 .withSteerMotor(MotorType.NEO, CANConfig.BACK_RIGHT_STEER)
                 .withSteerEncoderPort(CANConfig.BACK_RIGHT_ABS_ENCODER)
-                .withSteerOffset(Math.toRadians(108));
+                .withSteerOffset(Math.toRadians(-285));
 
         public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(
                 FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE, BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
@@ -268,9 +278,9 @@ public final class Constants {
 
     public static class AutoConfig {
         // All times in seconds
-        public static final double FEED_SHOOTER_INDEX_TIME = 1;
-        public static final double TIME_BETWEEN_SHOTS = 3;
-        public static final double SHOOTER_SPINUP_TIME = 4;
+        public static final double FEED_SHOOTER_INDEX_TIME = 0.15;
+        public static final double TIME_BETWEEN_SHOTS = 1;
+        public static final double SHOOTER_SPINUP_TIME = 1;
         public static final double EJECT_ALL_TIME = 5;
 
         // All motor outputs in percent (-1 -> 1)

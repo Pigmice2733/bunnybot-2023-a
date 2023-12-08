@@ -23,8 +23,8 @@ public class Intake extends SubsystemBase {
     }
 
     /** Sets the intake motor to a percent output (0.0 - 1.0) */
-    private void outputToMotors(double percent) {
-        intakeMotor.set(percent);
+    public void outputToMotors(double percent) {
+        intakeMotor.set(-percent);
     }
 
     /** Spins intake wheels to intake balls. */

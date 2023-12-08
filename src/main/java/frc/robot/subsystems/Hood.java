@@ -27,6 +27,7 @@ public class Hood extends SubsystemBase {
         rotationMotor.getEncoder().setPositionConversionFactor(HoodConfig.ROTATION_MOTOR_CONVERSION);
 
         rotationMotor.restoreFactoryDefaults();
+        rotationMotor.setInverted(false);
 
         // Convert to arm rotations in degrees
         rotationMotor.getEncoder().setPositionConversionFactor(HoodConfig.ROTATION_CONVERSION * 360);
