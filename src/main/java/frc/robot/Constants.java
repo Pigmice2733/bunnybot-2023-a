@@ -174,7 +174,7 @@ public final class Constants {
 
         public static final double ROTATION_CONVERSION = 0.00007004 * 90; // encoder rotation to arm rotations (TODO)
 
-        public static final double MOTOR_ZERO_SPEED = 0.1;
+        public static final double MOTOR_ZERO_SPEED = 0.2;
         public static final double MOTOR_ZERO_CURRENT_THRESHOLD = 0.3;
 
         public static final int LIMIT_SWITCH_PORT = 0;
@@ -197,7 +197,7 @@ public final class Constants {
     }
 
     public final static class DrivetrainConfig {
-        public static final double MAX_DRIVE_SPEED = 3; // max meters / second
+        public static final double MAX_DRIVE_SPEED = 6; // max meters / second
         public static final double MAX_TURN_SPEED = 6; // max radians / second
 
         public static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
@@ -224,8 +224,9 @@ public final class Constants {
         // Offset from chassis center that the robot will rotate about
         private static final Translation2d ROTATION_CENTER_OFFSET = /*
                                                                      * new Translation2d(Units.inchesToMeters(-5),
-                                                                     * /* Units.inchesToMeters(-10))
+                                                                     * Units.inchesToMeters(-10))
                                                                      */
+
                 new Translation2d();
 
         private static final MkSwerveModuleBuilder FRONT_LEFT_MODULE = new MkSwerveModuleBuilder()

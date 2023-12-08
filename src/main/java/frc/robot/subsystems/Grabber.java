@@ -101,7 +101,6 @@ public class Grabber extends SubsystemBase {
 
     /** Sets the angle that the arm will go to. */
     public void setTargetRotation(double targetRotation) {
-        System.out.println(targetRotation);
         this.targetRotation = targetRotation;
     }
 
@@ -165,7 +164,6 @@ public class Grabber extends SubsystemBase {
 
     public void resetPID() {
         double currentRotation = getCurrentRotation();
-        System.out.println("Reset pid to " + currentRotation);
         rotationController.reset(currentRotation);
         setTargetRotation(currentRotation);
     }

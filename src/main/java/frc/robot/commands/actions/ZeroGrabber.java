@@ -33,7 +33,7 @@ public class ZeroGrabber extends CommandBase {
   public void end(boolean interrupted) {
     if (!interrupted) {
       grabber.setEncoderPosition(0);
-      ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.5, 1);
+      ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.3, 0.7);
     } else {
       grabber.setTargetRotation(grabber.getCurrentRotation());
     }

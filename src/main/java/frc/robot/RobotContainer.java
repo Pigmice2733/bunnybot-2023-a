@@ -21,6 +21,7 @@ import frc.robot.Constants.GrabberConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.Constants.IntakeConfig;
 import frc.robot.commands.RunTurretStateMachine;
+import frc.robot.commands.TrackTargetWithDrivetrain;
 import frc.robot.commands.actions.ManualHood;
 import frc.robot.commands.actions.ThrowBunny;
 import frc.robot.commands.actions.ZeroGrabber;
@@ -85,6 +86,8 @@ public class RobotContainer {
                 controls::getDriveSpeedY,
                 controls::getTurnSpeed,
                 () -> true));
+
+        // autoCommand = new TrackTargetWithDrivetrain(drivetrain, vision);
         // hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
         // indexer.setDefaultCommand(autoBallCommand);
         // shooter.setDefaultCommand(autoBallCommand);
@@ -188,7 +191,7 @@ public class RobotContainer {
 
         // Throw bunny
         new JoystickButton(operator, Button.kStart.value)
-                .whileTrue(new ThrowBunny(drivetrain, grabber));
+                .whileTrue(new ThrowBunny(drivetrain, grabber, intake));
 
         // Throw bunny old
         // new JoystickButton(operator, Button.kStart.value)
@@ -220,12 +223,14 @@ public class RobotContainer {
         // grabber.stopFlywheelsCommand()));
     }
 
+    TrackTargetWithDrivetrain autoCommand;
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      * 
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        return autoCommand;
     }
 }

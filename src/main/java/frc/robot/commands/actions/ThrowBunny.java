@@ -15,9 +15,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.ControllerRumbler;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Intake;
 
 public class ThrowBunny extends SequentialCommandGroup {
-  public ThrowBunny(SwerveDrivetrain drivetrain, Grabber grabber) {
+  public ThrowBunny(SwerveDrivetrain drivetrain, Grabber grabber, Intake intake) {
     addRequirements(drivetrain, grabber);
 
     // Rotation2d drivetrainRotation = drivetrain.getHeading();
@@ -27,20 +28,24 @@ public class ThrowBunny extends SequentialCommandGroup {
     // 0).rotateBy(drivetrainRotation);
     // System.out.println("Direction " + directionVector);
 
-    addCommands(grabber.setTargetArmAngleCommand(ArmPosition.THROW),
+    addCommands(grabber.setTargetArmAngleCommand(ArmPosition.START),
         /*
          * grabber.setControllerConstraints(GrabberConfig.MAX_VELOCITY * 3,
          * GrabberConfig.MAX_ACCELERATION * 3,
          * GrabberConfig.ARM_P * 3),
          */
+        intake.stopWheels(),
         Commands.waitSeconds(1),
         Commands.runOnce(() -> drivetrain.driveChassisSpeeds(new ChassisSpeeds(-5, 0, 0))),
-        Commands.waitSeconds(0.6),
-        Commands.runOnce(() -> drivetrain.driveChassisSpeeds(new ChassisSpeeds(0, 0, 0))),
-        Commands.waitSeconds(0.1),
+        Commands.waitSeconds(0.3),
+        grabber.setTargetArmAngleCommand(ArmPosition.GROUND),
+        Commands.waitSeconds(0.55),
         Commands.runOnce(() -> grabber.outputToFlywheelsMotor(-1)),
+        Commands.waitSeconds(0.1),
+        Commands.runOnce(() -> drivetrain.driveChassisSpeeds(new ChassisSpeeds(0, 0, 0))),
         Commands.runOnce(() -> ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 1, 1)),
         Commands.waitSeconds(0.3),
-        grabber.stopFlywheelsCommand());
+        grabber.stopFlywheelsCommand(),
+        intake.spinForward());
   }
 }
