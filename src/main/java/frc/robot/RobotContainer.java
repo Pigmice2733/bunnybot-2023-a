@@ -9,6 +9,7 @@ import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -21,6 +22,7 @@ import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.Constants.IntakeConfig;
 import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.actions.ManualHood;
+import frc.robot.commands.actions.ThrowBunny;
 import frc.robot.commands.actions.ZeroGrabber;
 import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.EjectAll;
@@ -73,7 +75,9 @@ public class RobotContainer {
 
         driver = new XboxController(0);
         operator = new XboxController(1);
+
         controls = new Controls(driver, operator);
+        ControllerRumbler.setControllers(driver, operator);
 
         // autoBallCommand = new AutoShooter(hood, indexer, shooter, turret, vision);
         drivetrain.setDefaultCommand(new DriveWithJoysticksSwerve(drivetrain,
@@ -99,6 +103,10 @@ public class RobotContainer {
         grabber.resetPID();
     }
 
+    public void onDisable() {
+        ControllerRumbler.stopBothControllers();
+    }
+
     /**
      * Use this method to define your button->command mappings. Buttons can be
      * created by
@@ -110,9 +118,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* DRIVER */
 
-        // B (press) - Reset Odometry
+        // X (press) - Reset Odometry
         new JoystickButton(driver, Button.kX.value)
-                .onTrue(new InstantCommand(drivetrain::resetOdometry));
+                .onTrue(Commands.runOnce(drivetrain::resetOdometry));
+
+        new JoystickButton(driver, Button.kA.value)
+                .onTrue(Commands.runOnce(() -> ControllerRumbler.rumblerDriver(RumbleType.kBothRumble, 1, 1)));
 
         /* OPERATOR */
 
@@ -176,16 +187,7 @@ public class RobotContainer {
 
         // Throw bunny
         new JoystickButton(operator, Button.kStart.value)
-                .whileTrue(Commands.sequence(grabber.setTargetArmAngleCommand(ArmPosition.THROW),
-                        /*
-                         * grabber.setControllerConstraints(GrabberConfig.MAX_VELOCITY * 3,
-                         * GrabberConfig.MAX_ACCELERATION * 3,
-                         * GrabberConfig.ARM_P * 3),
-                         */
-                        Commands.waitSeconds(0.3),
-                        Commands.runOnce(() -> grabber.outputToFlywheelsMotor(1)),
-                        Commands.waitSeconds(0.3),
-                        grabber.stopFlywheelsCommand()));
+                .whileTrue(new ThrowBunny(drivetrain, grabber));
 
         // Throw bunny old
         // new JoystickButton(operator, Button.kStart.value)

@@ -4,7 +4,9 @@
 
 package frc.robot.commands.actions;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.ControllerRumbler;
 import frc.robot.Constants.GrabberConfig;
 import frc.robot.subsystems.Grabber;
 
@@ -29,10 +31,11 @@ public class ZeroGrabber extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-
     if (!interrupted) {
       grabber.setEncoderPosition(0);
+      ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.5, 1);
     }
+
     grabber.resetPID();
     grabber.runPID = true;
   }
