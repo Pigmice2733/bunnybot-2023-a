@@ -20,6 +20,7 @@ import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.Constants.IntakeConfig;
+import frc.robot.commands.ManualTurret;
 import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.TrackTargetWithDrivetrain;
 import frc.robot.commands.actions.ManualHood;
@@ -91,11 +92,10 @@ public class RobotContainer {
         // hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
         // indexer.setDefaultCommand(autoBallCommand);
         // shooter.setDefaultCommand(autoBallCommand);
-        // turret.setDefaultCommand(new ManuelTurret(turret,
-        // controls::getManualTurretRotationSpeed))
+        // turret.setDefaultCommand(new ManualTurret(turret,
+        // controls::getManualTurretRotationSpeed));
         // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
         // controls::getManualTurretRotationSpeed));
-        // intake.spinForward().schedule();
 
         configureButtonBindings();
     }
@@ -127,7 +127,8 @@ public class RobotContainer {
                 .onTrue(Commands.runOnce(drivetrain::resetOdometry));
 
         new JoystickButton(driver, Button.kA.value)
-                .onTrue(Commands.runOnce(() -> ControllerRumbler.rumblerDriver(RumbleType.kBothRumble, 1, 1)));
+                .onTrue(Commands.runOnce(
+                        () -> ControllerRumbler.rumblerDriver(RumbleType.kBothRumble, 1, 1)));
 
         /* OPERATOR */
 
@@ -140,21 +141,18 @@ public class RobotContainer {
                         grabber.setTargetArmAngleCommand(ArmPosition.STORE),
                         grabber.stopFlywheelsCommand()));
 
-        // Eject bunny
+        // Grab bunny from floor
         new POVButton(operator, 270) // left
-                .onTrue(Commands.sequence(
+                .onTrue(Commands.parallel(
                         grabber.setTargetArmAngleCommand(ArmPosition.TOTE),
-                        intake.stopWheels(),
-                        Commands.waitSeconds(0.5),
-                        grabber.runFlywheelsEjectCommand()))
+                        grabber.runFlywheelsIntakeCommand()))
                 .onFalse(Commands.parallel(
-                        intake.spinForward(),
-                        grabber.stopFlywheelsCommand(),
-                        grabber.setTargetArmAngleCommand(ArmPosition.STORE)));
+                        grabber.setTargetArmAngleCommand(ArmPosition.STORE),
+                        grabber.stopFlywheelsCommand()));
 
         // Eject bunny
         new POVButton(operator, 90) // right
-                .onTrue(Commands.sequence(
+                .whileTrue(Commands.sequence(
                         grabber.setTargetArmAngleCommand(ArmPosition.TOTE),
                         intake.stopWheels(),
                         Commands.waitSeconds(0.5),
@@ -164,7 +162,7 @@ public class RobotContainer {
                         grabber.stopFlywheelsCommand(),
                         grabber.setTargetArmAngleCommand(ArmPosition.STORE)));
 
-        // Place bunny on ground
+        // Eject bunny forward
         new POVButton(operator, 0) // up
                 .whileTrue(Commands.sequence(
                         grabber.setTargetArmAngleCommand(ArmPosition.START),
@@ -181,8 +179,9 @@ public class RobotContainer {
         // vision));
 
         // Left Bumper (hold) - eject balls through intake
-        // new JoystickButton(operator, Button.kLeftBumper.value)
-        // .whileTrue(new EjectAll(intake, indexer, shooter));
+        new JoystickButton(operator, Button.kLeftBumper.value)
+                .onTrue(Commands.parallel(intake.spinBackward()))
+                .onFalse(Commands.parallel(intake.spinForward()));
 
         // X (hold) - fire shooter
         new JoystickButton(operator, Button.kX.value)
@@ -191,7 +190,9 @@ public class RobotContainer {
 
         // Throw bunny
         new JoystickButton(operator, Button.kStart.value)
-                .whileTrue(new ThrowBunny(drivetrain, grabber, intake));
+                .whileTrue(new ThrowBunny(drivetrain, grabber, intake))
+                .onFalse(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.STORE),
+                        intake.spinForward()));
 
         // Throw bunny old
         // new JoystickButton(operator, Button.kStart.value)

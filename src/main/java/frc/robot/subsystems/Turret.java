@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,9 +20,12 @@ import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
     private final CANSparkMax rotationMotor;
+    private final DigitalInput limitSwitch;
     private final ProfiledPIDController rotationController;
 
     private double targetRotation;
+
+    public boolean runPID = true;
 
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
@@ -33,6 +37,8 @@ public class Turret extends SubsystemBase {
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
                 new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION));
+
+        limitSwitch = new DigitalInput(TurretConfig.LIMIT_SWITCH_PORT);
 
         ShuffleboardHelper
                 .addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
@@ -73,6 +79,9 @@ public class Turret extends SubsystemBase {
 
     /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
+        if (!runPID)
+            return;
+
         double calculatedOutput = rotationController.calculate(getCurrentRotation(),
                 targetRotation);
         outputToMotor(calculatedOutput);
@@ -121,5 +130,19 @@ public class Turret extends SubsystemBase {
      */
     public void setPIDConstraints(Constraints constraints) {
         rotationController.setConstraints(constraints);
+    }
+
+    public void setEncoderPosition(double position) {
+        rotationMotor.getEncoder().setPosition(position);
+    }
+
+    public void resetPID() {
+        double currentRotation = getCurrentRotation();
+        rotationController.reset(currentRotation);
+        setTargetRotation(currentRotation);
+    }
+
+    public boolean limitSwitchPressed() {
+        return !limitSwitch.get();
     }
 }

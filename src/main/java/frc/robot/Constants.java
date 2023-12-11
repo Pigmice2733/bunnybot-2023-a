@@ -99,6 +99,10 @@ public final class Constants {
         public static final double TARGET_YAW_TOLERANCE = 3.5;
 
         public static final double MAX_FIRE_VELOCITY = 1; // max vel a shot is allowed at (TODO)
+
+        public static final double ZERO_TURRET_SPEED = 0.1;
+
+        public static final int LIMIT_SWITCH_PORT = 1;
     }
 
     public static final class ShooterConfig {

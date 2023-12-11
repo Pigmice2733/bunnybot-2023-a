@@ -13,6 +13,11 @@ public class ControllerRumbler {
         ControllerRumbler.operator = operator;
     }
 
+    public static void rumbleBoth(RumbleType rumbleType, double seconds, double strength) {
+        rumblerDriver(rumbleType, seconds, strength);
+        rumblerOperator(rumbleType, seconds, strength);
+    }
+
     public static void rumblerDriver(RumbleType rumbleType, double seconds, double strength) {
         rumblerController(driver, rumbleType, seconds, strength);
     }
