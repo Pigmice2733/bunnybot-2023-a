@@ -116,9 +116,6 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
         public static final double DEFAULT_OUTPUT = 1;
-
-        public static final Double[] TEST_INPUTS = { 1.0 }; // distance (TODO)
-        public static final Double[][] TEST_OUTPUTS = { { 1.0, 1.0 } }; // angle, speed (TODO)
     }
 
     /*
@@ -156,6 +153,8 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 30; // deg/sec/sec
 
         public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
+
+        public static final double HOOD_ZERO_ANGLE = 30.72; // minimum angle above horizontal
     }
 
     public static final class IntakeConfig {
@@ -194,7 +193,7 @@ public final class Constants {
 
     public static final class VisionConfig {
         public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42);
-        public static final double AIM_HEIGHT_METERS = Units.inchesToMeters(37.25);
+        public static final double TURRET_HEIGHT_METERS = Units.inchesToMeters(37.25);
 
         public static final double CAMERA_HEIGHT_METERS = 1; // TODO
         public static final double CAMERA_PITCH_RADIANS = 0; // TODO

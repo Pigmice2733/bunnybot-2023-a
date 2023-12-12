@@ -8,34 +8,23 @@ import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
-import frc.robot.Constants.GrabberConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
-import frc.robot.Constants.IntakeConfig;
-import frc.robot.commands.ManualTurret;
-import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.TrackTargetWithDrivetrain;
-import frc.robot.commands.actions.ManualHood;
-import frc.robot.commands.actions.ThrowBunny;
 import frc.robot.commands.actions.ZeroGrabber;
-import frc.robot.commands.functions.AutoShooter;
-import frc.robot.commands.functions.EjectAll;
 import frc.robot.commands.functions.RepeatFireShooter;
+import frc.robot.commands.functions.ThrowBunny;
 import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since

@@ -37,9 +37,9 @@ public class Grabber extends SubsystemBase {
         flywheelsMotorB.restoreFactoryDefaults();
 
         rotationMotor.setInverted(false);
-
         flywheelsMotorA.setInverted(false);
         flywheelsMotorB.setInverted(true);
+
         rotationMotor.setIdleMode(IdleMode.kCoast);
 
         limitSwitch = new DigitalInput(GrabberConfig.LIMIT_SWITCH_PORT);
@@ -162,10 +162,17 @@ public class Grabber extends SubsystemBase {
         rotationMotor.getEncoder().setPosition(position);
     }
 
+    public void stopPID() {
+        runPID = false;
+    }
+
+    public void startPID() {
+        runPID = true;
+    }
+
     public void resetPID() {
-        double currentRotation = getCurrentRotation();
-        rotationController.reset(currentRotation);
-        setTargetRotation(currentRotation);
+        rotationController.reset(getCurrentRotation());
+        setTargetRotation(getCurrentRotation());
     }
 
     public boolean limitSwitchPressed() {

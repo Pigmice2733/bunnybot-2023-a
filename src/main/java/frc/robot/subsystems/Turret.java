@@ -136,10 +136,17 @@ public class Turret extends SubsystemBase {
         rotationMotor.getEncoder().setPosition(position);
     }
 
+    public void stopPID() {
+        runPID = false;
+    }
+
+    public void startPID() {
+        runPID = true;
+    }
+
     public void resetPID() {
-        double currentRotation = getCurrentRotation();
-        rotationController.reset(currentRotation);
-        setTargetRotation(currentRotation);
+        rotationController.reset(getCurrentRotation());
+        setTargetRotation(getCurrentRotation());
     }
 
     public boolean limitSwitchPressed() {
