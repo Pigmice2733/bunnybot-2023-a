@@ -55,13 +55,14 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
+    ShuffleboardHelper.update(true);
     CommandScheduler.getInstance().run();
-    ShuffleboardHelper.update();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_robotContainer.onDisable();
   }
 
   @Override
@@ -80,6 +81,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    m_robotContainer.onEnable();
   }
 
   /** This function is called periodically during autonomous. */
@@ -97,7 +100,9 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.turret.resetRotationController();
+    m_robotContainer.onEnable();
+
+    // m_robotContainer.turret.resetRotationController();
   }
 
   /** This function is called periodically during operator control. */

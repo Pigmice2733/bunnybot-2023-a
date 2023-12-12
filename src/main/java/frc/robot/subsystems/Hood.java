@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -19,7 +20,7 @@ public class Hood extends SubsystemBase {
     private final CANSparkMax rotationMotor;
     private final ProfiledPIDController rotationController;
 
-    private double targetRotation, currentRotation;
+    private double targetRotation;
 
     public Hood() {
         rotationMotor = new CANSparkMax(CANConfig.HOOD_ROTATION, MotorType.kBrushless);
@@ -27,34 +28,40 @@ public class Hood extends SubsystemBase {
         rotationMotor.getEncoder().setPositionConversionFactor(HoodConfig.ROTATION_MOTOR_CONVERSION);
 
         rotationMotor.restoreFactoryDefaults();
+        rotationMotor.setInverted(false);
 
         // Convert to arm rotations in degrees
-        rotationMotor.getEncoder().setPositionConversionFactor(HoodConfig.ROTATION_CONVERSION * 360);
+        rotationMotor.setIdleMode(IdleMode.kCoast);
 
         rotationController = new ProfiledPIDController(
                 HoodConfig.HOOD_P, HoodConfig.HOOD_I, HoodConfig.HOOD_D,
                 new Constraints(HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION));
 
-        ShuffleboardHelper.addOutput("Current", Constants.HOOD_TAB, () -> currentRotation)
-                .asDial(-180, 180);
-        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint())
-                .asDial(-180, 180);
-        ShuffleboardHelper.addOutput("Target", Constants.HOOD_TAB, () -> targetRotation)
-                .asDial(-180, 180);
+        ShuffleboardHelper.addOutput("Current", Constants.HOOD_TAB, () -> getHoodRotation());
+        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint().position);
+        ShuffleboardHelper.addOutput("Target", Constants.HOOD_TAB, () -> targetRotation);
 
         ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
+
+        // TODO: Remove after initial tuning
+        ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) -> setTargetRotation((double) value),
+                getHoodRotation());
+        ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.HOOD_TAB, rotationController,
+                HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION);
+
+        rotationMotor.getEncoder().setPosition(0);
     }
 
     @Override
     public void periodic() {
-        currentRotation = rotationMotor.getEncoder().getPosition();
+        // rotationMotor.set(-0.1);
         updateClosedLoopControl();
     }
 
     /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
         double calculatedOutput = rotationController.calculate(getHoodRotation(), targetRotation);
-        setTargetRotation(calculatedOutput);
+        outputToMotor(calculatedOutput);
     }
 
     /** Sets the percent output of the hood rotation motor. */
@@ -80,5 +87,11 @@ public class Hood extends SubsystemBase {
     /** Returns the hood's target rotation in degrees. */
     public double getTargetRotation() {
         return targetRotation;
+    }
+
+    public void resetPID() {
+        double currentRotation = getHoodRotation();
+        rotationController.reset(currentRotation);
+        setTargetRotation(currentRotation);
     }
 }

@@ -3,7 +3,7 @@ package frc.robot.commands.functions;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TurretConfig;
-import frc.robot.commands.actions.ShootTarget;
+import frc.robot.commands.actions.ShootTargetNew;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
@@ -35,7 +35,7 @@ public class AutoShooter extends CommandBase {
                 && turret.getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY) {
             if (!isShooting) {
                 isShooting = true;
-                shootCommand = new ShootTarget(hood, shooter, vision);
+                shootCommand = new ShootTargetNew(hood, shooter, vision);
             }
         } else if (isShooting) {
             isShooting = false;

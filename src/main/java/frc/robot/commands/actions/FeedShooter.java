@@ -14,6 +14,6 @@ public class FeedShooter extends SequentialCommandGroup {
     public FeedShooter(Indexer indexer) {
         addCommands(indexer.spinFeederForward(),
                 new WaitCommand(AutoConfig.FEED_SHOOTER_INDEX_TIME),
-                indexer.stopFeeder());
+                indexer.spinFeederBackwards());
     }
 }
