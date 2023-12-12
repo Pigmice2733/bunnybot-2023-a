@@ -76,7 +76,7 @@ public final class Constants {
     }
 
     public static final class TurretConfig {
-        public static final double MANUAL_ROTATION_MULTIPLIER = 8;
+        public static final double MANUAL_ROTATION_MULTIPLIER = 20;
 
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 342.4; // encoder
         // rot to
@@ -86,13 +86,13 @@ public final class Constants {
         public static final double ROTATION_I = 0.00;
         public static final double ROTATION_D = 0.00;
 
-        public static final double MAX_VELOCITY = 160; // deg/sec
+        public static final double MAX_VELOCITY = 300; // deg/sec
         public static final double MAX_ACCELERATION = 160; // deg/sec/sec
 
         public static final double WANDER_VELOCITY = MAX_VELOCITY / 20; // deg/sec
         public static final double WANDER_ACCELERATION = MAX_ACCELERATION / 10; // deg/sec/sec
 
-        public static final double MAX_ALLOWED_ROTATION = 90; // degrees
+        public static final double MAX_ALLOWED_ROTATION = 120; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
@@ -143,16 +143,15 @@ public final class Constants {
         public static final double MANUAL_ROTATION_SPEED = 3;
 
         // Encoder rotations to degrees
-        public static final double ROTATION_MOTOR_CONVERSION = 1097 * 360;
+        public static final double ROTATION_MOTOR_CONVERSION = 1 / 120.0;
 
-        public static final double HOOD_P = 0.0;
+        public static final double HOOD_P = 0.045;
         public static final double HOOD_I = 0.0;
         public static final double HOOD_D = 0.0;
 
-        public static final double MAX_VELOCITY = 30; // deg/sec
-        public static final double MAX_ACCELERATION = 30; // deg/sec/sec
+        public static final double MAX_VELOCITY = 300; // deg/sec
+        public static final double MAX_ACCELERATION = 300; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 1; // encoder rotation to arm rotations (TODO)
     }
 
     public static final class IntakeConfig {

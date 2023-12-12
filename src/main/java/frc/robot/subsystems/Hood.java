@@ -31,19 +31,15 @@ public class Hood extends SubsystemBase {
         rotationMotor.setInverted(false);
 
         // Convert to arm rotations in degrees
-        rotationMotor.getEncoder().setPositionConversionFactor(HoodConfig.ROTATION_CONVERSION * 360);
         rotationMotor.setIdleMode(IdleMode.kCoast);
 
         rotationController = new ProfiledPIDController(
                 HoodConfig.HOOD_P, HoodConfig.HOOD_I, HoodConfig.HOOD_D,
                 new Constraints(HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION));
 
-        ShuffleboardHelper.addOutput("Current", Constants.HOOD_TAB, () -> getHoodRotation())
-                .asDial(-180, 180);
-        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint().position)
-                .asDial(-180, 180);
-        ShuffleboardHelper.addOutput("Target", Constants.HOOD_TAB, () -> targetRotation)
-                .asDial(-180, 180);
+        ShuffleboardHelper.addOutput("Current", Constants.HOOD_TAB, () -> getHoodRotation());
+        ShuffleboardHelper.addOutput("Setpoint", Constants.HOOD_TAB, () -> rotationController.getSetpoint().position);
+        ShuffleboardHelper.addOutput("Target", Constants.HOOD_TAB, () -> targetRotation);
 
         ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
 
@@ -52,6 +48,8 @@ public class Hood extends SubsystemBase {
                 getHoodRotation());
         ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.HOOD_TAB, rotationController,
                 HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION);
+
+        rotationMotor.getEncoder().setPosition(0);
     }
 
     @Override
@@ -63,17 +61,17 @@ public class Hood extends SubsystemBase {
     /** Calculates and applies the next output from the PID controller. */
     private void updateClosedLoopControl() {
         double calculatedOutput = rotationController.calculate(getHoodRotation(), targetRotation);
-        setTargetRotation(calculatedOutput);
+        outputToMotor(calculatedOutput);
     }
 
     /** Sets the percent output of the hood rotation motor. */
     public void outputToMotor(double percentOutput) {
-        // rotationMotor.set(percentOutput);
+        rotationMotor.set(percentOutput);
     }
 
     /** Returns the hood's current rotation in degrees. */
     public double getHoodRotation() {
-        return -rotationMotor.getEncoder().getPosition();
+        return rotationMotor.getEncoder().getPosition();
     }
 
     /** Sets the hood's target position. */

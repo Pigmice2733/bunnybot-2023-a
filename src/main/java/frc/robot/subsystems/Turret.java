@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -110,12 +111,15 @@ public class Turret extends SubsystemBase {
 
     /** Sets the turret's target position. */
     public void setTargetRotation(double targetDegrees) {
+        targetRotation = MathUtil.clamp(targetRotation, -TurretConfig.MAX_ALLOWED_ROTATION,
+                TurretConfig.MAX_ALLOWED_ROTATION);
+
         targetRotation = targetDegrees;
     }
 
     /** Adjusts the turret's target position by the given amount. */
     public void changeTargetRotation(double delta) {
-        targetRotation += delta;
+        setTargetRotation(targetRotation + delta);
     }
 
     /** Returns the current velocity of the turret in degrees per second. */

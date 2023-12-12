@@ -54,7 +54,7 @@ public class RobotContainer {
     private final Intake intake;
     private final Shooter shooter;
     public final Turret turret;
-    // private final Vision vision;
+    private final Vision vision;
 
     private final XboxController driver;
     private final XboxController operator;
@@ -73,7 +73,7 @@ public class RobotContainer {
         intake = new Intake();
         shooter = new Shooter();
         turret = new Turret();
-        // vision = new Vision();
+        vision = new Vision();
 
         driver = new XboxController(0);
         operator = new XboxController(1);
@@ -92,8 +92,8 @@ public class RobotContainer {
         // hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
         // indexer.setDefaultCommand(autoBallCommand);
         // shooter.setDefaultCommand(autoBallCommand);
-        turret.setDefaultCommand(new ManualTurret(turret,
-                controls::getManualTurretRotationSpeed));
+        // turret.setDefaultCommand(new ManualTurret(turret,
+        // controls::getManualTurretRotationSpeed));
         // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
         // controls::getManualTurretRotationSpeed));
 
