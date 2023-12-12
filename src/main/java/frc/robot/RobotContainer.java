@@ -17,14 +17,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
+import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.TrackTargetWithDrivetrain;
 import frc.robot.commands.actions.ZeroGrabber;
 import frc.robot.commands.functions.RepeatFireShooter;
 import frc.robot.commands.functions.ThrowBunny;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -83,8 +87,8 @@ public class RobotContainer {
         // shooter.setDefaultCommand(autoBallCommand);
         // turret.setDefaultCommand(new ManualTurret(turret,
         // controls::getManualTurretRotationSpeed));
-        // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
-        // controls::getManualTurretRotationSpeed));
+        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
+                controls::getManualTurretRotationSpeed));
 
         configureButtonBindings();
     }

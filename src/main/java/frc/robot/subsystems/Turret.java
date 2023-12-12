@@ -22,7 +22,7 @@ import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
     private final CANSparkMax rotationMotor;
-    // private final DigitalInput limitSwitch;
+    // private final DigitalInput limitSwitch; //TODO
     private final ProfiledPIDController rotationController;
 
     private double targetRotation;
