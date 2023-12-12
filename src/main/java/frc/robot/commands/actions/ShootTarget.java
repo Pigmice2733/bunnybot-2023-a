@@ -3,7 +3,6 @@ package frc.robot.commands.actions;
 import java.util.Arrays;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ShooterConfig;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -20,16 +19,15 @@ public class ShootTarget extends CommandBase {
     private int index;
 
     /**
-     * Sets the hood to the correct angle and the shooter flywheel to the correct speed to shoot at
-     * the located target, using linear interpolation on a set of test values.
+     * DEPRECATED! Use {@link ShootTargetNew} instead.
      */
     public ShootTarget(Hood hood, Shooter shooter, Vision vision) {
         this.hood = hood;
         this.shooter = shooter;
         this.vision = vision;
 
-        inputs = ShooterConfig.TEST_INPUTS;
-        outputs = ShooterConfig.TEST_OUTPUTS;
+        inputs = new Double[1];
+        outputs = new Double[1][1];
 
         distance = speed = angle = 0;
 

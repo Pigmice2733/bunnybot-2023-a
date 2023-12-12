@@ -17,8 +17,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Vision;
 
 public class TrackTargetWithDrivetrain extends ProfiledPIDCommand {
-  private final SwerveDrivetrain drivetrain;
-  private final Vision vision;
 
   public TrackTargetWithDrivetrain(SwerveDrivetrain drivetrain, Vision vision) {
     super(
@@ -28,14 +26,12 @@ public class TrackTargetWithDrivetrain extends ProfiledPIDCommand {
               ? 0
               : vision.getCurrentTarget().getYaw();
         },
-        () -> new State(), (output, state) -> drivetrain.driveChassisSpeeds(
+        () -> new State(),
+        (output, state) -> drivetrain.driveChassisSpeeds(
             new ChassisSpeeds(0, 0, output)),
         drivetrain);
 
     getController().setTolerance(8);
-
-    this.drivetrain = drivetrain;
-    this.vision = vision;
 
     ShuffleboardHelper.addProfiledController("Auto aim", Constants.VISION_TAB, getController(), 0, 0);
 
