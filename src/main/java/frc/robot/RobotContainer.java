@@ -49,11 +49,11 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
     public final SwerveDrivetrain drivetrain;
     private final Grabber grabber;
-    // private final Hood hood;
+    private final Hood hood;
     private final Indexer indexer;
     private final Intake intake;
     private final Shooter shooter;
-    // public final Turret turret;
+    public final Turret turret;
     // private final Vision vision;
 
     private final XboxController driver;
@@ -68,11 +68,11 @@ public class RobotContainer {
     public RobotContainer() {
         drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
         grabber = new Grabber();
-        // hood = new Hood();
+        hood = new Hood();
         indexer = new Indexer();
         intake = new Intake();
         shooter = new Shooter();
-        // turret = new Turret();
+        turret = new Turret();
         // vision = new Vision();
 
         driver = new XboxController(0);
@@ -92,8 +92,8 @@ public class RobotContainer {
         // hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
         // indexer.setDefaultCommand(autoBallCommand);
         // shooter.setDefaultCommand(autoBallCommand);
-        // turret.setDefaultCommand(new ManualTurret(turret,
-        // controls::getManualTurretRotationSpeed));
+        turret.setDefaultCommand(new ManualTurret(turret,
+                controls::getManualTurretRotationSpeed));
         // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
         // controls::getManualTurretRotationSpeed));
 
@@ -105,6 +105,8 @@ public class RobotContainer {
         indexer.spinFeederBackwards().schedule();
         grabber.resetPID();
         new ZeroGrabber(grabber).schedule();
+        hood.resetPID();
+        turret.resetPID();
     }
 
     public void onDisable() {
@@ -165,7 +167,7 @@ public class RobotContainer {
         // Eject bunny forward
         new POVButton(operator, 0) // up
                 .whileTrue(Commands.sequence(
-                        grabber.setTargetArmAngleCommand(ArmPosition.START),
+                        grabber.setTargetArmAngleCommand(ArmPosition.STOW),
                         intake.stopWheels(),
                         Commands.waitSeconds(0.5),
                         grabber.runFlywheelsEjectCommand()))

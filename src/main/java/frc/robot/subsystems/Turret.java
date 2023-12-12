@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 import com.pigmice.frc.lib.utils.Utils;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -20,7 +21,7 @@ import frc.robot.Constants.TurretConfig;
 
 public class Turret extends SubsystemBase {
     private final CANSparkMax rotationMotor;
-    private final DigitalInput limitSwitch;
+    // private final DigitalInput limitSwitch;
     private final ProfiledPIDController rotationController;
 
     private double targetRotation;
@@ -33,12 +34,14 @@ public class Turret extends SubsystemBase {
         rotationMotor.restoreFactoryDefaults();
         rotationMotor.getEncoder().setPosition(0);
         rotationMotor.setInverted(false);
+        rotationMotor.getEncoder().setPositionConversionFactor(TurretConfig.ROTATION_MOTOR_CONVERSION);
+        rotationMotor.setIdleMode(IdleMode.kCoast);
 
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
                 new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION));
 
-        limitSwitch = new DigitalInput(TurretConfig.LIMIT_SWITCH_PORT);
+        // limitSwitch = new DigitalInput(TurretConfig.LIMIT_SWITCH_PORT);
 
         ShuffleboardHelper
                 .addOutput("Current Rotation", Constants.TURRET_TAB, () -> getCurrentRotation())
@@ -55,12 +58,12 @@ public class Turret extends SubsystemBase {
         ShuffleboardHelper.addOutput("Motor Output", Constants.TURRET_TAB,
                 () -> rotationMotor.get());
 
+        ShuffleboardHelper.addOutput("Motor Temp", Constants.TURRET_TAB,
+                () -> rotationMotor.getMotorTemperature());
+
         Constants.TURRET_TAB.add("Reset Encoder",
                 new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
 
-        // TODO: Remove after initial tuning
-        ShuffleboardHelper.addInput("Angle Input", Constants.TURRET_TAB, (value) -> setTargetRotation((double) value),
-                getCurrentRotation());
         ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.TURRET_TAB, rotationController,
                 TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION);
     }
@@ -143,6 +146,7 @@ public class Turret extends SubsystemBase {
     }
 
     public boolean limitSwitchPressed() {
-        return !limitSwitch.get();
+        // return !limitSwitch.get();
+        return false;
     }
 }

@@ -132,8 +132,8 @@ public class Grabber extends SubsystemBase {
     /** Sends the arm to the specified position. */
     public Command setTargetArmAngleCommand(ArmPosition position) {
         switch (position) {
-            case START:
-                return Commands.runOnce(() -> setTargetRotation(0));
+            case STOW:
+                return Commands.runOnce(() -> setTargetRotation(15));
             case STORE:
                 return Commands.runOnce(() -> setTargetRotation(45));
             case TOTE:

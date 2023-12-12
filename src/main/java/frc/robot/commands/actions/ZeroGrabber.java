@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.ControllerRumbler;
 import frc.robot.Constants.GrabberConfig;
+import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.subsystems.Grabber;
 
 public class ZeroGrabber extends CommandBase {
@@ -34,6 +35,7 @@ public class ZeroGrabber extends CommandBase {
     if (!interrupted) {
       grabber.setEncoderPosition(0);
       ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.3, 0.7);
+      grabber.setTargetArmAngleCommand(ArmPosition.STOW);
     } else {
       grabber.setTargetRotation(grabber.getCurrentRotation());
     }

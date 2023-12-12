@@ -28,7 +28,7 @@ public class ThrowBunny extends SequentialCommandGroup {
     // 0).rotateBy(drivetrainRotation);
     // System.out.println("Direction " + directionVector);
 
-    addCommands(grabber.setTargetArmAngleCommand(ArmPosition.START),
+    addCommands(grabber.setTargetArmAngleCommand(ArmPosition.STOW),
         /*
          * grabber.setControllerConstraints(GrabberConfig.MAX_VELOCITY * 3,
          * GrabberConfig.MAX_ACCELERATION * 3,

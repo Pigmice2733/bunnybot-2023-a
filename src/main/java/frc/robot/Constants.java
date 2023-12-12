@@ -53,12 +53,12 @@ public final class Constants {
         public static final int BACK_RIGHT_DRIVE = 14;// done
         public static final int BACK_RIGHT_STEER = 15;// done
 
-        public static final int FRONT_LEFT_ABS_ENCODER = 20;
-        public static final int FRONT_RIGHT_ABS_ENCODER = 24;
-        public static final int BACK_LEFT_ABS_ENCODER = 22;
-        public static final int BACK_RIGHT_ABS_ENCODER = 26;
+        public static final int FRONT_LEFT_ABS_ENCODER = 20;// done
+        public static final int FRONT_RIGHT_ABS_ENCODER = 24;// done
+        public static final int BACK_LEFT_ABS_ENCODER = 22;// done
+        public static final int BACK_RIGHT_ABS_ENCODER = 26;// done
 
-        public static final int ROTATE_TURRET = 100; // should be 30 but conflict
+        public static final int ROTATE_TURRET = 35; // done
         public static final int ROTATE_SHOOTER = 32;
 
         public static final int OVER_BUMPER_INTAKE = 31;// done
@@ -76,24 +76,23 @@ public final class Constants {
     }
 
     public static final class TurretConfig {
-        public static final double MANUAL_ROTATION_MULTIPLIER = 3;
+        public static final double MANUAL_ROTATION_MULTIPLIER = 8;
 
-        private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
-                                                                                          // rot to
-                                                                                          // deg
+        public static final double ROTATION_MOTOR_CONVERSION = 1 / 342.4; // encoder
+        // rot to
+        // deg
 
-        public static final double ROTATION_P = 0.009;
-        public static final double ROTATION_I = 0.0001;
-        public static final double ROTATION_D = 0.0001;
+        public static final double ROTATION_P = 0.02;
+        public static final double ROTATION_I = 0.00;
+        public static final double ROTATION_D = 0.00;
 
-        public static final double MAX_VELOCITY = 2400 * 2;// 1200; // deg/sec
-        public static final double MAX_ACCELERATION = 2400 * 2; // 1200; // deg/sec/sec
+        public static final double MAX_VELOCITY = 160; // deg/sec
+        public static final double MAX_ACCELERATION = 160; // deg/sec/sec
 
         public static final double WANDER_VELOCITY = MAX_VELOCITY / 20; // deg/sec
         public static final double WANDER_ACCELERATION = MAX_ACCELERATION / 10; // deg/sec/sec
 
-        public static final double MAX_ALLOWED_ROTATION = 180; // degrees
+        public static final double MAX_ALLOWED_ROTATION = 90; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
@@ -143,10 +142,8 @@ public final class Constants {
     public static final class HoodConfig {
         public static final double MANUAL_ROTATION_SPEED = 3;
 
-        private static final double ROTATION_GEAR_RATIO = 1;
-
         // Encoder rotations to degrees
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360;
+        public static final double ROTATION_MOTOR_CONVERSION = 1097 * 360;
 
         public static final double HOOD_P = 0.0;
         public static final double HOOD_I = 0.0;
@@ -185,7 +182,7 @@ public final class Constants {
 
         // All in degrees
         public static enum ArmPosition {
-            START, STORE, TOTE, GROUND, THROW
+            STOW, STORE, TOTE, GROUND, THROW
         }
 
         public static final double FLYWHEEL_INTAKE_SPEED = 0.3;
@@ -287,7 +284,7 @@ public final class Constants {
         // All times in seconds
         public static final double FEED_SHOOTER_INDEX_TIME = 0.15;
         public static final double TIME_BETWEEN_SHOTS = 1;
-        public static final double SHOOTER_SPINUP_TIME = 0.5;
+        public static final double SHOOTER_SPINUP_TIME = 1.2;
         public static final double EJECT_ALL_TIME = 5;
 
         // All motor outputs in percent (-1 -> 1)
