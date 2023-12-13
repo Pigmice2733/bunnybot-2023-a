@@ -40,6 +40,7 @@ public final class Constants {
     public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
     public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
     public static final ShuffleboardTab INTAKE_TAB = Shuffleboard.getTab("Intake");
+    public static final ShuffleboardTab DRIVER_TAB = Shuffleboard.getTab("Driver");
 
     public static final double AXIS_THRESHOLD = 0.25;
 
@@ -76,7 +77,7 @@ public final class Constants {
     }
 
     public static final class TurretConfig {
-        public static final double MANUAL_ROTATION_MULTIPLIER = 20;
+        public static final double MANUAL_ROTATION_MULTIPLIER = 30;
 
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 342.4; // encoder
         // rot to
@@ -182,8 +183,8 @@ public final class Constants {
             STOW, STORE, TOTE, GROUND, THROW
         }
 
-        public static final double FLYWHEEL_INTAKE_SPEED = 0.3;
-        public static final double FLYWHEEL_EJECT_SPEED = -0.6;
+        public static final double FLYWHEEL_INTAKE_SPEED = 0.4;
+        public static final double FLYWHEEL_EJECT_SPEED = -0.4;
     }
 
     public static final class VisionConfig {

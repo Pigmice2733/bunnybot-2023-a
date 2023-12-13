@@ -155,11 +155,9 @@ public class RobotContainer {
         new POVButton(operator, 270) // left
                 .whileTrue(Commands.sequence(
                         grabber.setTargetArmAngleCommand(ArmPosition.TOTE),
-                        intake.stopWheels(),
                         Commands.waitSeconds(0.5),
                         grabber.runFlywheelsEjectCommand()))
                 .onFalse(Commands.parallel(
-                        intake.spinForward(),
                         grabber.stopFlywheelsCommand(),
                         grabber.setTargetArmAngleCommand(ArmPosition.STORE)));
 
@@ -167,11 +165,9 @@ public class RobotContainer {
         new POVButton(operator, 90) // right
                 .whileTrue(Commands.sequence(
                         grabber.setTargetArmAngleCommand(ArmPosition.TOTE),
-                        intake.stopWheels(),
                         Commands.waitSeconds(0.5),
                         grabber.runFlywheelsEjectCommand()))
                 .onFalse(Commands.parallel(
-                        intake.spinForward(),
                         grabber.stopFlywheelsCommand(),
                         grabber.setTargetArmAngleCommand(ArmPosition.STORE)));
 
@@ -197,7 +193,7 @@ public class RobotContainer {
                 .onFalse(Commands.parallel(intake.spinForward()));
 
         // X (hold) - fire shooter
-        new JoystickButton(operator, Button.kX.value)
+        new JoystickButton(operator, Button.kRightBumper.value)
                 .whileTrue(new RepeatFireShooter(indexer, shooter))
                 .onFalse(Commands.parallel(shooter.stopFlywheel(), indexer.spinFeederBackwards()));
 
@@ -205,7 +201,7 @@ public class RobotContainer {
         new JoystickButton(operator, Button.kStart.value)
                 .whileTrue(new ThrowBunny(drivetrain, grabber, intake))
                 .onFalse(Commands.parallel(grabber.setTargetArmAngleCommand(ArmPosition.STORE),
-                        intake.spinForward()));
+                        intake.spinForward(), grabber.stopFlywheelsCommand()));
 
         // Throw bunny old
         // new JoystickButton(operator, Button.kStart.value)
@@ -225,7 +221,8 @@ public class RobotContainer {
         // */;
 
         new JoystickButton(operator, Button.kA.value)
-                .whileTrue(new ZeroGrabber(grabber, intake));
+                .whileTrue(new ZeroGrabber(grabber, intake))
+                .onFalse(intake.spinForward());
 
         // // Y (hold) - eject bunnies
         // new JoystickButton(operator, Button.kY.value)

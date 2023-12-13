@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pigmice.frc.lib.shuffleboard_helper.ShuffleboardHelper;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    Constants.DRIVER_TAB.add("Camera", CameraServer.startAutomaticCapture()).withPosition(5, 0).withSize(5, 4);
   }
 
   /**

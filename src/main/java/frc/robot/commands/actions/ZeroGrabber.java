@@ -47,7 +47,6 @@ public class ZeroGrabber extends CommandBase {
 
     grabber.startPID();
     grabber.setTargetArmAngleCommand(ArmPosition.STOW).schedule();
-    ;
 
     intake.spinForward();
   }
