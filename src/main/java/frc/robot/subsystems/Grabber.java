@@ -163,6 +163,7 @@ public class Grabber extends SubsystemBase {
     }
 
     public void stopPID() {
+        outputToRotationMotor(0);
         runPID = false;
     }
 

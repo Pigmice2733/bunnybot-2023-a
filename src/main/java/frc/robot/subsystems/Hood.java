@@ -49,8 +49,9 @@ public class Hood extends SubsystemBase {
         ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
 
         // TODO: Remove after initial tuning
-        ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) -> setTargetRotation((double) value),
-                getCurrentRotation());
+        // ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) ->
+        // setTargetRotation((double) value),
+        // getCurrentRotation());
         ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.HOOD_TAB, rotationController,
                 HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION);
 
@@ -83,6 +84,10 @@ public class Hood extends SubsystemBase {
         return rotationMotor.getEncoder().getPosition();
     }
 
+    public double getMotorCurrent() {
+        return rotationMotor.getOutputCurrent();
+    }
+
     /** Sets the hood's target position. */
     public void setTargetRotation(double targetDegrees) {
         targetRotation = targetDegrees;
@@ -109,6 +114,7 @@ public class Hood extends SubsystemBase {
     }
 
     public void stopPID() {
+        outputToMotor(0);
         runPID = false;
     }
 

@@ -144,6 +144,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void stopPID() {
+        outputToMotor(0);
         runPID = false;
     }
 

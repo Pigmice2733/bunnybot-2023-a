@@ -4,10 +4,13 @@
 
 package frc.robot.commands;
 
+import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 import frc.robot.turret_state_machine.FiniteStateMachine;
@@ -19,9 +22,10 @@ public class RunTurretStateMachine extends CommandBase {
 
     private final Turret turret;
     private final Vision vision;
+    private final Hood hood;
     private final DoubleSupplier manualRotationSpeed;
 
-    public RunTurretStateMachine(Turret turret, Vision vision, DoubleSupplier manualRotationSpeed) {
+    public RunTurretStateMachine(Turret turret, Vision vision, Hood hood, DoubleSupplier manualRotationSpeed) {
         stateMachine = new FiniteStateMachine<TurretState, TurretData>(TurretState.BeginWander);
 
         stateMachine.addTransitionsFromState(TurretState.BeginWander,
@@ -53,6 +57,7 @@ public class RunTurretStateMachine extends CommandBase {
 
         this.turret = turret;
         this.vision = vision;
+        this.hood = hood;
         this.manualRotationSpeed = manualRotationSpeed;
 
         addRequirements(turret);
@@ -60,7 +65,7 @@ public class RunTurretStateMachine extends CommandBase {
 
     @Override
     public void execute() {
-        if (!stateMachine.execute(new TurretData(turret, vision, manualRotationSpeed))) {
+        if (!stateMachine.execute(new TurretData(turret, vision, hood, manualRotationSpeed))) {
             System.out.println("Turret state machine encountered an error.");
         }
     }
@@ -79,19 +84,25 @@ public class RunTurretStateMachine extends CommandBase {
         public final double manualRotationSpeed;
         public final boolean hasTarget;
         public final double targetYaw;
+        public final double targetArea;
         public final double targetPitch;
         public final DoubleConsumer setTargetRotation;
         public final DoubleConsumer changeTargetRotation;
+        public final DoubleConsumer setTargetHoodAngle;
+        public final Consumer<Constraints> setTurretConstraints;
 
-        public TurretData(Turret turret, Vision vision, DoubleSupplier rotationSpeed) {
+        public TurretData(Turret turret, Vision vision, Hood hood, DoubleSupplier rotationSpeed) {
             turretRotation = turret.getCurrentRotation();
             turretVelocity = turret.getTurretVelocity();
             manualRotationSpeed = rotationSpeed.getAsDouble();
             hasTarget = vision.getCurrentTarget() != null;
             targetYaw = hasTarget ? vision.getCurrentTarget().getYaw() : 0;
+            targetArea = hasTarget ? vision.getCurrentTarget().getArea() : 0;
             targetPitch = hasTarget ? vision.getCurrentTarget().getPitch() : 0;
             setTargetRotation = turret::setTargetRotation;
             changeTargetRotation = turret::changeTargetRotation;
+            setTargetHoodAngle = hood::setTargetRotation;
+            setTurretConstraints = turret::setPIDConstraints;
         }
     }
 }

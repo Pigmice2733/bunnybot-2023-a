@@ -7,10 +7,7 @@ package frc.robot.commands.actions;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.ControllerRumbler;
-import frc.robot.Constants.GrabberConfig;
 import frc.robot.Constants.HoodConfig;
-import frc.robot.Constants.GrabberConfig.ArmPosition;
-import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Hood;
 
 public class ZeroHood extends CommandBase {
@@ -37,18 +34,16 @@ public class ZeroHood extends CommandBase {
     if (!interrupted) {
       hood.setEncoderPosition(0);
       ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.3, 0.7);
-    } else {
-      hood.setTargetRotation(hood.getCurrentRotation());
     }
 
     hood.resetPID();
+    hood.setTargetRotation(5);
     hood.startPID();
   }
 
   @Override
   public boolean isFinished() {
-    System.out.println(hood.getVelocity());
-    // return hood.limitSwitchPressed();
-    return false;
+    System.out.println(hood.getMotorCurrent());
+    return Math.abs(hood.getMotorCurrent()) > 0.5;
   }
 }
