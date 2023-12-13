@@ -23,7 +23,7 @@ public class Grabber extends SubsystemBase {
 
     private final ProfiledPIDController rotationController;
 
-    public boolean runPID = true;
+    private boolean runPID = true;
 
     private double targetRotation;
 

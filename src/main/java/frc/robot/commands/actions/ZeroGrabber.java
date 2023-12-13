@@ -10,19 +10,23 @@ import frc.robot.ControllerRumbler;
 import frc.robot.Constants.GrabberConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Intake;
 
 public class ZeroGrabber extends CommandBase {
   private final Grabber grabber;
+  private final Intake intake;
 
-  public ZeroGrabber(Grabber grabber) {
+  public ZeroGrabber(Grabber grabber, Intake intake) {
     this.grabber = grabber;
+    this.intake = intake;
 
     addRequirements(grabber);
   }
 
   @Override
   public void initialize() {
-    grabber.runPID = false;
+    grabber.stopPID();
+    intake.stopWheels();
   }
 
   @Override
@@ -35,14 +39,17 @@ public class ZeroGrabber extends CommandBase {
     if (!interrupted) {
       grabber.setEncoderPosition(0);
       ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.3, 0.7);
-      grabber.setTargetArmAngleCommand(ArmPosition.STOW);
+      grabber.resetPID();
     } else {
+      grabber.resetPID();
       grabber.setTargetRotation(grabber.getCurrentRotation());
     }
 
-    grabber.resetPID();
+    grabber.startPID();
+    grabber.setTargetArmAngleCommand(ArmPosition.STOW).schedule();
+    ;
 
-    grabber.runPID = true;
+    intake.spinForward();
   }
 
   @Override

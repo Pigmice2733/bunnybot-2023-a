@@ -15,7 +15,7 @@ public class Controls {
     // If a value from a joystick is less than this, it will return 0.
     private double threshold = Constants.AXIS_THRESHOLD;
 
-    private double joystickTurret, joystickY, joystickX, joystickTurn, joystickHood;
+    private double joystickTurret, joystickY, joystickX, joystickTurn;
 
     public Controls(XboxController driver, XboxController operator) {
         this.driver = driver;
@@ -27,10 +27,21 @@ public class Controls {
      * moves in the positive direction, and the left moves in the negative
      * direction, so controller input is defined as right minus left.
      */
+    // public double getManualTurretRotationSpeed() {
+    // joystickTurret = MathUtil.applyDeadband(operator.getRightTriggerAxis(),
+    // threshold) -
+    // MathUtil.applyDeadband(operator.getLeftTriggerAxis(), threshold);
+    // return joystickTurret * TurretConfig.MANUAL_ROTATION_MULTIPLIER;
+    // }
+
     public double getManualTurretRotationSpeed() {
-        joystickTurret = MathUtil.applyDeadband(operator.getRightTriggerAxis(), threshold) -
-                MathUtil.applyDeadband(operator.getLeftTriggerAxis(), threshold);
+        joystickTurret = MathUtil.applyDeadband(operator.getLeftX(), threshold);
         return joystickTurret * TurretConfig.MANUAL_ROTATION_MULTIPLIER;
+    }
+
+    public double getManualHoodRotationSpeed() {
+        double joystickHood = MathUtil.applyDeadband(operator.getLeftY(), threshold);
+        return joystickHood * HoodConfig.MANUAL_ROTATION_MULTIPLIER;
     }
 
     LinearFilter driveSpeedYFilter = LinearFilter.singlePoleIIR(0.05, 0.02);
@@ -70,10 +81,5 @@ public class Controls {
         joystickTurn = MathUtil.applyDeadband(driver.getRightX(), threshold);
         // joystickValue = turnSpeedFilter.calculate(joystickValue); // input smoothing
         return joystickTurn * DrivetrainConfig.MAX_TURN_SPEED;
-    }
-
-    public double getManualHoodSpeed() {
-        joystickHood = MathUtil.applyDeadband(operator.getLeftY(), threshold);
-        return joystickHood * HoodConfig.MANUAL_ROTATION_SPEED;
     }
 }

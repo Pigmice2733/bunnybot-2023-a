@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
+import frc.robot.commands.ManualHood;
+import frc.robot.commands.ManualTurret;
 import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.TrackTargetWithDrivetrain;
 import frc.robot.commands.actions.ZeroGrabber;
@@ -42,12 +44,12 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
     public final SwerveDrivetrain drivetrain;
     private final Grabber grabber;
-    private final Hood hood;
+    // private final Hood hood;
     private final Indexer indexer;
     private final Intake intake;
     private final Shooter shooter;
     public final Turret turret;
-    private final Vision vision;
+    // private final Vision vision;
 
     private final XboxController driver;
     private final XboxController operator;
@@ -61,12 +63,12 @@ public class RobotContainer {
     public RobotContainer() {
         drivetrain = new SwerveDrivetrain(DrivetrainConfig.SWERVE_CONFIG);
         grabber = new Grabber();
-        hood = new Hood();
+        // hood = new Hood();
         indexer = new Indexer();
         intake = new Intake();
         shooter = new Shooter();
         turret = new Turret();
-        vision = new Vision();
+        // vision = new Vision();
 
         driver = new XboxController(0);
         operator = new XboxController(1);
@@ -85,10 +87,12 @@ public class RobotContainer {
         // hood.setDefaultCommand(new ManualHood(hood, controls::getManualHoodSpeed));
         // indexer.setDefaultCommand(autoBallCommand);
         // shooter.setDefaultCommand(autoBallCommand);
-        // turret.setDefaultCommand(new ManualTurret(turret,
+        turret.setDefaultCommand(new ManualTurret(turret, controls::getManualTurretRotationSpeed));
+        // hood.setDefaultCommand(new ManualHood(hood,
+        // controls::getManualHoodRotationSpeed));
+
+        // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
         // controls::getManualTurretRotationSpeed));
-        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision,
-                controls::getManualTurretRotationSpeed));
 
         configureButtonBindings();
     }
@@ -96,10 +100,12 @@ public class RobotContainer {
     public void onEnable() {
         intake.spinForward().schedule();
         indexer.spinFeederBackwards().schedule();
+
         grabber.resetPID();
-        new ZeroGrabber(grabber).schedule();
-        hood.resetPID();
+        // hood.resetPID();
         turret.resetPID();
+
+        new ZeroGrabber(grabber, intake).schedule();
     }
 
     public void onDisable() {
@@ -136,14 +142,26 @@ public class RobotContainer {
                         grabber.setTargetArmAngleCommand(ArmPosition.STORE),
                         grabber.stopFlywheelsCommand()));
 
-        // Grab bunny from floor
-        new POVButton(operator, 270) // left
+        // Grab bunny from tote
+        new POVButton(operator, 0) // up
                 .onTrue(Commands.parallel(
                         grabber.setTargetArmAngleCommand(ArmPosition.TOTE),
                         grabber.runFlywheelsIntakeCommand()))
                 .onFalse(Commands.parallel(
                         grabber.setTargetArmAngleCommand(ArmPosition.STORE),
                         grabber.stopFlywheelsCommand()));
+
+        // Eject bunny
+        new POVButton(operator, 270) // left
+                .whileTrue(Commands.sequence(
+                        grabber.setTargetArmAngleCommand(ArmPosition.TOTE),
+                        intake.stopWheels(),
+                        Commands.waitSeconds(0.5),
+                        grabber.runFlywheelsEjectCommand()))
+                .onFalse(Commands.parallel(
+                        intake.spinForward(),
+                        grabber.stopFlywheelsCommand(),
+                        grabber.setTargetArmAngleCommand(ArmPosition.STORE)));
 
         // Eject bunny
         new POVButton(operator, 90) // right
@@ -158,15 +176,15 @@ public class RobotContainer {
                         grabber.setTargetArmAngleCommand(ArmPosition.STORE)));
 
         // Eject bunny forward
-        new POVButton(operator, 0) // up
-                .whileTrue(Commands.sequence(
-                        grabber.setTargetArmAngleCommand(ArmPosition.STOW),
-                        intake.stopWheels(),
-                        Commands.waitSeconds(0.5),
-                        grabber.runFlywheelsEjectCommand()))
-                .onFalse(Commands.parallel(
-                        intake.spinForward(),
-                        grabber.stopFlywheelsCommand()));
+        // new POVButton(operator, 0) // up
+        // .whileTrue(Commands.sequence(
+        // grabber.setTargetArmAngleCommand(ArmPosition.STOW),
+        // intake.stopWheels(),
+        // Commands.waitSeconds(0.5),
+        // grabber.runFlywheelsEjectCommand()))
+        // .onFalse(Commands.parallel(
+        // intake.spinForward(),
+        // grabber.stopFlywheelsCommand()));
 
         // Right Bumper (toggle) - toggle auto shooter
         // new JoystickButton(operator, Button.kRightBumper.value)
@@ -207,7 +225,7 @@ public class RobotContainer {
         // */;
 
         new JoystickButton(operator, Button.kA.value)
-                .whileTrue(new ZeroGrabber(grabber));
+                .whileTrue(new ZeroGrabber(grabber, intake));
 
         // // Y (hold) - eject bunnies
         // new JoystickButton(operator, Button.kY.value)

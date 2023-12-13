@@ -137,7 +137,8 @@ public final class Constants {
      */
 
     public static final class HoodConfig {
-        public static final double MANUAL_ROTATION_SPEED = 3;
+        public static final double MANUAL_ROTATION_MULTIPLIER = 3;
+        public static final double MOTOR_ZERO_SPEED = 0.1;
 
         // Encoder rotations to degrees
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 120.0;

@@ -27,7 +27,7 @@ public class Turret extends SubsystemBase {
 
     private double targetRotation;
 
-    public boolean runPID = true;
+    private boolean runPID = true;
 
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);

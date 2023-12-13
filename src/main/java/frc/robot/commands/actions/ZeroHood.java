@@ -7,43 +7,48 @@ package frc.robot.commands.actions;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.ControllerRumbler;
-import frc.robot.Constants.TurretConfig;
-import frc.robot.subsystems.Turret;
+import frc.robot.Constants.GrabberConfig;
+import frc.robot.Constants.HoodConfig;
+import frc.robot.Constants.GrabberConfig.ArmPosition;
+import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Hood;
 
-public class ZeroTurret extends CommandBase {
-  private final Turret turret;
+public class ZeroHood extends CommandBase {
+  private final Hood hood;
 
-  public ZeroTurret(Turret turret) {
-    this.turret = turret;
+  public ZeroHood(Hood hood) {
+    this.hood = hood;
 
-    addRequirements(turret);
+    addRequirements(hood);
   }
 
   @Override
   public void initialize() {
-    turret.stopPID();
+    hood.stopPID();
   }
 
   @Override
   public void execute() {
-    turret.outputToMotor(-TurretConfig.ZERO_TURRET_SPEED);
+    hood.outputToMotor(-HoodConfig.MOTOR_ZERO_SPEED);
   }
 
   @Override
   public void end(boolean interrupted) {
     if (!interrupted) {
-      turret.setEncoderPosition(0);
+      hood.setEncoderPosition(0);
       ControllerRumbler.rumblerOperator(RumbleType.kBothRumble, 0.3, 0.7);
     } else {
-      turret.setTargetRotation(turret.getCurrentRotation());
+      hood.setTargetRotation(hood.getCurrentRotation());
     }
 
-    turret.resetPID();
-    turret.startPID();
+    hood.resetPID();
+    hood.startPID();
   }
 
   @Override
   public boolean isFinished() {
-    return turret.limitSwitchPressed();
+    System.out.println(hood.getVelocity());
+    // return hood.limitSwitchPressed();
+    return false;
   }
 }
