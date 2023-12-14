@@ -96,7 +96,7 @@ public final class Constants {
         public static final double WANDER_VELOCITY = MAX_VELOCITY / 20; // deg/sec
         public static final double WANDER_ACCELERATION = MAX_ACCELERATION / 10; // deg/sec/sec
 
-        public static final double MAX_ALLOWED_ROTATION = 90; // degrees
+        public static final double MAX_ALLOWED_ROTATION = 30; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
@@ -142,7 +142,7 @@ public final class Constants {
 
     public static final class HoodConfig {
         public static final double MANUAL_ROTATION_MULTIPLIER = 3;
-        public static final double MOTOR_ZERO_SPEED = 0.1;
+        public static final double MOTOR_ZERO_SPEED = 0.075;
 
         // Encoder rotations to degrees
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 120.0;
@@ -154,6 +154,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 300; // deg/sec
         public static final double MAX_ACCELERATION = 300; // deg/sec/sec
 
+        public static final int LIMIT_SWITCH_PORT = 1;
     }
 
     public static final class IntakeConfig {

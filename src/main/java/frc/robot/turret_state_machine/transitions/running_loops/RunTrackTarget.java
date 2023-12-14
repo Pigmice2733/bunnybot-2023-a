@@ -22,7 +22,6 @@ public class RunTrackTarget extends RunningLoop<TurretState, TurretData> {
             return 10;
 
         double angle = 79.6 - 59.1 * targetArea + 6.16 * targetArea * targetArea;
-        System.out.println(targetArea + " " + angle);
         angle = MathUtil.clamp(angle, 0, 95);
         return angle;
     }

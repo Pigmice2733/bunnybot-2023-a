@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANConfig;
@@ -19,6 +20,7 @@ import frc.robot.Constants.HoodConfig;
 public class Hood extends SubsystemBase {
     private final CANSparkMax rotationMotor;
     private final ProfiledPIDController rotationController;
+    private final DigitalInput limitSwitch;
 
     private boolean runPID = true;
 
@@ -35,6 +37,8 @@ public class Hood extends SubsystemBase {
         rotationMotor.restoreFactoryDefaults();
         rotationMotor.setInverted(false);
 
+        limitSwitch = new DigitalInput(HoodConfig.LIMIT_SWITCH_PORT);
+
         // Convert to arm rotations in degrees
         rotationMotor.setIdleMode(IdleMode.kCoast);
 
@@ -48,10 +52,11 @@ public class Hood extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Motor Output", Constants.HOOD_TAB, () -> rotationMotor.get());
 
+        ShuffleboardHelper.addOutput("Limit Switch", Constants.HOOD_TAB, () -> limitSwitchPressed());
+
         // TODO: Remove after initial tuning
-        // ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) ->
-        // setTargetRotation((double) value),
-        // getCurrentRotation());
+        ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) -> setTargetRotation((double) value),
+                getCurrentRotation());
         ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.HOOD_TAB, rotationController,
                 HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION);
 
@@ -76,6 +81,9 @@ public class Hood extends SubsystemBase {
 
     /** Sets the percent output of the hood rotation motor. */
     public void outputToMotor(double percentOutput) {
+        if (limitSwitchPressed())
+            percentOutput = Math.max(0, percentOutput);
+
         rotationMotor.set(percentOutput);
     }
 
@@ -124,5 +132,9 @@ public class Hood extends SubsystemBase {
 
     public double getVelocity() {
         return rotationMotor.getEncoder().getVelocity();
+    }
+
+    public boolean limitSwitchPressed() {
+        return !limitSwitch.get();
     }
 }

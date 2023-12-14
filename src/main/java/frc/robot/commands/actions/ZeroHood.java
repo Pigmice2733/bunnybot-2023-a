@@ -43,7 +43,6 @@ public class ZeroHood extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    System.out.println(hood.getMotorCurrent());
-    return Math.abs(hood.getMotorCurrent()) > 0.5;
+    return hood.limitSwitchPressed();
   }
 }
