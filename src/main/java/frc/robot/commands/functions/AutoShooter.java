@@ -31,8 +31,7 @@ public class AutoShooter extends CommandBase {
 
     @Override
     public void execute() {
-        if (vision.getCurrentTarget() != null
-                && turret.getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY) {
+        if (turret.getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY && vision.getCurrentTarget() != null) {
             if (!isShooting) {
                 isShooting = true;
                 shootCommand = new ShootTargetNew(hood, shooter, vision);

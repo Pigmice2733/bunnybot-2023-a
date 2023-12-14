@@ -47,8 +47,6 @@ public class Vision extends SubsystemBase {
             currentTarget = null;
             return;
         }
-
-        currentTarget = results.getBestTarget();
     }
 
     public PhotonTrackedTarget getCurrentTarget() {

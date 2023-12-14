@@ -30,8 +30,7 @@ public class AutoIndexer extends CommandBase {
 
     @Override
     public void execute() {
-        if (vision.getCurrentTarget() != null
-                && turret.getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY) {
+        if (turret.getTurretVelocity() < TurretConfig.MAX_FIRE_VELOCITY && vision.getCurrentTarget() != null) {
             if (!isMoving) {
                 isMoving = true;
                 indexerCommand = new FeedShooter(indexer);

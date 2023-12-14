@@ -291,6 +291,8 @@ public final class Constants {
 
         // All motor outputs in percent (-1 -> 1)
         public static final double SHOOTER_EJECTION_SPEED = -0.1;
+
+        public static final String FETCH_BUNNY_PATH = "fetch-bunny";
     }
 
 }

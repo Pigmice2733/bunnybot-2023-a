@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 
@@ -11,19 +13,21 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
-import frc.robot.Constants.HoodConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
-import frc.robot.commands.ManualTurret;
 import frc.robot.commands.RunTurretStateMachine;
 import frc.robot.commands.TrackTargetWithDrivetrain;
 import frc.robot.commands.actions.ZeroGrabber;
 import frc.robot.commands.actions.ZeroHood;
+import frc.robot.commands.auto_routines.FetchBunny;
+import frc.robot.commands.functions.AutoShooter;
 import frc.robot.commands.functions.RepeatFireShooter;
 import frc.robot.commands.functions.ThrowBunny;
 import frc.robot.subsystems.Grabber;
@@ -57,7 +61,11 @@ public class RobotContainer {
     private final XboxController operator;
     private final Controls controls;
 
-    // private final AutoShooter autoBallCommand;
+    // Commands to fetch bunnies
+    private final SendableChooser<Command> autoChooserBunny = new SendableChooser<Command>();
+
+    // Commands to run the shooter
+    private final SendableChooser<Command> autoChooserShooter = new SendableChooser<Command>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -98,6 +106,30 @@ public class RobotContainer {
                 controls::getManualTurretRotationSpeed));
 
         configureButtonBindings();
+        configureAutoChoosers();
+    }
+
+    private void configureAutoChoosers() {
+        List<Command> bunnyCommands = List.of(
+                new FetchBunny(drivetrain, grabber));
+
+        List<Command> shooterCommands = List.of(
+                new AutoShooter(hood, indexer, shooter, turret, vision));
+
+        Constants.DRIVER_TAB.add("Bunny Auto", autoChooserBunny);
+        Constants.DRIVER_TAB.add("Shooter Auto", autoChooserShooter);
+
+        bunnyCommands.forEach(command -> {
+            autoChooserBunny.addOption(command.getName(), command);
+        });
+
+        shooterCommands.forEach(command -> {
+            autoChooserShooter.addOption(command.getName(), command);
+        });
+
+        // Default to doing nothing
+        autoChooserBunny.setDefaultOption("None", new InstantCommand());
+        autoChooserShooter.setDefaultOption("None", new InstantCommand());
     }
 
     public void onEnable() {
@@ -250,6 +282,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoCommand;
+        return new ParallelCommandGroup(autoChooserBunny.getSelected(), autoChooserShooter.getSelected());
     }
 }
