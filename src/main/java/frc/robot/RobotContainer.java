@@ -7,8 +7,6 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-
 import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.path_following.FollowPathSwerve;
@@ -21,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
