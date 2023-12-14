@@ -94,8 +94,8 @@ public class RobotContainer {
         // hood.setDefaultCommand(new ManualHood(hood,
         // controls::getManualHoodRotationSpeed));
 
-        // turret.setDefaultCommand(new RunTurretStateMachine(turret, vision, hood,
-        // controls::getManualTurretRotationSpeed));
+        turret.setDefaultCommand(new RunTurretStateMachine(turret, vision, hood,
+                controls::getManualTurretRotationSpeed));
 
         configureButtonBindings();
     }

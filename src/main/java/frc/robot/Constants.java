@@ -147,12 +147,12 @@ public final class Constants {
         // Encoder rotations to degrees
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 120.0;
 
-        public static final double HOOD_P = 0.045;
+        public static final double HOOD_P = 0.056;
         public static final double HOOD_I = 0.0;
         public static final double HOOD_D = 0.0;
 
-        public static final double MAX_VELOCITY = 300; // deg/sec
-        public static final double MAX_ACCELERATION = 300; // deg/sec/sec
+        public static final double MAX_VELOCITY = 450; // deg/sec
+        public static final double MAX_ACCELERATION = 450; // deg/sec/sec
 
         public static final int LIMIT_SWITCH_PORT = 1;
     }

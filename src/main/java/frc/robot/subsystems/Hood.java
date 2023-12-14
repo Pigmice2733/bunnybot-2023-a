@@ -55,8 +55,10 @@ public class Hood extends SubsystemBase {
         ShuffleboardHelper.addOutput("Limit Switch", Constants.HOOD_TAB, () -> limitSwitchPressed());
 
         // TODO: Remove after initial tuning
-        ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) -> setTargetRotation((double) value),
-                getCurrentRotation());
+        // ShuffleboardHelper.addInput("Angle Input", Constants.HOOD_TAB, (value) ->
+        // setTargetRotation((double) value),
+        // getCurrentRotation());
+
         ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.HOOD_TAB, rotationController,
                 HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION);
 
