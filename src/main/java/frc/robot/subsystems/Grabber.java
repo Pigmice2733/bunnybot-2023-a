@@ -133,7 +133,7 @@ public class Grabber extends SubsystemBase {
     public Command setTargetArmAngleCommand(ArmPosition position) {
         switch (position) {
             case STOW:
-                return Commands.runOnce(() -> setTargetRotation(15));
+                return Commands.runOnce(() -> setTargetRotation(5));
             case STORE:
                 return Commands.runOnce(() -> setTargetRotation(45));
             case TOTE:

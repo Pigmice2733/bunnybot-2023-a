@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import java.util.HashMap;
 import java.util.List;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
+import com.pigmice.frc.lib.drivetrain.swerve.commands.path_following.FollowPathSwerve;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -62,7 +66,7 @@ public class RobotContainer {
     private final Controls controls;
 
     // Commands to fetch bunnies
-    private final SendableChooser<Command> autoChooserBunny = new SendableChooser<Command>();
+    private final SendableChooser<Command> autoChooserDrive = new SendableChooser<Command>();
 
     // Commands to run the shooter
     private final SendableChooser<Command> autoChooserShooter = new SendableChooser<Command>();
@@ -110,17 +114,29 @@ public class RobotContainer {
     }
 
     private void configureAutoChoosers() {
-        List<Command> bunnyCommands = List.of(
-                new FetchBunny(drivetrain, grabber));
+        HashMap<String, Command> pathEvents = new HashMap<String, Command>();
+
+        pathEvents.put("test-event",
+                Commands.runOnce(() -> {
+                    System.out.println("HOLY SHIT IT WORKED");
+                    System.out.println("HOLY SHIT IT WORKED");
+                    System.out.println("HOLY SHIT IT WORKED");
+                    System.out.println("HOLY SHIT IT WORKED");
+                    System.out.println("HOLY SHIT IT WORKED");
+                    System.out.println("HOLY SHIT IT WORKED");
+                }));
+        List<Command> driveCommands = List.of(
+                new FetchBunny(drivetrain, grabber).withName("Fetch Bunny"),
+                new FollowPathSwerve(drivetrain, "test", pathEvents, false).withName("Test"));
 
         List<Command> shooterCommands = List.of(
-                new AutoShooter(hood, indexer, shooter, turret, vision));
+                new AutoShooter(hood, indexer, shooter, turret, vision).withName("Shoot Balls"));
 
-        Constants.DRIVER_TAB.add("Bunny Auto", autoChooserBunny);
+        Constants.DRIVER_TAB.add("Bunny Auto", autoChooserDrive);
         Constants.DRIVER_TAB.add("Shooter Auto", autoChooserShooter);
 
-        bunnyCommands.forEach(command -> {
-            autoChooserBunny.addOption(command.getName(), command);
+        driveCommands.forEach(command -> {
+            autoChooserDrive.addOption(command.getName(), command);
         });
 
         shooterCommands.forEach(command -> {
@@ -128,7 +144,7 @@ public class RobotContainer {
         });
 
         // Default to doing nothing
-        autoChooserBunny.setDefaultOption("None", new InstantCommand());
+        autoChooserDrive.setDefaultOption("None", new InstantCommand());
         autoChooserShooter.setDefaultOption("None", new InstantCommand());
     }
 
@@ -282,6 +298,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new ParallelCommandGroup(autoChooserBunny.getSelected(), autoChooserShooter.getSelected());
+        return autoChooserDrive.getSelected();
+        // return new ParallelCommandGroup(autoChooserDrive.getSelected(),
+        // autoChooserShooter.getSelected());
     }
 }

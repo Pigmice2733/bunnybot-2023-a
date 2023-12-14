@@ -10,7 +10,7 @@
         "x": 2.0,
         "y": 1.7
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -24,18 +24,18 @@
     },
     {
       "anchorPoint": {
-        "x": 7.1,
-        "y": 1.7
+        "x": 5.0,
+        "y": 1.688272966029218
       },
       "prevControl": {
-        "x": 6.1,
-        "y": 1.7
+        "x": 4.0,
+        "y": 1.688272966029218
       },
       "nextControl": {
-        "x": 6.1,
-        "y": 1.7
+        "x": 4.0,
+        "y": 1.688272966029218
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
@@ -49,15 +49,40 @@
     },
     {
       "anchorPoint": {
-        "x": 1.0069797184664366,
-        "y": 1.7
+        "x": 2.6952526844956566,
+        "y": 1.688272966029218
       },
       "prevControl": {
-        "x": 2.003529733136462,
-        "y": 1.6896500440100757
+        "x": 3.1759415151011985,
+        "y": 1.688272966029218
+      },
+      "nextControl": {
+        "x": 2.0800163035030095,
+        "y": 1.688272966029218
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 0.9718073650074944,
+        "y": 1.6999970838488674
+      },
+      "prevControl": {
+        "x": 1.9683573796775198,
+        "y": 1.689647127858943
       },
       "nextControl": null,
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 0.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -72,19 +97,19 @@
   ],
   "markers": [
     {
-      "position": 1.0,
+      "position": 0.7127272727272854,
       "names": [
-        "grabber-up"
+        "lower-grabber"
       ]
     },
     {
-      "position": 1.66,
+      "position": 1.0327272727272878,
       "names": [
-        "grabber-down"
+        "raise-grabber"
       ]
     },
     {
-      "position": 2.0,
+      "position": 3.0,
       "names": [
         "drop-bunny"
       ]
