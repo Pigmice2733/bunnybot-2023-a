@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -87,14 +88,8 @@ public final class Constants {
         public static final double ROTATION_I = 0.00;
         public static final double ROTATION_D = 0.00;
 
-        public static final double MAX_VELOCITY = 50; // deg/sec
-        public static final double MAX_ACCELERATION = 100; // deg/sec/sec
-
-        public static final double WANDER_VEL = MAX_VELOCITY;
-        public static final double WANDER_ACC = MAX_ACCELERATION;
-
-        public static final double WANDER_VELOCITY = MAX_VELOCITY / 20; // deg/sec
-        public static final double WANDER_ACCELERATION = MAX_ACCELERATION / 10; // deg/sec/sec
+        public static final Constraints DEFAULT_CONSTRAINTS = new Constraints(150, 250);
+        public static final Constraints WANDER_CONSTRAINTS = new Constraints(50, 100);
 
         public static final double MAX_ALLOWED_ROTATION = 120; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees

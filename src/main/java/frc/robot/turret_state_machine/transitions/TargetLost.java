@@ -1,5 +1,6 @@
 package frc.robot.turret_state_machine.transitions;
 
+import frc.robot.Constants.TurretConfig;
 import frc.robot.commands.RunTurretStateMachine.TurretData;
 import frc.robot.commands.RunTurretStateMachine.TurretState;
 import frc.robot.turret_state_machine.Transition;

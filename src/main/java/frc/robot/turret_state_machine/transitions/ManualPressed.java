@@ -22,7 +22,7 @@ public class ManualPressed extends Transition<TurretState, TurretData> {
     @Override
     public TurretState execute(TurretData turretData) {
         turretData.setTurretConstraints
-                .accept(new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION));
+                .accept(TurretConfig.DEFAULT_CONSTRAINTS);
         return to;
     }
 }

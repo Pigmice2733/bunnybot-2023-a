@@ -13,6 +13,8 @@ public class RunWanderRight extends RunningLoop<TurretState, TurretData> {
 
     @Override
     protected void run(TurretData turretData) {
+        turretData.setTurretConstraints
+                .accept(TurretConfig.WANDER_CONSTRAINTS);
         turretData.setTargetRotation.accept(TurretConfig.WANDER_LIMIT + 5);
     }
 }
