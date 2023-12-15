@@ -96,7 +96,7 @@ public final class Constants {
         public static final double WANDER_VELOCITY = MAX_VELOCITY / 20; // deg/sec
         public static final double WANDER_ACCELERATION = MAX_ACCELERATION / 10; // deg/sec/sec
 
-        public static final double MAX_ALLOWED_ROTATION = 30; // degrees
+        public static final double MAX_ALLOWED_ROTATION = 120; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
@@ -159,6 +159,7 @@ public final class Constants {
 
     public static final class IntakeConfig {
         public static final double INTAKE_SPEED = 0.3;
+        public static final double OVER_BUMPER_SPEED_MULTIPLIER = 1;
     }
 
     public static final class IndexerConfig {

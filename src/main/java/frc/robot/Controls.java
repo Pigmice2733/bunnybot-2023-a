@@ -35,7 +35,7 @@ public class Controls {
     // }
 
     public double getManualTurretRotationSpeed() {
-        joystickTurret = MathUtil.applyDeadband(operator.getLeftX(), threshold);
+        joystickTurret = MathUtil.applyDeadband(operator.getRightX(), threshold);
         return joystickTurret * TurretConfig.MANUAL_ROTATION_MULTIPLIER;
     }
 

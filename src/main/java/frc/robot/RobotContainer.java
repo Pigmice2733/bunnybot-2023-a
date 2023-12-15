@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
-import frc.robot.commands.TrackTargetWithDrivetrain;
 import frc.robot.commands.actions.ZeroGrabber;
 import frc.robot.commands.actions.ZeroHood;
 import frc.robot.commands.auto_routines.FetchBunny;
@@ -115,12 +114,7 @@ public class RobotContainer {
 
         pathEvents.put("test-event",
                 Commands.runOnce(() -> {
-                    System.out.println("HOLY SHIT IT WORKED");
-                    System.out.println("HOLY SHIT IT WORKED");
-                    System.out.println("HOLY SHIT IT WORKED");
-                    System.out.println("HOLY SHIT IT WORKED");
-                    System.out.println("HOLY SHIT IT WORKED");
-                    System.out.println("HOLY SHIT IT WORKED");
+
                 }));
         List<Command> driveCommands = List.of(
                 new FetchBunny(drivetrain, grabber).withName("Fetch Bunny"),
@@ -244,11 +238,11 @@ public class RobotContainer {
         // X (hold) - fire shooter
         new JoystickButton(operator, Button.kRightBumper.value)
                 .onTrue(Commands.parallel(Commands.runOnce(() -> hood.stopPID()),
-                        Commands.runOnce(() -> turret.stopPID())))
+                        Commands.runOnce(() -> turret.stopSetRot = true)))
                 .whileTrue(new RepeatFireShooter(indexer, shooter))
                 .onFalse(Commands.parallel(shooter.stopFlywheel(), indexer.spinFeederBackwards(),
                         Commands.runOnce(() -> hood.startPID()),
-                        Commands.runOnce(() -> turret.startPID())));
+                        Commands.runOnce(() -> turret.stopSetRot = false)));
 
         // Throw bunny
         new JoystickButton(operator, Button.kStart.value)
@@ -286,8 +280,6 @@ public class RobotContainer {
         // grabber.setTargetArmAngleCommand(ArmPosition.UP),
         // grabber.stopFlywheelsCommand()));
     }
-
-    TrackTargetWithDrivetrain autoCommand;
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

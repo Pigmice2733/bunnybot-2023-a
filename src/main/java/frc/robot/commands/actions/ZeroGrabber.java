@@ -6,6 +6,7 @@ package frc.robot.commands.actions;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.ControllerRumbler;
 import frc.robot.Constants.GrabberConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
@@ -48,7 +49,7 @@ public class ZeroGrabber extends CommandBase {
     grabber.startPID();
     grabber.setTargetArmAngleCommand(ArmPosition.STOW).schedule();
 
-    intake.spinForward();
+    Commands.sequence(Commands.waitSeconds(1.5), intake.spinForward()).schedule();
   }
 
   @Override
