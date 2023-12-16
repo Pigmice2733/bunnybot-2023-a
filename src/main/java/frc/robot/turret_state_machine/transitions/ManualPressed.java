@@ -1,6 +1,5 @@
 package frc.robot.turret_state_machine.transitions;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConfig;
 import frc.robot.commands.RunTurretStateMachine.TurretData;

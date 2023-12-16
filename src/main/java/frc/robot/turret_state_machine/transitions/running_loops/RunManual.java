@@ -12,6 +12,6 @@ public class RunManual extends RunningLoop<TurretState, TurretData> {
 
     @Override
     protected void run(TurretData turretData) {
-        turretData.setTargetRotation.accept(turretData.manualRotationSpeed);
+        turretData.changeTargetRotation.accept(turretData.manualRotationSpeed);
     }
 }

@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -28,6 +29,8 @@ public class Turret extends SubsystemBase {
 
     private boolean runPID = true;
     public boolean stopSetRot = false;
+
+    private Constraints constraints = TurretConfig.DEFAULT_CONSTRAINTS;
 
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
@@ -87,7 +90,7 @@ public class Turret extends SubsystemBase {
             return;
 
         double calculatedOutput = rotationController.calculate(getCurrentRotation(),
-                targetRotation);
+                new State(targetRotation, 0.0), constraints);
         outputToMotor(calculatedOutput);
     }
 
@@ -139,8 +142,8 @@ public class Turret extends SubsystemBase {
      * Sets the max velocity and acceleration of the turret as a Constraints object.
      */
     public void setPIDConstraints(Constraints constraints) {
-        System.out.println("set constrains");
-        rotationController.setConstraints(constraints);
+        System.out.println("set constrains " + constraints.maxVelocity);
+        this.constraints = constraints;
     }
 
     public void setEncoderPosition(double position) {

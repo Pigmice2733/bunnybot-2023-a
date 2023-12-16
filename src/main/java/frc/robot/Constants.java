@@ -78,7 +78,7 @@ public final class Constants {
     }
 
     public static final class TurretConfig {
-        public static final double MANUAL_ROTATION_MULTIPLIER = 30;
+        public static final double MANUAL_ROTATION_MULTIPLIER = 20;
 
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 342.4; // encoder
         // rot to deg
