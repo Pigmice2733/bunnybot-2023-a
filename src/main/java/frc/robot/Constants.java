@@ -100,7 +100,7 @@ public final class Constants {
         public static final Constraints WANDER_CONSTRAINTS = new Constraints(50,
                 100);
 
-        public static final double MAX_ALLOWED_ROTATION = 120; // degrees
+        public static final double MAX_ALLOWED_ROTATION = 90; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
@@ -319,7 +319,7 @@ public final class Constants {
         // All times in seconds
         public static final double FEED_SHOOTER_INDEX_TIME = 0.15;
         public static final double TIME_BETWEEN_SHOTS = 1;
-        public static final double SHOOTER_SPINUP_TIME = 1.2;
+        public static final double SHOOTER_SPINUP_TIME = 1.5;
         public static final double EJECT_ALL_TIME = 5;
 
         // All motor outputs in percent (-1 -> 1)
