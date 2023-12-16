@@ -113,7 +113,7 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
         public static final double DEFAULT_OUTPUT = 1;
-        public static final double IDLE_SPEED = 0.3;
+        public static final double IDLE_SPEED = 0;
     }
 
     /*
@@ -168,8 +168,8 @@ public final class Constants {
         public static final double ARM_I = 0.000;
         public static final double ARM_D = 0.000;
 
-        public static final double MAX_VELOCITY = 500; // 1200; // deg/sec
-        public static final double MAX_ACCELERATION = 900; // 1200; // deg/sec/sec
+        public static final double MAX_VELOCITY = 375; // 1200; // deg/sec
+        public static final double MAX_ACCELERATION = 7; // 1200; // deg/sec/sec
 
         public static final double ROTATION_CONVERSION = 0.00007004 * 90; // encoder rotation to arm rotations (TODO)
 
@@ -216,7 +216,7 @@ public final class Constants {
                 0.35493, 2.3014, 0.12872);
 
         // From what I have seen, it is common to only use a P value in path following
-        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(1, 1); // 3, 2.5
+        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(1.65, 2); // 3, 2.5
         private static final PIDController PATH_DRIVE_PID = new PIDController(0.3, 0, 0);
         private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
 
@@ -290,7 +290,5 @@ public final class Constants {
 
         public static final String FETCH_BUNNY_PATH = "fetch-bunny";
         public static final String FETCH_BUNNY_PATH_NO_SHOOT = "fetch-bunny-no-shoot";
-
     }
-
 }
