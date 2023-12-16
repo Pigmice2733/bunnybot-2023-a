@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.pigmice.frc.lib.drivetrain.swerve.SwerveDrivetrain;
 import com.pigmice.frc.lib.drivetrain.swerve.commands.DriveWithJoysticksSwerve;
@@ -62,10 +63,10 @@ public class RobotContainer {
         private final Controls controls;
 
         // Commands to fetch bunnies
-        private final SendableChooser<Command> autoChooserDrive = new SendableChooser<Command>();
+        private final SendableChooser<Supplier<Command>> autoChooserDrive = new SendableChooser<Supplier<Command>>();
 
         // Commands to run the shooter
-        private final SendableChooser<Command> autoChooserShooter = new SendableChooser<Command>();
+        private final SendableChooser<Supplier<Command>> autoChooserShooter = new SendableChooser<Supplier<Command>>();
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -110,25 +111,21 @@ public class RobotContainer {
         }
 
         private void configureAutoChoosers() {
-                List<Command> driveCommands = List.of(
-                                new FetchBunny(drivetrain, grabber).withName("Fetch Bunny"));
-                List<Command> shooterCommands = List.of(
-                                new AutoShooting(turret, shooter, indexer).withName("Auto Shooter"));
+                autoChooserShooter.addOption("Fetch bunny",
+                                () -> new FetchBunny(drivetrain, grabber).withName("Fetch Bunny"));
+
+                autoChooserShooter.addOption("Auto Shooter",
+                                () -> new AutoShooting(turret, shooter, indexer).withName("Auto Shooter"));
 
                 Constants.DRIVER_TAB.add("Bunny Auto", autoChooserDrive);
                 Constants.DRIVER_TAB.add("Shooter Auto", autoChooserShooter);
 
-                driveCommands.forEach(command -> {
-                        autoChooserDrive.addOption(command.getName(), command);
-                });
-
-                shooterCommands.forEach(command -> {
-                        autoChooserShooter.addOption(command.getName(), command);
-                });
-
                 // Default to doing nothing
-                autoChooserDrive.setDefaultOption("None", new InstantCommand());
-                autoChooserShooter.setDefaultOption("None", new InstantCommand());
+                autoChooserDrive.setDefaultOption("None", () -> new InstantCommand());
+                autoChooserShooter.setDefaultOption("None", () -> new InstantCommand());
+
+                Constants.DRIVER_TAB.add("Bunny Auto", autoChooserDrive);
+                Constants.DRIVER_TAB.add("Shooter Auto", autoChooserShooter);
         }
 
         public void onEnable() {
@@ -280,7 +277,7 @@ public class RobotContainer {
          */
         public Command getAutonomousCommand() {
                 // return autoChooserDrive.getSelected();
-                return new ParallelCommandGroup(autoChooserDrive.getSelected(),
-                                autoChooserShooter.getSelected());
+                return new ParallelCommandGroup(autoChooserDrive.getSelected().get(),
+                                autoChooserShooter.getSelected().get());
         }
 }
