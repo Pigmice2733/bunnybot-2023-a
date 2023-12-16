@@ -44,7 +44,7 @@
         "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "after",
-        "waitTime": 0
+        "waitTime": 3.0
       }
     },
     {
