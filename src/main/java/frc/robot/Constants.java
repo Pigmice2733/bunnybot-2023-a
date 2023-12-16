@@ -34,14 +34,22 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
  */
 public final class Constants {
     public static final ShuffleboardTab HOOD_TAB = Shuffleboard.getTab("Hood");
-    public static final ShuffleboardTab TURRET_TAB = Shuffleboard.getTab("Turret");
-    public static final ShuffleboardTab SWERVE_TAB = Shuffleboard.getTab("Drivetrain");
-    public static final ShuffleboardTab VISION_TAB = Shuffleboard.getTab("Vision");
-    public static final ShuffleboardTab GRABBER_TAB = Shuffleboard.getTab("Grabber");
-    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
-    public static final ShuffleboardTab INDEXER_TAB = Shuffleboard.getTab("Indexer");
-    public static final ShuffleboardTab INTAKE_TAB = Shuffleboard.getTab("Intake");
-    public static final ShuffleboardTab DRIVER_TAB = Shuffleboard.getTab("Driver");
+    public static final ShuffleboardTab TURRET_TAB = Shuffleboard
+            .getTab("Turret");
+    public static final ShuffleboardTab SWERVE_TAB = Shuffleboard
+            .getTab("Drivetrain");
+    public static final ShuffleboardTab VISION_TAB = Shuffleboard
+            .getTab("Vision");
+    public static final ShuffleboardTab GRABBER_TAB = Shuffleboard
+            .getTab("Grabber");
+    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard
+            .getTab("Shooter");
+    public static final ShuffleboardTab INDEXER_TAB = Shuffleboard
+            .getTab("Indexer");
+    public static final ShuffleboardTab INTAKE_TAB = Shuffleboard
+            .getTab("Intake");
+    public static final ShuffleboardTab DRIVER_TAB = Shuffleboard
+            .getTab("Driver");
 
     public static final double AXIS_THRESHOLD = 0.25;
 
@@ -87,15 +95,18 @@ public final class Constants {
         public static final double ROTATION_I = 0.00;
         public static final double ROTATION_D = 0.00;
 
-        public static final Constraints DEFAULT_CONSTRAINTS = new Constraints(200, 300);
-        public static final Constraints WANDER_CONSTRAINTS = new Constraints(50, 100);
+        public static final Constraints DEFAULT_CONSTRAINTS = new Constraints(
+                200, 300);
+        public static final Constraints WANDER_CONSTRAINTS = new Constraints(50,
+                100);
 
         public static final double MAX_ALLOWED_ROTATION = 120; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
 
-        public static final double MAX_FIRE_VELOCITY = 1; // max vel a shot is allowed at (TODO)
+        public static final double MAX_FIRE_VELOCITY = 1; // max vel a shot is
+                                                          // allowed at (TODO)
 
         public static final double ZERO_TURRET_SPEED = 0.1;
 
@@ -105,9 +116,10 @@ public final class Constants {
     public static final class ShooterConfig {
 
         private static final double ROTATION_GEAR_RATIO = 1;
-        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO * 360; // encoder
-                                                                                          // rot to
-                                                                                          // deg
+        public static final double ROTATION_MOTOR_CONVERSION = ROTATION_GEAR_RATIO
+                * 360; // encoder
+                       // rot to
+                       // deg
 
         public static final double MAX_VELOCITY = 50; // deg/sec
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
@@ -169,9 +181,14 @@ public final class Constants {
         public static final double ARM_D = 0.000;
 
         public static final double MAX_VELOCITY = 375; // 1200; // deg/sec
-        public static final double MAX_ACCELERATION = 7; // 1200; // deg/sec/sec
+        public static final double MAX_ACCELERATION = 700; // 1200; // deg/sec/sec
 
-        public static final double ROTATION_CONVERSION = 0.00007004 * 90; // encoder rotation to arm rotations (TODO)
+        public static final double ROTATION_CONVERSION = 0.00007004 * 90; // encoder
+                                                                          // rotation
+                                                                          // to
+                                                                          // arm
+                                                                          // rotations
+                                                                          // (TODO)
 
         public static final double MOTOR_ZERO_SPEED = 0.2;
         public static final double MOTOR_ZERO_CURRENT_THRESHOLD = 0.3;
@@ -188,8 +205,10 @@ public final class Constants {
     }
 
     public static final class VisionConfig {
-        public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(42);
-        public static final double TURRET_HEIGHT_METERS = Units.inchesToMeters(37.25);
+        public static final double TARGET_HEIGHT_METERS = Units
+                .inchesToMeters(42);
+        public static final double TURRET_HEIGHT_METERS = Units
+                .inchesToMeters(37.25);
 
         public static final double CAMERA_HEIGHT_METERS = 1; // TODO
         public static final double CAMERA_PITCH_RADIANS = 0; // TODO
@@ -199,16 +218,25 @@ public final class Constants {
         public static final double MAX_DRIVE_SPEED = 4.5; // max meters / second
         public static final double MAX_TURN_SPEED = 5; // max radians / second
 
-        public static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
-                                                                // wheel to another
+        public static final double TRACK_WIDTH_METERS = 0.5842; // distance from
+                                                                // the center of
+                                                                // one
+                                                                // wheel to
+                                                                // another
 
-        public static final double SLOWMODE_MULTIPLIER = 0.25; // TODO discuss with drive team
+        public static final double SLOWMODE_MULTIPLIER = 0.25; // TODO discuss
+                                                               // with drive
+                                                               // team
 
         private final static SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
-                new Translation2d(TRACK_WIDTH_METERS / 2, TRACK_WIDTH_METERS / 2), // Front left
-                new Translation2d(TRACK_WIDTH_METERS / 2, -TRACK_WIDTH_METERS / 2), // Front right
-                new Translation2d(-TRACK_WIDTH_METERS / 2, TRACK_WIDTH_METERS / 2), // Back left
-                new Translation2d(-TRACK_WIDTH_METERS / 2, -TRACK_WIDTH_METERS / 2) // Back right
+                new Translation2d(TRACK_WIDTH_METERS / 2,
+                        TRACK_WIDTH_METERS / 2), // Front left
+                new Translation2d(TRACK_WIDTH_METERS / 2,
+                        -TRACK_WIDTH_METERS / 2), // Front right
+                new Translation2d(-TRACK_WIDTH_METERS / 2,
+                        TRACK_WIDTH_METERS / 2), // Back left
+                new Translation2d(-TRACK_WIDTH_METERS / 2,
+                        -TRACK_WIDTH_METERS / 2) // Back right
         );
 
         // Constants found in Sysid (volts)
@@ -222,8 +250,14 @@ public final class Constants {
 
         // Offset from chassis center that the robot will rotate about
         private static final Translation2d ROTATION_CENTER_OFFSET = /*
-                                                                     * new Translation2d(Units.inchesToMeters(-5),
-                                                                     * Units.inchesToMeters(-10))
+                                                                     * new
+                                                                     * Translation2d
+                                                                     * (Units.
+                                                                     * inchesToMeters
+                                                                     * (-5),
+                                                                     * Units.
+                                                                     * inchesToMeters
+                                                                     * (-10))
                                                                      */
 
                 new Translation2d();
@@ -273,9 +307,12 @@ public final class Constants {
                 .withSteerOffset(Math.toRadians(-285));
 
         public static final SwerveConfig SWERVE_CONFIG = new SwerveConfig(
-                FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE, BACK_LEFT_MODULE, BACK_RIGHT_MODULE,
-                PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID, MAX_DRIVE_SPEED, MAX_TURN_SPEED,
-                SLOWMODE_MULTIPLIER, KINEMATICS, DRIVE_FEED_FORWARD, SWERVE_TAB, ROTATION_CENTER_OFFSET);
+                FRONT_LEFT_MODULE, FRONT_RIGHT_MODULE, BACK_LEFT_MODULE,
+                BACK_RIGHT_MODULE,
+                PATH_CONSTRAINTS, PATH_DRIVE_PID, PATH_TURN_PID,
+                MAX_DRIVE_SPEED, MAX_TURN_SPEED,
+                SLOWMODE_MULTIPLIER, KINEMATICS, DRIVE_FEED_FORWARD, SWERVE_TAB,
+                ROTATION_CENTER_OFFSET);
     }
 
     public static class AutoConfig {
@@ -289,6 +326,7 @@ public final class Constants {
         public static final double SHOOTER_EJECTION_SPEED = -0.1;
 
         public static final String FETCH_BUNNY_PATH = "fetch-bunny";
-        public static final String FETCH_BUNNY_PATH_NO_SHOOT = "fetch-bunny-no-shoot";
+        public static final String FETCH_BUNNY_PATH_NO_SHOOT = "fetch-bunny Copy";
+
     }
 }
