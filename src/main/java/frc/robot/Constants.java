@@ -200,7 +200,7 @@ public final class Constants {
             STOW, STORE, TOTE, GROUND, THROW
         }
 
-        public static final double FLYWHEEL_INTAKE_SPEED = 0.4;
+        public static final double FLYWHEEL_INTAKE_SPEED = 0.6;
         public static final double FLYWHEEL_EJECT_SPEED = -0.4;
     }
 
@@ -244,7 +244,7 @@ public final class Constants {
                 0.35493, 2.3014, 0.12872);
 
         // From what I have seen, it is common to only use a P value in path following
-        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(1.65, 2); // 3, 2.5
+        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(2, 2); // 3, 2.5
         private static final PIDController PATH_DRIVE_PID = new PIDController(0.3, 0, 0);
         private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
 

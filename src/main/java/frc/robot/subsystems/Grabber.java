@@ -72,7 +72,7 @@ public class Grabber extends SubsystemBase {
         ShuffleboardHelper.addOutput("Flywheel vel", Constants.GRABBER_TAB,
                 () -> rotationMotor.getEncoder().getVelocity());
 
-        rotationMotor.setSmartCurrentLimit(20);
+        rotationMotor.setSmartCurrentLimit(40);
 
     }
 
