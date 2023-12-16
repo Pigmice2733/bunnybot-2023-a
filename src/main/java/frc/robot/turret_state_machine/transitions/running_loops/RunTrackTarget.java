@@ -14,7 +14,7 @@ public class RunTrackTarget extends RunningLoop<TurretState, TurretData> {
     @Override
     protected void run(TurretData turretData) {
         turretData.setTargetRotation.accept(turretData.turretRotation + turretData.targetYaw);
-        turretData.setTargetHoodAngle.accept(calculateHoodAngle(turretData.targetArea));
+        turretData.setTargetHoodAngle.accept(calculateHoodAngle(turretData.targetArea * 2.0));
     }
 
     private double calculateHoodAngle(double targetArea) {

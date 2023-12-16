@@ -20,8 +20,6 @@ public class VelocityRight extends Transition<TurretState, TurretData> {
 
     @Override
     public TurretState execute(TurretData turretData) {
-        turretData.setTurretConstraints
-                .accept(new Constraints(TurretConfig.WANDER_VELOCITY, TurretConfig.WANDER_ACCELERATION));
         return to;
     }
 }

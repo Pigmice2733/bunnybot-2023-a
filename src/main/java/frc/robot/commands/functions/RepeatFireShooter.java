@@ -11,10 +11,8 @@ import frc.robot.ControllerRumbler;
 import frc.robot.Constants.AutoConfig;
 import frc.robot.Constants.ShooterConfig;
 import frc.robot.commands.actions.FeedShooter;
-import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Turret;
 
 public class RepeatFireShooter extends SequentialCommandGroup {
     /** Fires the shooter at a set interval until canceled. */

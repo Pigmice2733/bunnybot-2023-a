@@ -27,6 +27,7 @@ public class Turret extends SubsystemBase {
     private double targetRotation;
 
     private boolean runPID = true;
+    public boolean stopSetRot = false;
 
     public Turret() {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
@@ -39,7 +40,7 @@ public class Turret extends SubsystemBase {
 
         rotationController = new ProfiledPIDController(
                 TurretConfig.ROTATION_P, TurretConfig.ROTATION_I, TurretConfig.ROTATION_D,
-                new Constraints(TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION));
+                TurretConfig.DEFAULT_CONSTRAINTS);
 
         // limitSwitch = new DigitalInput(TurretConfig.LIMIT_SWITCH_PORT);
 
@@ -65,10 +66,7 @@ public class Turret extends SubsystemBase {
                 new InstantCommand(() -> rotationMotor.getEncoder().setPosition(0)));
 
         ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.TURRET_TAB, rotationController,
-                TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION);
-
-        rotationMotor.setSmartCurrentLimit(20);
-
+                TurretConfig.DEFAULT_CONSTRAINTS.maxVelocity, TurretConfig.DEFAULT_CONSTRAINTS.maxAcceleration);
     }
 
     /** Resets the controller to the turret's current rotation. */
@@ -113,6 +111,9 @@ public class Turret extends SubsystemBase {
 
     /** Sets the turret's target position. */
     public void setTargetRotation(double targetDegrees) {
+        if (stopSetRot)
+            return;
+
         targetRotation = MathUtil.clamp(targetRotation, -TurretConfig.MAX_ALLOWED_ROTATION,
                 TurretConfig.MAX_ALLOWED_ROTATION);
 
@@ -138,6 +139,7 @@ public class Turret extends SubsystemBase {
      * Sets the max velocity and acceleration of the turret as a Constraints object.
      */
     public void setPIDConstraints(Constraints constraints) {
+        System.out.println("set constrains");
         rotationController.setConstraints(constraints);
     }
 

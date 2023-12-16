@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConfig;
 import frc.robot.Constants.GrabberConfig.ArmPosition;
 import frc.robot.commands.RunTurretStateMachine;
-import frc.robot.commands.TrackTargetWithDrivetrain;
 import frc.robot.commands.actions.ZeroGrabber;
 import frc.robot.commands.actions.ZeroHood;
 import frc.robot.commands.auto_routines.FetchBunny;
@@ -286,8 +285,6 @@ public class RobotContainer {
                 // grabber.setTargetArmAngleCommand(ArmPosition.UP),
                 // grabber.stopFlywheelsCommand()));
         }
-
-        TrackTargetWithDrivetrain autoCommand;
 
         /**
          * Use this to pass the autonomous command to the main {@link Robot} class.

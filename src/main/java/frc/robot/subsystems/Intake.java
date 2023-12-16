@@ -13,16 +13,17 @@ import frc.robot.Constants.IntakeConfig;
 
 public class Intake extends SubsystemBase {
     private final CANSparkMax intakeMotor;
-    private final CANSparkMax overBumperMotor;
+    // private final CANSparkMax overBumperMotor;
 
     public Intake() {
         intakeMotor = new CANSparkMax(CANConfig.INTAKE_WHEELS, MotorType.kBrushless);
         intakeMotor.restoreFactoryDefaults();
         intakeMotor.setInverted(false);
 
-        overBumperMotor = new CANSparkMax(CANConfig.OVER_BUMPER_INTAKE, MotorType.kBrushless);
-        overBumperMotor.restoreFactoryDefaults();
-        overBumperMotor.setInverted(false);
+        // overBumperMotor = new CANSparkMax(CANConfig.OVER_BUMPER_INTAKE,
+        // MotorType.kBrushless);
+        // overBumperMotor.restoreFactoryDefaults();
+        // overBumperMotor.setInverted(false);
 
         ShuffleboardHelper.addOutput("Motor Output", Constants.INTAKE_TAB, () -> intakeMotor.get());
 
@@ -33,7 +34,7 @@ public class Intake extends SubsystemBase {
     /** Sets the intake motor to a percent output (0.0 - 1.0) */
     public void outputToMotors(double percent) {
         intakeMotor.set(-percent);
-        overBumperMotor.set(percent);
+        // overBumperMotor.set(percent * IntakeConfig.OVER_BUMPER_SPEED_MULTIPLIER);
     }
 
     /** Spins intake wheels to intake balls. */
