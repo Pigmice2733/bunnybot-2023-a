@@ -15,51 +15,51 @@ import frc.robot.Constants;
 import frc.robot.Constants.VisionConfig;
 
 public class Vision extends SubsystemBase {
-        private final PhotonCamera camera = new PhotonCamera("HD_Pro_Webcam_C920");
-        private PhotonTrackedTarget currentTarget;
+    private final PhotonCamera camera = new PhotonCamera("HD_Pro_Webcam_C920");
+    private PhotonTrackedTarget currentTarget;
 
-        public Vision() {
-                ShuffleboardHelper
-                                .addOutput("Yaw", Constants.VISION_TAB,
-                                                () -> currentTarget == null ? 0 : currentTarget.getYaw())
-                                .asDial(-180, 180);
+    public Vision() {
+        ShuffleboardHelper
+                .addOutput("Yaw", Constants.VISION_TAB,
+                        () -> currentTarget == null ? 0 : currentTarget.getYaw())
+                .asDial(-180, 180);
 
-                ShuffleboardHelper
-                                .addOutput("Pitch", Constants.VISION_TAB,
-                                                () -> currentTarget == null ? 0 : currentTarget.getPitch())
-                                .asDial(-180, 180);
+        ShuffleboardHelper
+                .addOutput("Pitch", Constants.VISION_TAB,
+                        () -> currentTarget == null ? 0 : currentTarget.getPitch())
+                .asDial(-180, 180);
 
-                ShuffleboardHelper
-                                .addOutput("Skew", Constants.VISION_TAB,
-                                                () -> currentTarget == null ? 0 : currentTarget.getSkew())
-                                .asDial(-180, 180);
+        ShuffleboardHelper
+                .addOutput("Skew", Constants.VISION_TAB,
+                        () -> currentTarget == null ? 0 : currentTarget.getSkew())
+                .asDial(-180, 180);
 
-                ShuffleboardHelper
-                                .addOutput("Area", Constants.VISION_TAB,
-                                                () -> currentTarget == null ? 0 : currentTarget.getArea())
-                                .asDial(0, 1);
+        ShuffleboardHelper
+                .addOutput("Area", Constants.VISION_TAB,
+                        () -> currentTarget == null ? 0 : currentTarget.getArea())
+                .asDial(0, 1);
+    }
+
+    @Override
+    public void periodic() {
+        PhotonPipelineResult results = camera.getLatestResult();
+        if (!results.hasTargets()) {
+            currentTarget = null;
+            return;
         }
 
-        @Override
-        public void periodic() {
-                PhotonPipelineResult results = camera.getLatestResult();
-                if (!results.hasTargets()) {
-                        currentTarget = null;
-                        return;
-                }
+        currentTarget = results.getBestTarget();
+    }
 
-                currentTarget = results.getBestTarget();
-        }
+    public PhotonTrackedTarget getCurrentTarget() {
+        return currentTarget;
+    }
 
-        public PhotonTrackedTarget getCurrentTarget() {
-                return currentTarget;
-        }
-
-        /**
-         * Returns the distance between the camera and the current target, in meters.
-         */
-        public double distanceToTarget() {
-                return (VisionConfig.TARGET_HEIGHT_METERS - VisionConfig.CAMERA_HEIGHT_METERS)
-                                / Math.tan(currentTarget.getPitch());
-        }
+    /**
+     * Returns the distance between the camera and the current target, in meters.
+     */
+    public double distanceToTarget() {
+        return (VisionConfig.TARGET_HEIGHT_METERS - VisionConfig.CAMERA_HEIGHT_METERS)
+                / Math.tan(currentTarget.getPitch());
+    }
 }

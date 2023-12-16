@@ -18,6 +18,6 @@ public class RunAndFeed extends SequentialCommandGroup {
                 shooter.setFlywheelSpeed(ShooterConfig.DEFAULT_OUTPUT),
                 new WaitCommand(AutoConfig.SHOOTER_SPINUP_TIME),
                 new FeedShooter(indexer),
-                shooter.stopFlywheel());
+                shooter.idleFlywheel());
     }
 }

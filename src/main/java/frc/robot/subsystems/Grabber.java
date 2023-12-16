@@ -71,6 +71,9 @@ public class Grabber extends SubsystemBase {
         ShuffleboardHelper.addOutput("Limit Switch Pressed", Constants.GRABBER_TAB, () -> limitSwitchPressed());
         ShuffleboardHelper.addOutput("Flywheel vel", Constants.GRABBER_TAB,
                 () -> rotationMotor.getEncoder().getVelocity());
+
+        rotationMotor.setSmartCurrentLimit(20);
+
     }
 
     @Override
@@ -135,7 +138,7 @@ public class Grabber extends SubsystemBase {
             case STOW:
                 return Commands.runOnce(() -> setTargetRotation(5));
             case STORE:
-                return Commands.runOnce(() -> setTargetRotation(45));
+                return Commands.runOnce(() -> setTargetRotation(5));
             case TOTE:
                 return Commands.runOnce(() -> setTargetRotation(147));
             case GROUND:

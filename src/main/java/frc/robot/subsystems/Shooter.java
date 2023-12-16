@@ -31,6 +31,11 @@ public class Shooter extends SubsystemBase {
         ShuffleboardHelper
                 .addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get())
                 .asNumberBar(-1, 1);
+
+        rotationMotor.setSmartCurrentLimit(20);
+
+        outputToMotor(ShooterConfig.IDLE_SPEED);
+
     }
 
     /** Manually set the percent output of the motor. */
@@ -45,8 +50,8 @@ public class Shooter extends SubsystemBase {
     }
 
     /** Sets the flywheel speed to zero. */
-    public Command stopFlywheel() {
-        return Commands.runOnce(() -> outputToMotor(0));
+    public Command idleFlywheel() {
+        return Commands.runOnce(() -> outputToMotor(ShooterConfig.IDLE_SPEED));
     }
 
     /** Returns the current speed of the motor. */

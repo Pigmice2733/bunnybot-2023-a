@@ -25,6 +25,9 @@ public class Indexer extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Feeder Output", Constants.INDEXER_TAB, () -> feederWheelMotor.get()).asDial(-1,
                 1);
+
+        feederWheelMotor.setSmartCurrentLimit(20);
+
     }
 
     private void outputToFeeder(double percent) {

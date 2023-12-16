@@ -66,6 +66,9 @@ public class Turret extends SubsystemBase {
 
         ShuffleboardHelper.addProfiledController("Rotation Controller", Constants.TURRET_TAB, rotationController,
                 TurretConfig.MAX_VELOCITY, TurretConfig.MAX_ACCELERATION);
+
+        rotationMotor.setSmartCurrentLimit(20);
+
     }
 
     /** Resets the controller to the turret's current rotation. */

@@ -39,6 +39,6 @@ public class ShootTargetNew extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        shooter.stopFlywheel();
+        shooter.idleFlywheel();
     }
 }

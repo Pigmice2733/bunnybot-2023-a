@@ -20,7 +20,7 @@ public class EjectAll extends SequentialCommandGroup {
                 shooter.setFlywheelSpeed(AutoConfig.SHOOTER_EJECTION_SPEED),
                 new WaitCommand(AutoConfig.EJECT_ALL_TIME),
                 intake.spinForward(),
-                shooter.stopFlywheel());
+                shooter.idleFlywheel());
 
         addRequirements(intake, indexer, shooter);
     }

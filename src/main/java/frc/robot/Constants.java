@@ -80,8 +80,7 @@ public final class Constants {
         public static final double MANUAL_ROTATION_MULTIPLIER = 30;
 
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 342.4; // encoder
-        // rot to
-        // deg
+        // rot to deg
 
         public static final double ROTATION_P = 0.02;
         public static final double ROTATION_I = 0.00;
@@ -119,6 +118,7 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
         public static final double DEFAULT_OUTPUT = 1;
+        public static final double IDLE_SPEED = 0.3;
     }
 
     /*
@@ -200,8 +200,8 @@ public final class Constants {
     }
 
     public final static class DrivetrainConfig {
-        public static final double MAX_DRIVE_SPEED = 6; // max meters / second
-        public static final double MAX_TURN_SPEED = 6; // max radians / second
+        public static final double MAX_DRIVE_SPEED = 3; // max meters / second
+        public static final double MAX_TURN_SPEED = 5; // max radians / second
 
         public static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
                                                                 // wheel to another

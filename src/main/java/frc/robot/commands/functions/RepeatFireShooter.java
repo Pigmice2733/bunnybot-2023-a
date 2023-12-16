@@ -26,6 +26,6 @@ public class RepeatFireShooter extends SequentialCommandGroup {
                         new FeedShooter(indexer),
                         Commands.runOnce(() -> ControllerRumbler.rumbleBoth(RumbleType.kBothRumble, 0.2, 1)),
                         Commands.waitSeconds(AutoConfig.TIME_BETWEEN_SHOTS)),
-                shooter.stopFlywheel());
+                shooter.idleFlywheel());
     }
 }

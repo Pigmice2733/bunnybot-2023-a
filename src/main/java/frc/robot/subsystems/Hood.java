@@ -63,6 +63,8 @@ public class Hood extends SubsystemBase {
                 HoodConfig.MAX_VELOCITY, HoodConfig.MAX_ACCELERATION);
 
         rotationMotor.getEncoder().setPosition(0);
+
+        rotationMotor.setSmartCurrentLimit(20);
     }
 
     @Override
