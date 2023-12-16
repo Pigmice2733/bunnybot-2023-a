@@ -2,11 +2,8 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-<<<<<<< HEAD
-=======
       "/Shuffleboard/Driver/Bunny Auto": "String Chooser",
       "/Shuffleboard/Driver/Shooter Auto": "String Chooser",
->>>>>>> auto
       "/Shuffleboard/Drivetrain/Heading": "Gyro",
       "/Shuffleboard/Turret/Reset Encoder": "Command"
     }
