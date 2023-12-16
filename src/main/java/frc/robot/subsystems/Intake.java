@@ -27,7 +27,7 @@ public class Intake extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Motor Output", Constants.INTAKE_TAB, () -> intakeMotor.get());
 
-        intakeMotor.setSmartCurrentLimit(20);
+        intakeMotor.setSmartCurrentLimit(40);
     }
 
     /** Sets the intake motor to a percent output (0.0 - 1.0) */

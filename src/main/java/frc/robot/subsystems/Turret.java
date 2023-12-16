@@ -142,7 +142,6 @@ public class Turret extends SubsystemBase {
      * Sets the max velocity and acceleration of the turret as a Constraints object.
      */
     public void setPIDConstraints(Constraints constraints) {
-        System.out.println("set constrains " + constraints.maxVelocity);
         this.constraints = constraints;
     }
 

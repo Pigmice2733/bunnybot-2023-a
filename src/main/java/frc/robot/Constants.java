@@ -83,11 +83,11 @@ public final class Constants {
         public static final double ROTATION_MOTOR_CONVERSION = 1 / 342.4; // encoder
         // rot to deg
 
-        public static final double ROTATION_P = 0.02;
+        public static final double ROTATION_P = 0.038;
         public static final double ROTATION_I = 0.00;
         public static final double ROTATION_D = 0.00;
 
-        public static final Constraints DEFAULT_CONSTRAINTS = new Constraints(150, 250);
+        public static final Constraints DEFAULT_CONSTRAINTS = new Constraints(200, 300);
         public static final Constraints WANDER_CONSTRAINTS = new Constraints(50, 100);
 
         public static final double MAX_ALLOWED_ROTATION = 120; // degrees
@@ -196,7 +196,7 @@ public final class Constants {
     }
 
     public final static class DrivetrainConfig {
-        public static final double MAX_DRIVE_SPEED = 3; // max meters / second
+        public static final double MAX_DRIVE_SPEED = 4.5; // max meters / second
         public static final double MAX_TURN_SPEED = 5; // max radians / second
 
         public static final double TRACK_WIDTH_METERS = 0.5842; // distance from the center of one
