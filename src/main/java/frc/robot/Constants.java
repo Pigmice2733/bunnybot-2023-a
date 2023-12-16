@@ -323,7 +323,7 @@ public final class Constants {
     public static class AutoConfig {
         // All times in seconds
         public static final double FEED_SHOOTER_INDEX_TIME = 0.15;
-        public static final double TIME_BETWEEN_SHOTS = 1;
+        public static final double TIME_BETWEEN_SHOTS = 1.05;
         public static final double SHOOTER_SPINUP_TIME = 1.2;
         public static final double EJECT_ALL_TIME = 5;
 
