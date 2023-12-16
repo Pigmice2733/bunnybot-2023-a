@@ -36,7 +36,7 @@ public class Turret extends SubsystemBase {
         rotationMotor = new CANSparkMax(CANConfig.ROTATE_TURRET, MotorType.kBrushless);
 
         rotationMotor.restoreFactoryDefaults();
-        rotationMotor.getEncoder().setPosition(-90);
+        rotationMotor.getEncoder().setPosition(90);
         rotationMotor.setInverted(false);
         rotationMotor.getEncoder().setPositionConversionFactor(TurretConfig.ROTATION_MOTOR_CONVERSION);
         rotationMotor.setIdleMode(IdleMode.kCoast);
