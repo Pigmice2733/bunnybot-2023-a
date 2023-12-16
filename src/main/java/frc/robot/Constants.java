@@ -289,6 +289,8 @@ public final class Constants {
         public static final double SHOOTER_EJECTION_SPEED = -0.1;
 
         public static final String FETCH_BUNNY_PATH = "fetch-bunny";
+        public static final String FETCH_BUNNY_PATH_NO_SHOOT = "fetch-bunny-no-shoot";
+
     }
 
 }
