@@ -101,7 +101,7 @@ public class Turret extends SubsystemBase {
         // TODO: assumes (+ output) => (+ rotation). Verify this in later testing.
         percentOutput = Utils.applySoftwareStop(currentRotation, percentOutput, TurretConfig.MAX_ALLOWED_ROTATION);
 
-        rotationMotor.set(percentOutput);
+        // rotationMotor.set(percentOutput);
     }
 
     /** Returns the turret's current rotation in degrees. */

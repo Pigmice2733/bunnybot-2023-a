@@ -100,7 +100,7 @@ public final class Constants {
         public static final Constraints WANDER_CONSTRAINTS = new Constraints(50,
                 100);
 
-        public static final double MAX_ALLOWED_ROTATION = 90; // degrees
+        public static final double MAX_ALLOWED_ROTATION = 100; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
