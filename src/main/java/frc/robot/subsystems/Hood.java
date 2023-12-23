@@ -88,7 +88,7 @@ public class Hood extends SubsystemBase {
         if (limitSwitchPressed())
             percentOutput = Math.max(0, percentOutput);
 
-        // rotationMotor.set(percentOutput);
+        rotationMotor.set(percentOutput);
     }
 
     /** Returns the hood's current rotation in degrees. */
