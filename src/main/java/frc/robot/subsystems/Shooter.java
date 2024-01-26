@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
                 .addOutput("Motor Output", Constants.SHOOTER_TAB, () -> rotationMotor.get())
                 .asNumberBar(-1, 1);
 
-        rotationMotor.setSmartCurrentLimit(20);
+        rotationMotor.setSmartCurrentLimit(200);
 
         outputToMotor(ShooterConfig.IDLE_SPEED);
 

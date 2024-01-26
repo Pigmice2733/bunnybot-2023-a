@@ -100,7 +100,7 @@ public final class Constants {
         public static final Constraints WANDER_CONSTRAINTS = new Constraints(50,
                 100);
 
-        public static final double MAX_ALLOWED_ROTATION = 120; // degrees
+        public static final double MAX_ALLOWED_ROTATION = 100; // degrees
         public static final double WANDER_LIMIT = MAX_ALLOWED_ROTATION - 10; // degrees
 
         public static final double TARGET_YAW_TOLERANCE = 3.5;
@@ -125,7 +125,7 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 50; // deg/sec/sec
 
         public static final double DEFAULT_OUTPUT = 1;
-        public static final double IDLE_SPEED = 0.3;
+        public static final double IDLE_SPEED = 0;
     }
 
     /*
@@ -180,9 +180,8 @@ public final class Constants {
         public static final double ARM_I = 0.000;
         public static final double ARM_D = 0.000;
 
-        public static final double MAX_VELOCITY = 500; // 1200; // deg/sec
-        public static final double MAX_ACCELERATION = 900; // 1200; //
-                                                           // deg/sec/sec
+        public static final double MAX_VELOCITY = 375; // 1200; // deg/sec
+        public static final double MAX_ACCELERATION = 700; // 1200; // deg/sec/sec
 
         public static final double ROTATION_CONVERSION = 0.00007004 * 90; // encoder
                                                                           // rotation
@@ -201,7 +200,7 @@ public final class Constants {
             STOW, STORE, TOTE, GROUND, THROW
         }
 
-        public static final double FLYWHEEL_INTAKE_SPEED = 0.4;
+        public static final double FLYWHEEL_INTAKE_SPEED = 0.6;
         public static final double FLYWHEEL_EJECT_SPEED = -0.4;
     }
 
@@ -244,14 +243,10 @@ public final class Constants {
         private static final SimpleMotorFeedforward DRIVE_FEED_FORWARD = new SimpleMotorFeedforward(
                 0.35493, 2.3014, 0.12872);
 
-        // From what I have seen, it is common to only use a P value in path
-        // following
-        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
-                1, 1); // 3, 2.5
-        private static final PIDController PATH_DRIVE_PID = new PIDController(
-                0.3, 0, 0);
-        private static final PIDController PATH_TURN_PID = new PIDController(
-                0.31, 0, 0);
+        // From what I have seen, it is common to only use a P value in path following
+        private static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(2, 2); // 3, 2.5
+        private static final PIDController PATH_DRIVE_PID = new PIDController(0.3, 0, 0);
+        private static final PIDController PATH_TURN_PID = new PIDController(0.31, 0, 0);
 
         // Offset from chassis center that the robot will rotate about
         private static final Translation2d ROTATION_CENTER_OFFSET = /*
@@ -323,8 +318,8 @@ public final class Constants {
     public static class AutoConfig {
         // All times in seconds
         public static final double FEED_SHOOTER_INDEX_TIME = 0.15;
-        public static final double TIME_BETWEEN_SHOTS = 1.05;
-        public static final double SHOOTER_SPINUP_TIME = 1.2;
+        public static final double TIME_BETWEEN_SHOTS = 1;
+        public static final double SHOOTER_SPINUP_TIME = 1.5;
         public static final double EJECT_ALL_TIME = 5;
 
         // All motor outputs in percent (-1 -> 1)
@@ -334,5 +329,4 @@ public final class Constants {
         public static final String FETCH_BUNNY_PATH_NO_SHOOT = "fetch-bunny Copy";
 
     }
-
 }

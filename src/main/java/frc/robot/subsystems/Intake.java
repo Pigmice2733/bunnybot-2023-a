@@ -27,7 +27,7 @@ public class Intake extends SubsystemBase {
 
         ShuffleboardHelper.addOutput("Motor Output", Constants.INTAKE_TAB, () -> intakeMotor.get());
 
-        intakeMotor.setSmartCurrentLimit(40);
+        intakeMotor.setSmartCurrentLimit(200);
     }
 
     /** Sets the intake motor to a percent output (0.0 - 1.0) */
@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase {
 
     /** Spins intake wheels to eject balls. */
     public Command spinBackward() {
-        return Commands.runOnce(() -> outputToMotors(-IntakeConfig.INTAKE_SPEED));
+        return Commands.runOnce(() -> outputToMotors(-IntakeConfig.INTAKE_SPEED * 1.5));
     }
 
     /** Sets intake wheels to zero output. */
